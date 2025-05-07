@@ -1,0 +1,6 @@
+{
+  "appTitle": "flights_logger",
+  "@appTitle": {
+    "description": "The title of the application"
+  }
+}
