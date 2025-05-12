@@ -93,10 +93,9 @@ class CalendarStateful extends StatefulWidget {
 }
 
 class CalendarState extends State<CalendarStateful> {
-  DateTime firstDate = DateTime(2024, 7, 4, 9, 31);
-  DateTime lastDate = DateTime(2024, 7, 29, 23, 57);
-  // DateTime initialDate = DateTime(2024, 7, 11);
-  DateTime? initialDate;
+  DateTime firstDate = (int year) { return DateTime(year - 3); }(DateTime.now().year);
+  DateTime lastDate = (int year) { return DateTime(year + 1); }(DateTime.now().year);
+  DateTime initialDate = DateTime.now();
 
   DateTime? fromDate;
   bool stepOne = true;
@@ -105,12 +104,10 @@ class CalendarState extends State<CalendarStateful> {
   void reset() {
     fromDate = null;
     stepOne = true;
-    initialDate = null;
-    // forbiddenDates.clear();
+    // forbiddenDates.clear();3
   }
 
   void onDateChanged(DateTime d) {
-    // print('date picked');
     // print(d); // DateTime 2024-07-10 00:00:00.000
     // print('iso 8601: ${d.toIso8601String()}'); // 2024-07-10T00:00:00.000
     print('date picked toString: ${d.toString()}'); // 2024-07-10 00:00:00.000
@@ -118,7 +115,6 @@ class CalendarState extends State<CalendarStateful> {
     if (stepOne) {
       stepOne = false;
       fromDate = d;
-      // initialDate = d;
 
       return;
     }
