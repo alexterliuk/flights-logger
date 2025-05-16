@@ -110,7 +110,7 @@ class CalendarState extends State<CalendarStateful> {
   void onDateChanged(DateTime d) {
     // print(d); // DateTime 2024-07-10 00:00:00.000
     // print('iso 8601: ${d.toIso8601String()}'); // 2024-07-10T00:00:00.000
-    print('date picked toString: ${d.toString()}'); // 2024-07-10 00:00:00.000
+    // print('date picked toString: ${d.toString()}'); // 2024-07-10 00:00:00.000
 
     if (stepOne) {
       stepOne = false;
@@ -130,10 +130,8 @@ class CalendarState extends State<CalendarStateful> {
   bool selectableDayPredicate(DateTime d) {
     // DateTime? foundDate = forbiddenDates
     if (fromDate is DateTime) {
-      // TODO: to allow selection the same date twice (so that from and to is equal)
-      // make smth like d.subtract(Duration).isAfter...
-      return d.isAfter(fromDate as DateTime);
-      // return d.isAtSameMomentAs(initialDate as DateTime);
+      // allow selection the same date twice (so that from and to is equal)
+      return d.add(const Duration(days: 1)).isAfter(fromDate as DateTime);
     }
 
     return true;
