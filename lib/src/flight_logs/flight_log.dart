@@ -25,6 +25,9 @@ class FlightLog extends StatelessWidget {
     var flightLogsState = context.watch<FlightLogsState>();
     var appState = context.watch<MyAppState>();
 
+    print('LOG: started - ${log.takeoffDateAndTime}, ended - ${log.landingDateAndTime}');
+    // started - 2024-04-14 00:00, ended - 2024-04-14 01:39
+
     edit () {
       flightLogsState.updateEditAndDeleteButtonsView(index, false);
       appState.addToHistory(FlightLogForm.routeName);

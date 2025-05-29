@@ -26,6 +26,8 @@ class Shift extends StatelessWidget {
     var shiftsState = context.watch<ShiftsNewState>();
     var appState = context.watch<MyAppState>();
 
+    print('SHIFT: started - ${shift.startedAtDateAndTime}, ended - ${shift.endedAtDateAndTime}');
+    // SHIFT: started - 2024-04-14 15:15, ended - 2024-04-14 15:30
     edit () {
       shiftsState.updateEditAndDeleteButtonsView(index, false);
 
