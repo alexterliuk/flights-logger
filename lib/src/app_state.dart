@@ -3,9 +3,10 @@
 // import 'dart:async';
 // import 'package:flights_logger/src/app_state_init_data.dart';
 // import 'package:flights_logger/src/flight_logs/flight_log.dart';
-import 'package:flights_logger/src/utils/date_time/parse_date_and_time.dart';
-import 'package:flights_logger/src/utils/date_time/to_date_time.dart';
-import 'package:flights_logger/src/utils/get_last_date_and_time_index.dart';
+import 'utils/date_time/parse_date_and_time.dart';
+import 'utils/date_time/to_date_time.dart';
+import 'utils/date_time/from_date_time.dart';
+import 'utils/get_last_date_and_time_index.dart';
 import 'package:flutter/material.dart';
 // import 'package:path/path.dart';
 // import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -1136,9 +1137,6 @@ class MyAppState with ChangeNotifier {
         DateTime shiftStarted = toDateTime(shift.startedAtDateAndTime);
         DateTime shiftEnded = toDateTime(shift.endedAtDateAndTime);
 
-        // ParsedDateAndTime shiftStarted = ParsedDateAndTime(year: 2000, month: 1, day: 1, hour: 0, minute: 0);
-        // ParsedDateAndTime shiftEnded = ParsedDateAndTime(year: 2000, month: 1, day: 1, hour: 0, minute: 0);
-
         for (final id in shift.logIds) {
           final log = await getFlightLogFromDb(id);
 
@@ -1157,22 +1155,16 @@ class MyAppState with ChangeNotifier {
               highestAltitudeMeters = log.altitudeMeters;
             }
 
-// use isFirstDateAndTimeEarlier and ...later?
-            // DateTime logStarted = toDateTime(log.takeoffDateAndTime);
-            // DateTime logEnded = toDateTime(log.landingDateAndTime);
+            DateTime logStarted = toDateTime(log.takeoffDateAndTime);
+            DateTime logEnded = toDateTime(log.landingDateAndTime);
 
-            // if (logStarted.isBefore(shiftStarted)) {
-            //   shiftStarted = logStarted;
-            // }
+            if (isFirstDateTimeEarlier(logStarted, shiftStarted)) {
+              shiftStarted = logStarted;
+            }
 
-            // if (logEnded.isAfter(shiftEnded)) {
-            //   shiftEnded = logEnded;
-            // }
-
-            /// TODO: update startedAtDateAndTime and endedAtDateAndTime
-            ///   LOG started - 2024-04-14 00:00, ended - 2024-04-14 01:39
-            /// SHIFT started - 2024-04-14 15:15, ended - 2024-04-14 15:30
-            
+            if (isFirstDateTimeLater(logEnded, shiftEnded)) {
+              shiftEnded = logEnded;
+            }
           }
         }
 
@@ -1182,8 +1174,8 @@ class MyAppState with ChangeNotifier {
         shift.longestDistanceMeters = longestDistanceMeters;
         shift.highestAltitudeMeters = highestAltitudeMeters;
 
-        // shift.startedAtDateAndTime = 
-        // shift.endedAtDateAndTime = 
+        shift.startedAtDateAndTime = fromDateTime(shiftStarted);
+        shift.endedAtDateAndTime = fromDateTime(shiftEnded);
 
         await updateShiftInDbAfterFlightLogRemoved(shift);
       }   
