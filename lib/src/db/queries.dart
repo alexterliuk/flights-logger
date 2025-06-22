@@ -1,6 +1,6 @@
-import 'package:flights_logger/src/utils/date_time/is_first_date_and_time_earlier.dart';
-import 'package:flights_logger/src/utils/date_time/is_first_date_and_time_later.dart';
-import 'package:flights_logger/src/utils/date_time/parse_date_and_time.dart';
+import '../utils/date_time/is_first_date_and_time_earlier.dart';
+import '../utils/date_time/is_first_date_and_time_later.dart';
+import '../utils/date_time/parse_date_and_time.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import '../utils/extract_ids.dart';
@@ -326,6 +326,7 @@ class ShiftsResult {
 ///
 Future<ShiftsResult> getShiftsFromDb({ int? offset, int? limit }) async {
   final db = await database;
+
   final List<Map<String, Object?>> shiftsMap = await db.query('Shift', offset: offset, limit: limit);
   final List<Map<String, Object?>> totalCountMap = await db.rawQuery('SELECT COUNT(*) FROM SHIFT'); // [{COUNT(*): 117}]
 

@@ -1,34 +1,20 @@
-// import 'package:flights_logger/src/sample_feature/sample_item_list_view.dart';
-// import 'dart:io';
-// import 'dart:async';
-// import 'package:flights_logger/src/app_state_init_data.dart';
-// import 'package:flights_logger/src/flight_logs/flight_log.dart';
-import 'utils/date_time/parse_date_and_time.dart';
-import 'utils/date_time/to_date_time.dart';
-import 'utils/date_time/from_date_time.dart';
-import 'utils/get_last_date_and_time_index.dart';
 import 'package:flutter/material.dart';
 // import 'package:path/path.dart';
 // import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-// import 'sample_feature/sample_item_details_view.dart';
-// import 'app_state_init_data_model.dart';
-import 'db/queries.dart';
+import 'flight_logs/flight_log.dart';
 import 'flight_logs/flight_log_model.dart';
-// import 'home/home_model.dart';
-import 'home/home_model.dart';
-import 'shifts/filter_shifts.dart';
 import 'shifts/shift.dart';
 import 'shifts/shift_model.dart';
-
-// import 'app_dummy_data.dart';
-import 'app_storage.dart';
-
-// enum FlightLogOriginType {
-//   noShift,
-//   singleShift,
-//   newShift,
-// }
+import 'shifts/filter_shifts.dart';
+import 'utils/date_time/parse_date_and_time.dart';
+import 'utils/date_time/to_date_time.dart';
+import 'utils/date_time/from_date_time.dart';
+import 'utils/date_time/is_first_date_time_earlier.dart';
+import 'utils/date_time/is_first_date_time_later.dart';
+import 'utils/get_last_date_and_time_index.dart';
+import 'db/queries.dart';
+import 'home/home_model.dart';
 
 class ShiftsTotalCou {
   int value;
@@ -36,14 +22,6 @@ class ShiftsTotalCou {
 }
 
 class MyAppState with ChangeNotifier {
-  // MyAppState(this.initData);
-
-  // final AppStateInitDataModel initData;
-  // late HomeModel initData;
-
-  // ============================= FLIGHT LOGS ===================
-  // MyAppStorage appStorage = MyAppStorage();
-
   List<String> history = [];
 
   List<String> getHistory() {
@@ -77,8 +55,6 @@ class MyAppState with ChangeNotifier {
     }
   }
 
-  // AppStateInitData appStateInitDat = appStateInitData;
-  // List<FlightLogModel> flightLogs = dummyFlightLogs;
   bool isSingleShiftMode = false;
   ShiftModel? singleShift;
 
@@ -91,9 +67,6 @@ class MyAppState with ChangeNotifier {
   List<FlightLogModel> newShiftFlightLogs = [];
   List<int> newShiftFlightLogsIds = [];
 
-  // List<FlightLogModel> lastFlightLogs = [];
-
-  // List<ShiftModel> shifts = dummyShifts;
   List<ShiftModel> shifts = [];
   List<int> shiftsIds = [];
   int shiftsTotalCount = 0;
@@ -115,26 +88,6 @@ class MyAppState with ChangeNotifier {
 
   List<ShiftModel> selectedShifts = [];
   // selectedShifts.add(shifts.get[0]);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   ///
   /// UPDATE FLIGHT LOGS
@@ -270,7 +223,7 @@ class MyAppState with ChangeNotifier {
       // shiftsTotalCountArr.first = shiftsTotalCount - 1;
 
       // shiftsTotalCou.value -= 1;
- 
+
       // shiftsTotalCountArr.first = shiftsTotalCountArr.first - 1;
 
       // print('[updateShifts] ........... shiftsTotalCount - $shiftsTotalCount');
@@ -310,7 +263,9 @@ class MyAppState with ChangeNotifier {
     }
   }
 
-
+  ///
+  ///
+  ///
   void updateShiftsRes(ShiftsResult givenShiftsRes) {
     try {
       if (
@@ -319,9 +274,6 @@ class MyAppState with ChangeNotifier {
       ) {
         throw Error();
       }
-
-      print('[updateShiftsRes]: givenShiftsRes.shifts - ${givenShiftsRes.shifts}');
-      print('[updateShiftsRes]: givenShiftsRes.totalCount - ${givenShiftsRes.totalCount}');
 
       if (shiftsIds.isEmpty) {
         shiftsRes.shifts = givenShiftsRes.shifts;
@@ -353,28 +305,10 @@ class MyAppState with ChangeNotifier {
     }
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   ///
   ///
   ///
-  
-  // void updateShiftsTotalCount(int count) => shiftsTotalCount = count;
+  void updateShiftsTotalCount(int count) => shiftsTotalCount = count;
   // void updateShiftsTotalCount(int count) => shiftsTotalCou['value'] = count;
   // void updateShiftsTotalCount(int count) => shiftsTotalCou.value = count;
   // void updateShiftsTotalCount(int count) => shiftsTotalCountArr.first = count;
@@ -385,11 +319,17 @@ class MyAppState with ChangeNotifier {
   //   shiftsTotalCou.value = count;
   // }
 
+  ///
+  ///
+  ///
   void resetShifts() {
     shifts = [];
     shiftsIds = [];
   }
 
+  ///
+  ///
+  ///
   void replaceShift(ShiftModel givenShift) {
     int index = shifts.indexWhere((shift) => shift.id == givenShift.id);
 
@@ -398,6 +338,9 @@ class MyAppState with ChangeNotifier {
     }
   }
 
+  ///
+  ///
+  ///
   bool removeShift(int id) {
     // int beforeCount = shifts.length;
     // shifts.removeWhere((shift) => shift.id == id);
@@ -423,6 +366,10 @@ class MyAppState with ChangeNotifier {
     isSingleShiftMode = true;
     singleShift = shift;
   }
+
+  ///
+  ///
+  ///
   void resetSingleShiftMode() {
     isSingleShiftMode = false;
     singleShift = null;
@@ -433,11 +380,17 @@ class MyAppState with ChangeNotifier {
     // update();
   }
 
+  ///
+  ///
+  ///
   void resetSingleShiftFlightLogs() {
     singleShiftFlightLogs = [];
     singleShiftFlightLogsIds = [];
   }
 
+  ///
+  ///
+  ///
   void replaceSingleShiftFlightLog(FlightLogModel givenLog) {
     int index = singleShiftFlightLogs.indexWhere((log) => log.id == givenLog.id);
 
@@ -453,7 +406,10 @@ class MyAppState with ChangeNotifier {
     flightLogs = [];
     flightLogsIds = [];
   }
-  
+
+  ///
+  ///
+  ///
   void replaceFlightLog(FlightLogModel givenLog) {
     int index = flightLogs.indexWhere((log) => log.id == givenLog.id);
     print('[replaceFlightLog] index - $index, flightLogs.length - ${flightLogs.length}');
@@ -462,6 +418,9 @@ class MyAppState with ChangeNotifier {
     }
   }
 
+  ///
+  ///
+  ///
   bool removeFlightLog(int id) {
     int beforeCount = flightLogs.length;
     flightLogs.removeWhere((log) => log.id == id);
@@ -478,6 +437,9 @@ class MyAppState with ChangeNotifier {
     newShiftFlightLogsIds = [];
   }
 
+  ///
+  ///
+  ///
   void replaceNewShiftFlightLog(FlightLogModel givenLog) {
     int index = newShiftFlightLogs.indexWhere((log) => log.id == givenLog.id);
 
@@ -539,86 +501,6 @@ class MyAppState with ChangeNotifier {
 
 
 
-
-
-
-
-
-
-
-
-
-  // Future<void> insertDog(Dog dog, Future<Database> database) async {
-  //   // Get a reference to the database.
-  //   final db = await database;
-
-  //   // Insert the Dog into the correct table. You might also specify the
-  //   // `conflictAlgorithm` to use in case the same dog is inserted twice.
-  //   //
-  //   // In this case, replace any previous data.
-  //   await db.insert(
-  //     'dogs',
-  //     dog.toMap(),
-  //     conflictAlgorithm: ConflictAlgorithm.replace,
-  //   );
-  // }
-
-  // Future<List<Dog>> dogs(Future<Database> database) async {
-  //   // Get a reference to the database.
-  //   final db = await database;
-
-  //   // Query the table for all the dogs.
-  //   final List<Map<String, Object?>> dogMaps = await db.query('dogs');
-
-  //   // Convert the list of each dog's fields into a list of `Dog` objects.
-  //   return [
-  //     for (final {
-  //           'id': id as int,
-  //           'name': name as String,
-  //           'age': age as int,
-  //         } in dogMaps)
-  //       Dog(id: id, name: name, age: age),
-  //   ];
-  // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   ///
   /// Home block
   ///
@@ -649,134 +531,6 @@ class MyAppState with ChangeNotifier {
   void updateLastShiftId(int id) => lastShiftId = id;
   void updateLastFlightLogId(int id) => lastFlightLogId = id;
   void updateLastFlightLog(FlightLogModel log) => lastFlightLog = log;
-  // void updateLastFlightLogs(List<FlightLogModel> logs) => lastFlightLogs = logs;
-
-  // void onInit() {
-  //   updateTopFlightTime(initData.topFlightTimeMinutes);
-  //   updateTopDistance(initData.topDistanceMeters);
-  //   updateTopAltitude(initData.topAltitudeMeters);
-  //   updateLastShiftId(initData.lastShiftId);
-  //   updateLastFlightLogId(initData.lastFlightLog.id);
-  //   updateLastFlightLog(initData.lastFlightLog);
-  //   updateLastFlightLogs(initData.lastFlightLogs);
-  // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // ------------
-  // void addNewShiftFlightLog(BaseFlightLogModel flightLog) async {
-  // }
-
-  // ------------
-  // FlightLogModel? getFlightLogById(String id) {
-  //   var log = flightLogs.firstWhere((log) => log.id == id, orElse: () => null);
-  //   return log;
-  // }
-
-  // ------------
-  // FlightLogModel? getFlightLogById(String id, {bool isNewShift = false}) {
-  //   try {
-  //     if (isNewShift) {
-  //       FlightLogModel? log = newShift?.logs.firstWhere((log) => log.id == id);
-  //       return log;
-  //     } else {
-  //       FlightLogModel log = flightLogs.firstWhere((log) => log.id == id);
-  //       return log;
-  //     }
-  //   } catch (e) {
-  //     return null;
-  //   }
-  // }
-
-  // ------------
-  // NewShiftFlightLogModel? getNewShiftFlightLogById(String id) {
-  //   try {
-  //     NewShiftFlightLogModel log = newShift!.logs.firstWhere((log) => log.id == id);
-  //     return log;
-  //   } catch (e) {
-  //     return null;
-  //   }
-  // }
-  // ------------
-  // FlightLogModel? findLastFlightLog() {
-  //   List<String> dateAndTimes = [];
-
-  //   for (final FlightLogModel(:landingDateAndTime) in flightLogs) {
-  //     dateAndTimes.add(landingDateAndTime);
-  //   }
-
-  //   int lastFlightLogIndex = getLastDateAndTimeIndex(dateAndTimes);
-  //   lastFlightLog = flightLogs[lastFlightLogIndex];
-
-  //   return lastFlightLog;
-  // }
-
-  // ------------
-  // void updateFlightLog(FlightLogModel log, {bool isNewShift = false}) {
-  //   final existingLog = getFlightLogById(log.id, isNewShift: isNewShift);
-
-  //   if (existingLog != null) {
-  //     existingLog.takeoffDateAndTime = log.takeoffDateAndTime;
-  //     existingLog.landingDateAndTime = log.landingDateAndTime;
-  //     existingLog.flightTimeMinutes = log.flightTimeMinutes;
-  //     existingLog.distanceMeters = log.distanceMeters;
-  //     existingLog.altitudeMeters = log.altitudeMeters;
-  //     existingLog.location = log.location;
-  //     existingLog.droneAccum = log.droneAccum;
-  //     existingLog.droneAccumChargeLeft = log.droneAccumChargeLeft;
-  //     existingLog.rcAccumChargeLeft = log.rcAccumChargeLeft;
-  //     // var ind = flightLogs.indexOf(existingLog);
-  //     // print(ind);
-
-  //     // var x = existingLog.toString();
-  //     // print('stringified: $x');
-  //     // appStorage.write(x);      
-  //   }
-  // }
-
-  // ------------
-  // void updateNewShiftFlightLog(BaseFlightLogModel log, String id) {
-  //   final newShiftLog = getNewShiftFlightLogById(id);
-
-  //   if (newShiftLog != null) {
-  //     var l = getUpdatedFlightLog(newShiftLog, log);
-  //     // TD: update log in db in newShift
-  //   }
-  // }
-
-  // Shift? lastShift;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   ///
   ///
@@ -852,7 +606,6 @@ class MyAppState with ChangeNotifier {
     }
   }
 
-
   ///
   ///
   ///
@@ -889,7 +642,7 @@ class MyAppState with ChangeNotifier {
   ///
   ///
   ///
-  ///
+  /// ============================== DB RELATED ================================
   ///
 
   ///
@@ -1126,7 +879,7 @@ class MyAppState with ChangeNotifier {
 
       if (shift.logIds.isEmpty) {
         bool isRemoved = await removeShiftFromDb(shiftId);
-        print('[dbUpdateShiftAfterFlightLogRemoved] ...removing shift - $isRemoved, id was - $shiftId'); 
+        print('[dbUpdateShiftAfterFlightLogRemoved] ...removing shift - $isRemoved, id was - $shiftId');
       } else {
         int flightsQty = shift.logIds.length;
         int timeTotalMinutes = 0;
@@ -1178,7 +931,7 @@ class MyAppState with ChangeNotifier {
         shift.endedAtDateAndTime = fromDateTime(shiftEnded);
 
         await updateShiftInDbAfterFlightLogRemoved(shift);
-      }   
+      }
     }
   }
 
@@ -1206,36 +959,6 @@ class MyAppState with ChangeNotifier {
     return isRemoved;
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   ///
   ///
   ///
@@ -1243,53 +966,3 @@ class MyAppState with ChangeNotifier {
     notifyListeners();
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// class Dog {
-//   final int id;
-//   final String name;
-//   final int age;
-
-//   Dog({
-//     required this.id,
-//     required this.name,
-//     required this.age,
-//   });
-
-//   // Convert a Dog into a Map. The keys must correspond to the names of the
-//   // columns in the database.
-//   Map<String, Object?> toMap() {
-//     return {
-//       'id': id,
-//       'name': name,
-//       'age': age,
-//     };
-//   }
-
-//   // Implement toString to make it easier to see information about
-//   // each dog when using the print statement.
-//   @override
-//   String toString() {
-//     return 'Dog{id: $id, name: $name, age: $age}';
-//   }
-// }

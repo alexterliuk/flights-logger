@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../l10n/app_localizations.dart';
+import '../settings/settings_view.dart';
 import '../shifts/start_new_shift.dart';
 import '../db/queries.dart';
 import '../app_state.dart';
@@ -48,6 +50,7 @@ class HomeState extends State<Home> {
         (() async {
           /// =================== THIS WORKS - UPDATES TOP NUMBERS ==================
           HomeModel homeData = await getHomeFromDb();
+          // HomeModel homeData = HomeModel();
           bool isTopFlightTimeChanged = appState.topFlightTimeMinutes != homeData.topFlightTimeMinutes;
           bool isTopDistanceChanged = appState.topDistanceMeters != homeData.topDistanceMeters;
           bool isTopAltitudeChanged = appState.topAltitudeMeters != homeData.topAltitudeMeters;
@@ -75,6 +78,16 @@ class HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home Route'),
+        // title: Text(AppLocalizations.of(context)!.helloWorld),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            tooltip: 'Open settings',
+            onPressed: () {
+              Navigator.restorablePushNamed(context, SettingsView.routeName);
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -88,7 +101,7 @@ class HomeState extends State<Home> {
           Container(height: 12),
           // LastFlight(log: appState.lastFlightLog),
           const LastFlight(),
-          // ?EditFlightBtn,
+          // // ?EditFlightBtn,
           const SelectShift(),
           const ShowAllShifts(),
           const ShowAllFlights(),
@@ -96,6 +109,34 @@ class HomeState extends State<Home> {
           // const Flexible(
           //   child: FlightLogs(isOrdinalShown: false),
           // ),
+
+          // Center(
+          //   child: Column(
+          //     mainAxisAlignment: MainAxisAlignment.center,
+          //     children: <Widget>[
+          //       // Add the following code
+          //       Localizations.override(
+          //         context: context,
+          //         locale: const Locale('en'),
+          //         // Using a Builder to get the correct BuildContext.
+          //         // Alternatively, you can create a new widget and Localizations.override
+          //         // will pass the updated BuildContext to the new widget.
+          //         child: Builder(
+          //           builder: (context) {
+          //             // A toy example for an internationalized Material widget.
+          //             return CalendarDatePicker(
+          //               initialDate: DateTime.now(),
+          //               firstDate: DateTime(1900),
+          //               lastDate: DateTime(2100),
+          //               onDateChanged: (value) {},
+          //             );
+          //           },
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
+
         ],
       ),
     );

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../app_state.dart';
-import 'shift_model.dart';
 import 'shifts_new.dart';
 
 class ShiftsLoading extends StatefulWidget {

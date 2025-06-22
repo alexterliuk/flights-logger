@@ -1,16 +1,14 @@
 import 'dart:io';
 import 'dart:async';
-import 'package:flights_logger/src/db/queries.dart';
+// import 'package:flights_logger/src/db/queries.dart';
 import 'package:flights_logger/src/flight_logs/flight_log_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import '../../l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'app_state.dart';
-import 'app_state_init_data.dart';
-import 'app_state_init_data_model.dart';
-import 'flight_logs/flight_logs.dart';
+// import 'flight_logs/flight_logs.dart';
 import 'flight_logs/flight_logs_loading.dart';
 import 'home/home.dart';
 import 'home/home_model.dart';
@@ -50,18 +48,18 @@ class MyApp extends StatelessWidget {
             // returns to the app after it has been killed while running in the
             // background.
             restorationScopeId: 'app',
-
-            // Provide the generated AppLocalizations to the MaterialApp. This
-            // allows descendant Widgets to display the correct translations
-            // depending on the user's locale.
-            localizationsDelegates: const [
+            title: 'Raw meat',
+            localizationsDelegates: [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: const [
-              Locale('en', ''), // English, no country code
+              Locale('en'), // English
+              Locale('es'), // Spanish
+              Locale('fr'), // French
+              Locale('uk'), // Ukrainian
             ],
 
             // Use AppLocalizations to configure the correct application title
@@ -69,8 +67,8 @@ class MyApp extends StatelessWidget {
             //
             // The appTitle is defined in .arb files found in the localization
             // directory.
-            onGenerateTitle: (BuildContext context) =>
-                AppLocalizations.of(context)!.appTitle,
+            //     onGenerateTitle: (BuildContext context) =>
+            //         AppLocalizations.of(context)!.appTitle,
 
             // Define a light and dark color theme. Then, read the user's
             // preferred ThemeMode (light, dark, or system default) from the

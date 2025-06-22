@@ -23,7 +23,7 @@ class Calendar extends StatelessWidget {
 
   static const routeName = '/calendar';
 
-  onDateChanged (DateTime d) {
+  void onDateChanged (DateTime d) {
     // print('date picked');
     // print(d); // DateTime 2024-07-10 00:00:00.000
     // print('iso 8601: ${d.toIso8601String()}'); // 2024-07-10T00:00:00.000
@@ -130,7 +130,7 @@ class CalendarState extends State<CalendarStateful> {
   bool selectableDayPredicate(DateTime d) {
     // DateTime? foundDate = forbiddenDates
     if (fromDate is DateTime) {
-      // allow selection the same date twice (so that from and to is equal)
+      // allow selecting the same date twice (so that from and to is equal)
       return d.add(const Duration(days: 1)).isAfter(fromDate as DateTime);
     }
 

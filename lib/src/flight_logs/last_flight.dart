@@ -19,6 +19,7 @@ class LastFlight extends StatelessWidget {
     var appState = context.watch<MyAppState>();
 
     final FlightLogModel log = appState.lastFlightLog;
+    bool isEditButtonHidden = log.shiftId == -1;
 
     String logDate = getStartEndDates(log.takeoffDateAndTime, log.landingDateAndTime, withYear: true);
 
@@ -112,7 +113,9 @@ class LastFlight extends StatelessWidget {
             ),
           ],
         ),
-        TextButton(onPressed: edit, child: const Text('Edit')),
+        isEditButtonHidden
+          ? Container()
+          : TextButton(onPressed: edit, child: const Text('Edit')),
       ],
     );
   }
