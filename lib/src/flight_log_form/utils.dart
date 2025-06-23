@@ -1,5 +1,5 @@
 import '../utils/date_time/parse_date_and_time.dart';
-
+import '../utils/prepend_zero_if_needed.dart';
 import '../flight_logs/flight_log_model.dart';
 import '../utils/extract_int.dart';
 
@@ -97,8 +97,4 @@ String getISODateStringWithoutTime(String dateString) { // '17.07.2024'
   final day = prependZeroIfNeeded(segments.first);
 
   return '$year-$month-$day';
-}
-
-String prependZeroIfNeeded(String numStr) {
-  return numStr.length == 1 ? '0$numStr' : numStr;
 }
