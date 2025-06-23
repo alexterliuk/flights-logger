@@ -121,7 +121,7 @@ class FlightLogs extends StatelessWidget {
                   BackButton(
                     onPressed: onPressBackButton,
                     style: const ButtonStyle(
-                      padding: MaterialStatePropertyAll(EdgeInsets.all(16)),
+                      padding: WidgetStatePropertyAll(EdgeInsets.all(16)),
                     ),
                   ),
                   const Padding(padding: EdgeInsets.all(8)),

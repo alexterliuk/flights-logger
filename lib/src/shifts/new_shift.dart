@@ -120,7 +120,7 @@ class NewShiftState extends State<NewShift> {
             BackButton(
               onPressed: navigateByBackButton,
               style: const ButtonStyle(
-                padding: MaterialStatePropertyAll(EdgeInsets.all(16)),
+                padding: WidgetStatePropertyAll(EdgeInsets.all(16)),
               ),
             ),
             const Padding(padding: EdgeInsets.all(8)),

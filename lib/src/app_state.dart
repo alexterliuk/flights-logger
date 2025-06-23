@@ -512,7 +512,7 @@ class MyAppState with ChangeNotifier {
   /// there should be last flight log in the meaning of 'the latest flight'.
   /// SOLUTION:
   /// 1. In db make table FlightLogLandingRecord
-  /// where a unit is <FlightLogLandingRecord> { id: logId, landingDateAndTime, landingDateAndTimeMs }
+  /// where a unit is FlightLogLandingRecord { id: logId, landingDateAndTime, landingDateAndTimeMs }
   /// 2. added or edited log --> if > last in table --> add to end in table
   ///                            if < last in table --> find by landingDateAndTimeMs where to insert in table
   /// DO NOT IMPLEMENT BEC. EDITING LAST LOG SO THAT IT BECOMES NOT LATEST IS A RARE CASE
