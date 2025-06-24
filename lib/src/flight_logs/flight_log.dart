@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../home/home.dart';
 import '../app_state.dart';
 import '../utils/get_flight_log_distance_kilometers.dart';
 import '../flight_log_form/flight_log_form.dart';
@@ -38,11 +39,20 @@ class FlightLog extends StatelessWidget {
     }
 
     remove() async {
-      bool isRemoved = await appState.dbRemoveFlightLog(log.id, log.shiftId);
+      RemovalResult removalResult = await appState.dbRemoveFlightLog(log.id, log.shiftId);
 
-      if (isRemoved) {
+      if (removalResult.isLogRemoved) {
         flightLogsState.updateEditAndDeleteButtonsView(index, false);
         appState.update();
+      }
+
+      if (removalResult.isShiftRemoved) {
+        appState.resetSingleShiftMode();
+        appState.updateShiftsResAfterShiftRemoved(removalResult.removedShiftId);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Home()),
+        );
       }
     }
 

@@ -21,6 +21,20 @@ class ShiftsTotalCou {
   ShiftsTotalCou(this.value);
 }
 
+class RemovalResult {
+  bool isLogRemoved;
+  int removedLogId;
+  bool isShiftRemoved;
+  int removedShiftId;
+
+  RemovalResult({
+    this.isLogRemoved = false,
+    this.removedLogId = -1,
+    this.isShiftRemoved = false,
+    this.removedShiftId = -1,
+  });
+}
+
 class MyAppState with ChangeNotifier {
   List<String> history = [];
 
@@ -303,6 +317,17 @@ class MyAppState with ChangeNotifier {
     } catch (e) {
       print('[ERR]: shifts and shiftsIds length are not equal');
     }
+  }
+
+  ///
+  ///
+  ///
+  void updateShiftsResAfterShiftRemoved(int removedShiftId) {
+    shiftsRes.shifts.retainWhere((shift) => shift.id != removedShiftId);
+    shifts.retainWhere((shift) => shift.id != removedShiftId);
+    shiftsIds.retainWhere((id) => id != removedShiftId);
+    shiftsRes.totalCount = shiftsRes.shifts.length;
+    shiftsTotalCount = shifts.length;
   }
 
   ///
@@ -855,31 +880,42 @@ class MyAppState with ChangeNotifier {
   ///
   ///
   ///
-  Future<bool> dbRemoveFlightLog(int id, int shiftId) async {
-    bool isRemoved = await removeFlightLogFromDb(id);
-    print('[dbRemoveFlightLog] is removed - $isRemoved, flightLogs.length - ${flightLogs.length}');
+  Future<RemovalResult> dbRemoveFlightLog(int id, int shiftId) async {
+    bool isLogRemoved = await removeFlightLogFromDb(id);
 
-    if (isRemoved) {
+    var removalResult = RemovalResult(
+      isLogRemoved: isLogRemoved,
+      removedLogId: isLogRemoved ? id : -1,
+    );
+
+    if (isLogRemoved) {
       removeFlightLog(id);
-      dbUpdateShiftAfterFlightLogRemoved(shiftId, id);
+      var shiftRemovalResult = await dbUpdateShiftAfterFlightLogRemoved(shiftId, id);
+      removalResult.isShiftRemoved = shiftRemovalResult.isShiftRemoved;
+      removalResult.removedShiftId = shiftRemovalResult.removedShiftId;
       dbUpdateHomeInDb();
     }
 
-    return isRemoved;
+    return removalResult;
   }
 
   ///
   ///
   ///
-  Future<void> dbUpdateShiftAfterFlightLogRemoved(int shiftId, int removedLogId) async {
+  Future<RemovalResult> dbUpdateShiftAfterFlightLogRemoved(int shiftId, int removedLogId) async {
     ShiftModel? shift = await getShiftFromDb(shiftId);
 
     if (shift != null) {
       shift.logIds.retainWhere((id) => id != removedLogId);
 
       if (shift.logIds.isEmpty) {
-        bool isRemoved = await removeShiftFromDb(shiftId);
-        print('[dbUpdateShiftAfterFlightLogRemoved] ...removing shift - $isRemoved, id was - $shiftId');
+        bool isShiftRemoved = await removeShiftFromDb(shiftId);
+        print('[dbUpdateShiftAfterFlightLogRemoved] ...removing shift - $isShiftRemoved, id was - $shiftId');
+
+        return RemovalResult(
+          isShiftRemoved: isShiftRemoved,
+          removedShiftId: isShiftRemoved ? shiftId : -1,
+        );
       } else {
         int flightsQty = shift.logIds.length;
         int timeTotalMinutes = 0;
@@ -933,6 +969,8 @@ class MyAppState with ChangeNotifier {
         await updateShiftInDbAfterFlightLogRemoved(shift);
       }
     }
+
+    return RemovalResult();
   }
 
   ///
