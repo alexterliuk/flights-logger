@@ -24,8 +24,7 @@ ParsedDateAndTime parseDateAndTime(String dateAndTime) { // '2024-07-20 23:48'
   final month = segments[1];
   final day = segments[2].substring(0, 2);
   final hour = dateAndTime.substring(11, 13);
-  final minute = dateAndTime.substring(13);
-
+  final minute = dateAndTime.substring(14);
   final yearInt = extractInt(year);
   final monthInt = extractInt(month);
   final dayInt = extractInt(day);
