@@ -49,6 +49,14 @@ class FlightLog extends StatelessWidget {
       if (removalResult.isShiftRemoved) {
         appState.resetSingleShiftMode();
         appState.updateShiftsResAfterShiftRemoved(removalResult.removedShiftId);
+      }
+
+      if (removalResult.isLogRemoved || removalResult.isShiftRemoved) {
+        // if using with `await`, an err in terminal - at this moment widget's state is not stable...
+        appState.dbUpdateHome(shouldRefresh: true);
+      }
+
+      if (removalResult.isShiftRemoved) {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => Home()),

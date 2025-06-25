@@ -557,6 +557,15 @@ class MyAppState with ChangeNotifier {
   void updateLastFlightLogId(int id) => lastFlightLogId = id;
   void updateLastFlightLog(FlightLogModel log) => lastFlightLog = log;
 
+  void resetHomeItems() {
+    topFlightTimeMinutes = 0;
+    topDistanceMeters = 0;
+    topAltitudeMeters = 0;
+    lastShiftId = -1;
+    lastFlightLogId = -1;
+    lastFlightLog = FlightLogModel(shiftId: -1, id: -1);
+  }
+
   ///
   ///
   ///
@@ -673,7 +682,7 @@ class MyAppState with ChangeNotifier {
   ///
   ///
   ///
-  void dbUpdateHomeInDb() async {
+  Future<void> dbUpdateHome({ bool shouldRefresh = false }) async {
     HomeModel home = await getHomeFromDb();
     List<ShiftModel> shifts = (await getShiftsFromDb()).shifts;
     List<FlightLogModel> logs = await getFlightLogsFromDb();
@@ -721,6 +730,15 @@ class MyAppState with ChangeNotifier {
       }
     }
 
+    if (logs.isEmpty) {
+      resetHomeItems();
+      shouldUpdateTopFlightTimeMinutes = true;
+      shouldUpdateTopDistanceMeters = true;
+      shouldUpdateTopAltitudeMeters = true;
+      shouldUpdateLastShiftId = true;
+      shouldUpdateLastFlightLogId = true;
+    }
+
     updateHomeInDb(
       topFlightTimeMinutes: shouldUpdateTopFlightTimeMinutes
         ? topFlightTimeMinutes
@@ -738,6 +756,10 @@ class MyAppState with ChangeNotifier {
         ? lastFlightLogId
         : null,
     );
+
+    if (shouldRefresh) {
+      update();
+    }
   }
 
   ///
@@ -893,7 +915,7 @@ class MyAppState with ChangeNotifier {
       var shiftRemovalResult = await dbUpdateShiftAfterFlightLogRemoved(shiftId, id);
       removalResult.isShiftRemoved = shiftRemovalResult.isShiftRemoved;
       removalResult.removedShiftId = shiftRemovalResult.removedShiftId;
-      dbUpdateHomeInDb();
+      dbUpdateHome();
     }
 
     return removalResult;
@@ -991,7 +1013,7 @@ class MyAppState with ChangeNotifier {
 
     if (isRemoved) {
       removeShift(id);
-      dbUpdateHomeInDb();
+      dbUpdateHome();
     }
 
     return isRemoved;
