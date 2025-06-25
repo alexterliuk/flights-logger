@@ -451,7 +451,12 @@ class MyAppState with ChangeNotifier {
     flightLogs.removeWhere((log) => log.id == id);
     int afterCount = flightLogs.length;
 
-    return beforeCount != afterCount;
+    bool isRemoved = beforeCount != afterCount;
+    if (isRemoved) {
+      flightLogsIds.removeWhere((logId) => logId == id);
+    }
+
+    return isRemoved;
   }
 
   ///
@@ -764,16 +769,16 @@ class MyAppState with ChangeNotifier {
 
   ///
   ///
-  ///
-  Future<List<FlightLogModel>> dbGetFlightLogs() async {
-    List<FlightLogModel> logs = await getFlightLogsFromDb();
-    print('[dbGetFlightLogs] ...getting all flight logs, count - ${logs.length}');
-
-    // updateFlightLogs(logs, FlightLogOriginType.noShift);
-    updateFlightLogs(givenLogs: logs);
-
-    return logs;
-  }
+  /// COMMENTED BECAUSE THERE'S NO CALLER OF THE FUNC IN THE APP
+  // Future<List<FlightLogModel>> dbGetFlightLogs() async {
+  //   List<FlightLogModel> logs = await getFlightLogsFromDb();
+  //   print('[dbGetFlightLogs] ...getting all flight logs, count - ${logs.length}');
+  //
+  //   // updateFlightLogs(logs, FlightLogOriginType.noShift);
+  //   updateFlightLogs(givenLogs: logs);
+  //
+  //   return logs;
+  // }
 
   ///
   ///
