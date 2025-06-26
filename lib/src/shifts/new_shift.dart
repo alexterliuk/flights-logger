@@ -41,15 +41,6 @@ class NewShiftState extends State<NewShift> {
   }
 
   @override
-  initState() {
-    super.initState();
-
-    if (widget.givenShiftId == -1) {
-      createNewShift();
-    }
-  }
-
-  @override
   dispose() {
     super.dispose();
   }
@@ -71,7 +62,17 @@ class NewShiftState extends State<NewShift> {
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
 
-    void addLog() {
+    void addLog() async {
+      if (widget.givenShiftId == -1) {
+        await createNewShift();
+
+        /// When widget.givenShiftId is -1, new shift is created, and its id becomes shiftId,
+        /// and shiftId becomes lastShiftId in the next block
+        if (shiftId != -1 && appState.lastShiftId != shiftId) {
+          appState.updateLastShiftId(shiftId);
+        }
+      }
+
       appState.addToHistory(FlightLogForm.routeName);
       Navigator.push(
         context,
@@ -79,12 +80,6 @@ class NewShiftState extends State<NewShift> {
           FlightLogForm(shiftId: shiftId == -1 ? widget.givenShiftId : shiftId),
         ),
       );
-    }
-
-    /// When widget.givenShiftId is -1, new shift is created, and its id becomes shiftId,
-    /// and shiftId becomes lastShiftId in the next block
-    if (shiftId != -1 && appState.lastShiftId != shiftId) {
-      appState.updateLastShiftId(shiftId);
     }
 
     final List<FlightLogModel> logs = appState.newShiftFlightLogs;
