@@ -3,21 +3,26 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../app_state.dart';
+import '../db/queries.dart';
 import '../calendar/calendar.dart';
 import '../flight_logs/flight_log_model.dart';
 import '../flight_logs/flight_logs.dart';
 import '../shifts/new_shift.dart';
+import '../shifts/shift_model.dart';
 import '../utils/extract_int.dart';
 import '../utils/date_time/landing_time/get_landing_time.dart';
+import '../utils/prepend_zero_if_needed.dart';
 import './utils.dart';
 
 class FlightLogFormArguments {
   final FlightLogModel? log;
   final int shiftId;
+  final bool isNewShift;
 
   FlightLogFormArguments(
     this.log,
     this.shiftId,
+    this.isNewShift,
   );
 }
 
@@ -25,11 +30,13 @@ class FlightLogFormArguments {
 class FlightLogForm extends StatefulWidget {
   final FlightLogModel? log;
   final int shiftId;
+  final bool isNewShift;
 
   const FlightLogForm({
     super.key,
     this.log,
     this.shiftId = -1,
+    this.isNewShift = false,
   });
 
   static const routeName = '/flight_log_form';
@@ -86,10 +93,16 @@ class FlightLogFormState extends State<FlightLogForm> {
     });
   }
 
+  Future<int> createNewShift() async {
+    BaseShiftModel shift = BaseShiftModel();
+    int id = await addShiftToDb(shift);
+
+    return id;
+  }
+
   @override
   void initState() {
     super.initState();
-    print('[FlightLogForm initState] shiftId - ${widget.shiftId}');
     FlightLogModel? log = widget.log;
 
     if (log != null) {
@@ -132,10 +145,8 @@ class FlightLogFormState extends State<FlightLogForm> {
 
   BaseFlightLogModel? getEditedLog() {
     if (_formKey.currentState!.validate()) {
-      var takeoffH = takeoffHoursController.text;
-      var takeoffM = takeoffMinutesController.text;
-      var takeoffHour = takeoffH.length == 1 ? '0$takeoffH' : takeoffH;
-      var takeoffMinute = takeoffM.length == 1 ? '0$takeoffM' : takeoffM;
+      var takeoffHour = prependZeroIfNeeded(takeoffHoursController.text);
+      var takeoffMinute = prependZeroIfNeeded(takeoffMinutesController.text);
       var takeoffTime = '$takeoffHour:$takeoffMinute';
       // var dateISO = getISODateStringWithoutTime(date);
       final takeoffDateAndTime = '$dateISO $takeoffTime';
@@ -145,8 +156,8 @@ class FlightLogFormState extends State<FlightLogForm> {
 
       final landing = getLandingTime(
         dateISO,
-        GetLandingTimeArgument(takeoffH, validateHours),
-        GetLandingTimeArgument(takeoffM, validateMinutes),
+        GetLandingTimeArgument(takeoffHoursController.text, validateHours),
+        GetLandingTimeArgument(takeoffMinutesController.text, validateMinutes),
         GetLandingTimeArgument(flightTime, validateFlightTime),
       );
       final landingDateAndTime = landing.dateTime.toLocal().toString().substring(0, 16);
@@ -163,7 +174,7 @@ class FlightLogFormState extends State<FlightLogForm> {
       //   SnackBar(content: Text(flightLog)),
       // );
 
-      final finalLog = BaseFlightLogModel(
+      var finalLog = BaseFlightLogModel(
         takeoffDateAndTime: takeoffDateAndTime,
         landingDateAndTime: landingDateAndTime,
         flightTimeMinutes: flightTimeMinutes,
@@ -186,12 +197,12 @@ class FlightLogFormState extends State<FlightLogForm> {
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
 
-    void proceedToNewShift() {
+    void proceedToNewShift(BaseFlightLogModel editedLog) {
       appState.removeFromHistory(FlightLogForm.routeName);
       Navigator.pop(context);
       Navigator.push(context,
         MaterialPageRoute(builder: (context) =>
-          NewShift(givenShiftId: widget.shiftId),
+          NewShift(givenShiftId: widget.isNewShift ? editedLog.shiftId : widget.shiftId),
         ),
       );
     }
@@ -216,7 +227,7 @@ class FlightLogFormState extends State<FlightLogForm> {
     void navigateByOKButton(BaseFlightLogModel editedLog) {
       /// form being used for a new log
       if (widget.log == null || appState.newShiftFlightLogs.isNotEmpty) {
-        proceedToNewShift();
+        proceedToNewShift(editedLog);
       } else {
         bool isLogChanged = hasFlightLogChanged(widget.log as FlightLogModel, editedLog);
         if (isLogChanged) {
@@ -389,7 +400,7 @@ class FlightLogFormState extends State<FlightLogForm> {
                       ),
                     ],
                   ),
-        
+
                   // ================= FLIGHT TIME =================
                   Column(
                     children: [
@@ -427,7 +438,7 @@ class FlightLogFormState extends State<FlightLogForm> {
                   ),
                 ],
               ),
-        
+
               // ================= SECOND ROW =================
               Flex(
                 direction: Axis.horizontal,
@@ -458,7 +469,7 @@ class FlightLogFormState extends State<FlightLogForm> {
                       ),
                     ],
                   ),
-        
+
                  // ================= ALTITUDE =================
                   Column(
                     children: [
@@ -484,7 +495,7 @@ class FlightLogFormState extends State<FlightLogForm> {
                       ),
                     ],
                   ),
-        
+
                  // ================= LOCATION =================
                   Column(
                     children: [
@@ -508,7 +519,7 @@ class FlightLogFormState extends State<FlightLogForm> {
                   ),
                 ],
               ),
-        
+
               // ================= THIRD ROW =================
               Flex(
                 direction: Axis.horizontal,
@@ -536,7 +547,7 @@ class FlightLogFormState extends State<FlightLogForm> {
                       ),
                     ],
                   ),
-        
+
                  // ================= DRONE ACCUM % LEFT =================
                   Column(
                     children: [
@@ -560,7 +571,7 @@ class FlightLogFormState extends State<FlightLogForm> {
                       ),
                     ],
                   ),
-        
+
                  // ================= RC ACCUM % LEFT =================
                   Column(
                     children: [
@@ -586,7 +597,7 @@ class FlightLogFormState extends State<FlightLogForm> {
                   ),
                 ],
               ),
-        
+
               // ================= NOTE =================
               const Padding(
                 padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 8.0, bottom: 8.0),
@@ -595,7 +606,7 @@ class FlightLogFormState extends State<FlightLogForm> {
                   style: TextStyle(fontStyle: FontStyle.italic),
                 ),
               ),
-        
+
               // ================= OK BUTTON =================
               Padding(
                 padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 8.0, bottom: 24.0),
@@ -603,7 +614,13 @@ class FlightLogFormState extends State<FlightLogForm> {
                   onPressed: () async {
                     BaseFlightLogModel? editedLog = getEditedLog();
 
-                    if (editedLog != null) {
+                    if (editedLog is BaseFlightLogModel) {
+                      if (widget.isNewShift) {
+                        int newShiftId = await createNewShift();
+                        appState.updateLastShiftId(newShiftId);
+                        editedLog.shiftId = newShiftId;
+                      }
+
                       if (widget.log == null) {
                         await appState.dbAddFlightLog(editedLog/*, widget.shiftId*/);
                       } else {

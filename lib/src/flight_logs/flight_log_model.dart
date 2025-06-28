@@ -19,7 +19,7 @@ class BaseFlightLogModel {
   String droneAccum;
   int droneAccumChargeLeft;
   int rcAccumChargeLeft;
-  final int shiftId;
+  int shiftId;
 
   BaseFlightLogModel({
     this.takeoffDateAndTime = '',

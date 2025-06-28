@@ -30,16 +30,6 @@ class NewShiftState extends State<NewShift> {
   String? end;
   int shiftId = -1;
 
-  Future<void> createNewShift() async {
-    BaseShiftModel shift = BaseShiftModel();
-
-    int id = await addShiftToDb(shift);
-
-    setState(() {
-      shiftId = id;
-    });
-  }
-
   @override
   dispose() {
     super.dispose();
@@ -62,22 +52,15 @@ class NewShiftState extends State<NewShift> {
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
 
-    void addLog() async {
-      if (widget.givenShiftId == -1) {
-        await createNewShift();
-
-        /// When widget.givenShiftId is -1, new shift is created, and its id becomes shiftId,
-        /// and shiftId becomes lastShiftId in the next block
-        if (shiftId != -1 && appState.lastShiftId != shiftId) {
-          appState.updateLastShiftId(shiftId);
-        }
-      }
-
+    void addLog() {
       appState.addToHistory(FlightLogForm.routeName);
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) =>
-          FlightLogForm(shiftId: shiftId == -1 ? widget.givenShiftId : shiftId),
+          FlightLogForm(
+            shiftId: shiftId == -1 ? widget.givenShiftId : shiftId,
+            isNewShift: widget.givenShiftId == -1,
+          ),
         ),
       );
     }
@@ -98,11 +81,6 @@ class NewShiftState extends State<NewShift> {
 
     void navigateByBackButton() async {
       appState.removeFromHistory(NewShift.routeName);
-
-      if (appState.newShiftFlightLogs.isEmpty) {
-        await appState.dbRemoveShift(shiftId == -1 ? widget.givenShiftId : shiftId);
-      }
-
       proceedToHome();
     }
 
