@@ -1,6 +1,8 @@
 List<String> initialTableQueries = [
 '''
 CREATE TABLE FlightLog(
+  droneName TEXT,
+  droneId TEXT,
   id INTEGER PRIMARY KEY,
   takeoffDateAndTime TEXT,
   landingDateAndTime TEXT,
@@ -11,6 +13,7 @@ CREATE TABLE FlightLog(
   droneAccum TEXT,
   droneAccumChargeLeft INTEGER,
   rcAccumChargeLeft INTEGER,
+  note TEXT,
   shiftId INTEGER
 )
 ''',

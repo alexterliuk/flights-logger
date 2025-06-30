@@ -174,7 +174,7 @@ class FlightLogs extends StatelessWidget {
                     }
                   }
 
-                  return FlightLog(log: log, index: index, isOrdinalShown: false);
+                  return FlightLog(log: log, index: index, isOrdinalShown: true);
                 },
               ),
             ),

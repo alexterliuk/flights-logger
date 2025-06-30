@@ -49,6 +49,8 @@ class FlightLogForm extends StatefulWidget {
 
 class FlightLogFormState extends State<FlightLogForm> {
   final _formKey = GlobalKey<FormState>();
+  final droneNameController = TextEditingController();
+  final droneIdController = TextEditingController();
   final takeoffHoursController = TextEditingController();
   final takeoffMinutesController = TextEditingController();
   final flightTimeController = TextEditingController();
@@ -58,6 +60,7 @@ class FlightLogFormState extends State<FlightLogForm> {
   final droneAccumController = TextEditingController();
   final droneAccumChargeLeftController = TextEditingController();
   final rcAccumChargeLeftController = TextEditingController();
+  final noteController = TextEditingController();
 
   String landingTime = '';
   String date = '';
@@ -106,6 +109,8 @@ class FlightLogFormState extends State<FlightLogForm> {
     FlightLogModel? log = widget.log;
 
     if (log != null) {
+      droneNameController.text = log.droneName;
+      droneIdController.text = log.droneId;
       takeoffHoursController.text = log.takeoffDateAndTime.substring(11, 13);
       takeoffMinutesController.text = log.takeoffDateAndTime.substring(14, 16);
       flightTimeController.text = '${log.flightTimeMinutes}';
@@ -115,6 +120,7 @@ class FlightLogFormState extends State<FlightLogForm> {
       droneAccumController.text = log.droneAccum;
       droneAccumChargeLeftController.text = log.droneAccumChargeLeft == -1 ? '' : '${log.droneAccumChargeLeft}';
       rcAccumChargeLeftController.text = log.rcAccumChargeLeft == -1 ? '' : '${log.rcAccumChargeLeft}';
+      noteController.text = log.note;
 
       if (log.landingDateAndTime.isNotEmpty) {
         setLandingTime(
@@ -132,6 +138,8 @@ class FlightLogFormState extends State<FlightLogForm> {
   @override
   void dispose() {
     super.dispose();
+    droneNameController.dispose();
+    droneIdController.dispose();
     takeoffHoursController.dispose();
     takeoffMinutesController.dispose();
     flightTimeController.dispose();
@@ -141,10 +149,13 @@ class FlightLogFormState extends State<FlightLogForm> {
     droneAccumController.dispose();
     droneAccumChargeLeftController.dispose();
     rcAccumChargeLeftController.dispose();
+    noteController.dispose();
   }
 
   BaseFlightLogModel? getEditedLog() {
     if (_formKey.currentState!.validate()) {
+      var droneName = droneNameController.text;
+      var droneId = droneIdController.text;
       var takeoffHour = prependZeroIfNeeded(takeoffHoursController.text);
       var takeoffMinute = prependZeroIfNeeded(takeoffMinutesController.text);
       var takeoffTime = '$takeoffHour:$takeoffMinute';
@@ -168,6 +179,7 @@ class FlightLogFormState extends State<FlightLogForm> {
       var droneAccum = droneAccumController.text;
       var droneAccumChargeLeft = extractInt(droneAccumChargeLeftController.text);
       var rcAccumChargeLeft = extractInt(rcAccumChargeLeftController.text);
+      var note = noteController.text;
 
       // ScaffoldMessenger.of(context).showSnackBar(
       //   // SnackBar(content: Text('Takeoff Time: $takeoffTime')),
@@ -175,6 +187,8 @@ class FlightLogFormState extends State<FlightLogForm> {
       // );
 
       var finalLog = BaseFlightLogModel(
+        droneName: droneName,
+        droneId: droneId,
         takeoffDateAndTime: takeoffDateAndTime,
         landingDateAndTime: landingDateAndTime,
         flightTimeMinutes: flightTimeMinutes,
@@ -184,6 +198,7 @@ class FlightLogFormState extends State<FlightLogForm> {
         droneAccum: droneAccum,
         droneAccumChargeLeft: droneAccumChargeLeft,
         rcAccumChargeLeft: rcAccumChargeLeft,
+        note: note,
         shiftId: widget.shiftId,
       );
 
@@ -300,6 +315,7 @@ class FlightLogFormState extends State<FlightLogForm> {
                 ],
               ),
 
+              // ================= FIRST ROW =================
               Flex(
                 direction: Axis.horizontal,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -598,13 +614,94 @@ class FlightLogFormState extends State<FlightLogForm> {
                 ],
               ),
 
-              // ================= NOTE =================
+              // ================= INFO =================
               const Padding(
                 padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 8.0, bottom: 8.0),
                 child: Text(
                   '* Enter flight time in minutes, distance and altitude - in meters',
                   style: TextStyle(fontStyle: FontStyle.italic),
                 ),
+              ),
+
+              // ================= FOURTH ROW =================
+              Flex(
+                direction: Axis.horizontal,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  // ================= DRONE NAME =================
+                  Column(
+                    children: [
+                      const Text('Drone Name'),
+                      Flex(
+                        direction: Axis.horizontal,
+                        children: [
+                          SizedBox(
+                            width: 135,
+                            height: 100,
+                            child: TextFormField(
+                              controller: droneNameController,
+                              minLines: 1,
+                              maxLines: 3,
+                              maxLength: 100,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+
+                  // ================= DRONE ID =================
+                  Column(
+                    children: [
+                      const Text('Drone Id'),
+                      Flex(
+                        direction: Axis.horizontal,
+                        children: [
+                          SizedBox(
+                            width: 135,
+                            height: 100,
+                            child: TextFormField(
+                              controller: droneIdController,
+                              minLines: 1,
+                              maxLines: 3,
+                              maxLength: 100,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+
+              // ================= FIFTH ROW =================
+              Flex(
+                direction: Axis.horizontal,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  // ================= NOTE =================
+                  Column(
+                    children: [
+                      const Text('Note'),
+                      Flex(
+                        direction: Axis.horizontal,
+                        children: [
+                          SizedBox(
+                            width: 320,
+                            height: 160,
+                            child: TextFormField(
+                              controller: noteController,
+                              // textAlign: TextAlign.end,
+                              // minLines: 1,
+                              maxLines: 5,
+                              maxLength: 300
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
               ),
 
               // ================= OK BUTTON =================

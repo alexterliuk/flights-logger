@@ -124,6 +124,48 @@ class NewShiftFlightLog extends StatelessWidget {
             ),
             Row(
               children: [
+                const SizedBox(width: 30, height: 26),
+                SizedBox(
+                  width: 266,
+                  height: 26,
+                  child: Text(
+                    'Drone name - ${log.droneName}',
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(height: 2.4),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                const SizedBox(width: 30, height: 26),
+                SizedBox(
+                  width: 266,
+                  height: 26,
+                  child: Text(
+                    'Drone id - ${log.droneId}',
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(height: 2.4),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                const SizedBox(width: 30, height: 26),
+                SizedBox(
+                  width: 266,
+                  height: 26,
+                  child: Text(
+                    'Note - ${log.note}',
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(height: 2.4),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
                 const SizedBox(width: 240, height: 26),
                 TextButton(onPressed: edit, child: const Text('Edit')),
               ],

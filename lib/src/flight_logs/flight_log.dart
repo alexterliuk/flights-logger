@@ -84,46 +84,51 @@ class FlightLog extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          isOrdinalShown
-                            ? SizedBox(
-                                width: 30,
-                                height: 36,
-                                child: Text(
-                                  '${index + 1}.',
-                                  style: const TextStyle(height: 2.4),
-                                ),
-                              )
-                            : const SizedBox(width: 30, height: 36),
+                          SizedBox(width: 8),
                           SizedBox(
-                            width: 65,
+                            width: 28,
+                            height: 36,
+                            child: isOrdinalShown
+                              ? Text(
+                                  '${index + 1}',
+                                  style: const TextStyle(height: 2.4),
+                                  // TODO: add fontSize 16 or 13 if count > 999 to not overflow
+                                )
+                              : null,
+                          ),
+                          SizedBox(
+                            width: 64,
                             height: 36,
                             child: Text(
-                              // getTime(log.takeoffDateAndTime),
-                              log.id.toString(),
+                              getTime(log.takeoffDateAndTime),
+                              // log.id.toString(),
                               style: const TextStyle(height: 2.4),
+                              textAlign: TextAlign.right,
                             ),
                           ),
                           SizedBox(
-                            width: 65,
+                            width: 64,
                             height: 36,
                             child: Text(
                               getTime(log.landingDateAndTime),
                               style: const TextStyle(height: 2.4),
+                              textAlign: TextAlign.right,
                             ),
                           ),
                           SizedBox(
-                            width: 90,
+                            width: 80,
                             height: 36,
                             child: Text(
-                              // '${getFlightLogDistanceKilometers(log.distanceMeters)} км',
-                              'shId ${log.shiftId}',
+                              '${getFlightLogDistanceKilometers(log.distanceMeters)} км',
+                              // '${log.shiftId}',
                               style: const TextStyle(height: 2.4),
+                              textAlign: TextAlign.right,
                             ),
                           ),
                           flightLogsState.areEditAndDeleteButtonsShown(index)
                             ?
                               SizedBox(
-                                width: 70,
+                                width: 80,
                                 child: Flex(
                                   direction: Axis.horizontal,
                                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -145,125 +150,206 @@ class FlightLog extends StatelessWidget {
                               )
                             :
                               SizedBox(
-                                width: 70,
+                                width: 80,
                                 height: 36,
                                 child: Text(
                                   log.location,
                                   style: const TextStyle(height: 2.4),
+                                  textAlign: TextAlign.right,
                                 ),
                               ),
                         ],
                       ),
                       flightLogsState.isExpanded(log.id)
                         ?
-                          Flex(
-                            direction: Axis.horizontal,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          Column(
                             children: [
-                              Column(
+                              Flex(
+                                direction: Axis.horizontal,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
-                                  const Row(
+                                  Column(
                                     children: [
-                                      SizedBox(
-                                        width: 95,
-                                        child: Text(
-                                          'Flight time',
-                                          textScaler: collapsibleRowScaler,
-                                        ),
+                                      const Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 96,
+                                            child: Text(
+                                              'Flight time',
+                                              textScaler: collapsibleRowScaler,
+                                              style: TextStyle(fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 96,
+                                            child: Text(
+                                              '${log.flightTimeMinutes} хв',
+                                              textScaler: collapsibleRowScaler,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                  Row(
+                                  Column(
                                     children: [
-                                      SizedBox(
-                                        width: 95,
-                                        child: Text(
-                                          '${log.flightTimeMinutes} хв',
-                                          textScaler: collapsibleRowScaler,
-                                        ),
+                                      const Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 72,
+                                            child: Text(
+                                              'Altitude ',
+                                              textScaler: collapsibleRowScaler,
+                                              style: TextStyle(fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 72,
+                                            child: Text(
+                                              '${log.altitudeMeters} м',
+                                              textScaler: collapsibleRowScaler,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      const Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 80,
+                                            child: Text(
+                                              'Battery',
+                                              textScaler: collapsibleRowScaler,
+                                              style: TextStyle(fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 80,
+                                            child: Text(
+                                              droneAccumRecord,
+                                              textScaler: collapsibleRowScaler,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      const Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 72,
+                                            child: Text(
+                                              'RC Battery',
+                                              textScaler: collapsibleRowScaler,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 72,
+                                            child: Text(
+                                              rcAccumRecord,
+                                              textScaler: collapsibleRowScaler,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
                                 ],
                               ),
-                              Column(
+
+                              Padding(padding: EdgeInsetsGeometry.directional(top: 8)),
+
+                              Flex(
+                                direction: Axis.horizontal,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
-                                  const Row(
-                                    children: [
-                                      SizedBox(
-                                        width: 65,
-                                        child: Text(
-                                          'Altitude ',
-                                          textScaler: collapsibleRowScaler,
-                                        ),
-                                      ),
-                                    ],
+                                  const SizedBox(
+                                    width: 96,
+                                    child: Text(
+                                      'Drone Name',
+                                      textScaler: collapsibleRowScaler,
+                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                    ),
                                   ),
-                                  Row(
-                                    children: [
-                                      SizedBox(
-                                        width: 65,
-                                        child: Text(
-                                          '${log.altitudeMeters} м',
-                                          textScaler: collapsibleRowScaler,
-                                        ),
-                                      ),
-                                    ],
+                                  SizedBox(
+                                    width: 224,
+                                    child: Text(
+                                      log.droneName,
+                                      textScaler: collapsibleRowScaler,
+                                    ),
                                   ),
                                 ],
                               ),
-                              Column(
+
+                              Padding(padding: EdgeInsetsGeometry.directional(top: 8)),
+
+                              Flex(
+                                direction: Axis.horizontal,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
-                                  const Row(
-                                    children: [
-                                      SizedBox(
-                                        width: 90,
-                                        child: Text(
-                                          'Battery',
-                                          textScaler: collapsibleRowScaler,
-                                        ),
-                                      ),
-                                    ],
+                                  const SizedBox(
+                                    width: 96,
+                                    child: Text(
+                                      'Drone Id',
+                                      textScaler: collapsibleRowScaler,
+                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                    ),
                                   ),
-                                  Row(
-                                    children: [
-                                      SizedBox(
-                                        width: 90,
-                                        child: Text(
-                                          droneAccumRecord,
-                                          textScaler: collapsibleRowScaler,
-                                        ),
-                                      ),
-                                    ],
+                                  SizedBox(
+                                    width: 224,
+                                    child: Text(
+                                      log.droneId,
+                                      textScaler: collapsibleRowScaler,
+                                    ),
                                   ),
                                 ],
                               ),
-                              Column(
+
+                              Padding(padding: EdgeInsetsGeometry.directional(top: 8)),
+
+                              Flex(
+                                direction: Axis.horizontal,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
-                                  const Row(
-                                    children: [
-                                      SizedBox(
-                                        width: 70,
-                                        child: Text(
-                                          'RC Battery',
-                                          textScaler: collapsibleRowScaler,
-                                        ),
-                                      ),
-                                    ],
+                                  const SizedBox(
+                                    width: 96,
+                                    child: Text(
+                                      'Note',
+                                      textScaler: collapsibleRowScaler,
+                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                    ),
                                   ),
-                                  Row(
-                                    children: [
-                                      SizedBox(
-                                        width: 70,
-                                        child: Text(
-                                          rcAccumRecord,
-                                          textScaler: collapsibleRowScaler,
-                                        ),
-                                      ),
-                                    ],
+                                  SizedBox(
+                                    width: 224,
+                                    child: Text(
+                                      log.note,
+                                      textScaler: collapsibleRowScaler,
+                                    ),
                                   ),
                                 ],
                               ),
+
                             ],
                           )
                         :

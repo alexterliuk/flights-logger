@@ -21,12 +21,12 @@ class FlightLogsHeader extends StatelessWidget {
           children: [
             Row(
               children: [
-                isOrdinalShown ? const SizedBox(width: 30, child: Text('#')) : Container(),
-                const SizedBox(width: 65, child: Text('Takeoff')),
-                const SizedBox(width: 65, child: Text('Landing')),
-                const SizedBox(width: 90, child: Text('Distance')),
-                const SizedBox(width: 70, child: Text('Location')),
-                const SizedBox(width: 6),
+                SizedBox(width: 32, child: isOrdinalShown ? Text('#') : null),
+                const SizedBox(width: 64, child: Text('Takeoff', textAlign: TextAlign.right)),
+                const SizedBox(width: 64, child: Text('Landing', textAlign: TextAlign.right)),
+                const SizedBox(width: 80, child: Text('Distance', textAlign: TextAlign.right)),
+                const SizedBox(width: 80, child: Text('Location', textAlign: TextAlign.right)),
+                // const SizedBox(width: 6),
               ],
             ),
           ],

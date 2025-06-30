@@ -10,6 +10,8 @@
 /// Also used for passing as an argument to addFlightLogToDb
 ///
 class BaseFlightLogModel {
+  String droneName;
+  String droneId;
   String takeoffDateAndTime; // '2024-07-20 23:48'
   String landingDateAndTime; // '2024-07-21 00:07'
   int flightTimeMinutes;
@@ -19,9 +21,12 @@ class BaseFlightLogModel {
   String droneAccum;
   int droneAccumChargeLeft;
   int rcAccumChargeLeft;
+  String note;
   int shiftId;
 
   BaseFlightLogModel({
+    this.droneName = '',
+    this.droneId = '',
     this.takeoffDateAndTime = '',
     this.landingDateAndTime = '',
     this.flightTimeMinutes = -1,
@@ -31,11 +36,14 @@ class BaseFlightLogModel {
     this.droneAccum = '',
     this.droneAccumChargeLeft = -1,
     this.rcAccumChargeLeft = -1,
+    this.note = '',
     required this.shiftId,
   });
 
   Map<String, Object?> toMap() {
     return {
+      'droneName': droneName,
+      'droneId': droneId,
       'takeoffDateAndTime': takeoffDateAndTime,
       'landingDateAndTime': landingDateAndTime,
       'flightTimeMinutes': flightTimeMinutes,
@@ -45,12 +53,15 @@ class BaseFlightLogModel {
       'droneAccum': droneAccum,
       'droneAccumChargeLeft': droneAccumChargeLeft,
       'rcAccumChargeLeft': rcAccumChargeLeft,
+      'note': note,
       'shiftId': shiftId,
     };
   }
 
   FlightLogModel toLog({ required int id }) {
     return FlightLogModel(
+      droneName: droneName,
+      droneId: droneId,
       takeoffDateAndTime: takeoffDateAndTime,
       landingDateAndTime: landingDateAndTime,
       flightTimeMinutes: flightTimeMinutes,
@@ -60,6 +71,7 @@ class BaseFlightLogModel {
       droneAccum: droneAccum,
       droneAccumChargeLeft: droneAccumChargeLeft,
       rcAccumChargeLeft: rcAccumChargeLeft,
+      note: note,
       shiftId: shiftId,
       id: id,
     );
@@ -73,6 +85,8 @@ class FlightLogModel extends BaseFlightLogModel {
   final int id;
 
   FlightLogModel({
+    super.droneName,
+    super.droneId,
     super.takeoffDateAndTime,
     super.landingDateAndTime,
     super.flightTimeMinutes,
@@ -82,6 +96,7 @@ class FlightLogModel extends BaseFlightLogModel {
     super.droneAccum,
     super.droneAccumChargeLeft,
     super.rcAccumChargeLeft,
+    super.note,
     required super.shiftId,
     required this.id,
   });

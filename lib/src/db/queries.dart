@@ -139,6 +139,8 @@ Future<List<FlightLogModel>> getFlightLogsFromDb({ int? offset, int? limit }) as
     for (final {
           'id': id as int,
           'shiftId': shiftId as int,
+          'droneName': droneName as String,
+          'droneId': droneId as String,
           'takeoffDateAndTime': takeoffDateAndTime as String,
           'landingDateAndTime': landingDateAndTime as String,
           'flightTimeMinutes': flightTimeMinutes as int,
@@ -148,10 +150,13 @@ Future<List<FlightLogModel>> getFlightLogsFromDb({ int? offset, int? limit }) as
           'droneAccum': droneAccum as String,
           'droneAccumChargeLeft': droneAccumChargeLeft as int,
           'rcAccumChargeLeft': rcAccumChargeLeft as int,
+          'note': note as String,
         } in logsMap)
       FlightLogModel(
         id: id,
         shiftId: shiftId,
+        droneName: droneName,
+        droneId: droneId,
         takeoffDateAndTime: takeoffDateAndTime,
         landingDateAndTime: landingDateAndTime,
         flightTimeMinutes: flightTimeMinutes,
@@ -161,6 +166,7 @@ Future<List<FlightLogModel>> getFlightLogsFromDb({ int? offset, int? limit }) as
         droneAccum: droneAccum,
         droneAccumChargeLeft: droneAccumChargeLeft,
         rcAccumChargeLeft: rcAccumChargeLeft,
+        note: note,
       ),
   ];
 }
@@ -182,6 +188,8 @@ Future<List<FlightLogModel>> getFlightLogsByIdsFromDb({ List<int> ids = const []
     for (final {
           'id': id as int,
           'shiftId': shiftId as int,
+          'droneName': droneName as String,
+          'droneId': droneId as String,
           'takeoffDateAndTime': takeoffDateAndTime as String,
           'landingDateAndTime': landingDateAndTime as String,
           'flightTimeMinutes': flightTimeMinutes as int,
@@ -191,11 +199,14 @@ Future<List<FlightLogModel>> getFlightLogsByIdsFromDb({ List<int> ids = const []
           'droneAccum': droneAccum as String,
           'droneAccumChargeLeft': droneAccumChargeLeft as int,
           'rcAccumChargeLeft': rcAccumChargeLeft as int,
+          'note': note as String,
         } in logsMap) {
       logs.add(
         FlightLogModel(
           id: id,
           shiftId: shiftId,
+          droneName: droneName,
+          droneId: droneId,
           takeoffDateAndTime: takeoffDateAndTime,
           landingDateAndTime: landingDateAndTime,
           flightTimeMinutes: flightTimeMinutes,
@@ -205,6 +216,7 @@ Future<List<FlightLogModel>> getFlightLogsByIdsFromDb({ List<int> ids = const []
           droneAccum: droneAccum,
           droneAccumChargeLeft: droneAccumChargeLeft,
           rcAccumChargeLeft: rcAccumChargeLeft,
+          note: note,
         ),
       );
     }
@@ -231,6 +243,8 @@ Future<FlightLogModel?> getFlightLogFromDb(int id) async {
     return FlightLogModel(
       id: id,
       shiftId: logMap['shiftId'] as int,
+      droneName: logMap['droneName'] as String,
+      droneId: logMap['droneId'] as String,
       takeoffDateAndTime: logMap['takeoffDateAndTime'] as String,
       landingDateAndTime: logMap['landingDateAndTime'] as String,
       flightTimeMinutes: logMap['flightTimeMinutes'] as int,
@@ -240,6 +254,7 @@ Future<FlightLogModel?> getFlightLogFromDb(int id) async {
       droneAccum: logMap['droneAccum'] as String,
       droneAccumChargeLeft: logMap['droneAccumChargeLeft'] as int,
       rcAccumChargeLeft: logMap['rcAccumChargeLeft'] as int,
+      note: logMap['note'] as String,
     ); 
   }
 

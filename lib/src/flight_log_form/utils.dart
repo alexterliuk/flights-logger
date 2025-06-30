@@ -63,6 +63,8 @@ String? validateLocation(String? location) {
 
 bool hasFlightLogChanged(FlightLogModel originalLog, BaseFlightLogModel editedLog) {
   List<bool> changes = [
+    originalLog.droneName != editedLog.droneName,
+    originalLog.droneId != editedLog.droneId,
     originalLog.takeoffDateAndTime != editedLog.takeoffDateAndTime,
     originalLog.landingDateAndTime != editedLog.landingDateAndTime,
     originalLog.flightTimeMinutes != editedLog.flightTimeMinutes,
@@ -72,6 +74,7 @@ bool hasFlightLogChanged(FlightLogModel originalLog, BaseFlightLogModel editedLo
     originalLog.droneAccum != editedLog.droneAccum,
     originalLog.droneAccumChargeLeft != editedLog.droneAccumChargeLeft,
     originalLog.rcAccumChargeLeft != editedLog.rcAccumChargeLeft,
+    originalLog.note != editedLog.note,
   ];
 
   return changes.any((change) => change == true);
