@@ -258,6 +258,7 @@ class FlightLog extends StatelessWidget {
                                             child: Text(
                                               'RC Battery',
                                               textScaler: collapsibleRowScaler,
+                                              style: TextStyle(fontWeight: FontWeight.bold),
                                             ),
                                           ),
                                         ],
