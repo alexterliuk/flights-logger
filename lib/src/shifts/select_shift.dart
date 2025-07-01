@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../calendar/calendar.dart';
+import '../calendar/calendar_period.dart';
 import './shifts.dart';
 
 // class ShowCalendar with ChangeNotifier {
@@ -54,7 +54,7 @@ class SelectShift extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => CalendarStateful(callback: showShifts)),
+              MaterialPageRoute(builder: (context) => CalendarPeriod(callback: showShifts)),
             );
           },
         ),
