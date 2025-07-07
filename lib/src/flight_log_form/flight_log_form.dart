@@ -524,8 +524,6 @@ class FlightLogFormState extends State<FlightLogForm> {
                             height: 80,
                             child: TextFormField(
                               controller: locationController,
-                              validator: validateLocation,
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
                               textAlign: TextAlign.end,
                             ),
                           ),

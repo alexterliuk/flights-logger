@@ -472,12 +472,6 @@ Future<int> updateShiftInDb(int id, FlightLogModel log, FlightLogModel? logBefor
       }
     }
 
-    /// this expression is temporary bec. ShiftModel had -1 as default value
-    /// (now it has 0, so when the old data is removed change next line with:
-    /// updatedShift.flightsQty += 1;
-    /// THE SAME FOR OTHER EXPRESSIONS)
-    // updatedShift.flightsQty = updatedShift.flightsQty == -1 ? 1 : updatedShift.flightsQty + 1;
-
     updatedShift.flightsQty = updatedShift.logIds.length;
 
     if (updatedShift.timeTotalMinutes == 0) {

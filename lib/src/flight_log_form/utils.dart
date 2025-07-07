@@ -53,13 +53,13 @@ String? validateAltitude(String? metersStr) {
   return null;
 }
 
-String? validateLocation(String? location) {
-  if (location == null || location.isEmpty) {
-    return '';
-  }
-
-  return null;
-}
+// String? validateLocation(String? location) {
+//   if (location == null || location.isEmpty) {
+//     return '';
+//   }
+//
+//   return null;
+// }
 
 bool hasFlightLogChanged(FlightLogModel originalLog, BaseFlightLogModel editedLog) {
   List<bool> changes = [

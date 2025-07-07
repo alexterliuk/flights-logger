@@ -124,8 +124,8 @@ class Shift extends StatelessWidget {
                             width: 70,
                             height: 36,
                             child: Text(
-                              // '${shift.flightsQty}',
-                              '${shift.id}',
+                              '${shift.flightsQty}',
+                              // '${shift.id}',
                               textAlign: TextAlign.center,
                               style: const TextStyle(height: 2.4),
                             ),
