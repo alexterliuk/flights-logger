@@ -14,20 +14,17 @@ class FlightLog extends StatelessWidget {
     super.key,
     required this.log,
     required this.index,
-    this.isOrdinalShown = true,
+    required this.isSingleShiftMode,
   });
 
   final FlightLogModel log;
   final int index;
-  final bool isOrdinalShown;
+  final bool isSingleShiftMode;
 
   @override
   Widget build(BuildContext context) {
     var flightLogsState = context.watch<FlightLogsState>();
     var appState = context.watch<MyAppState>();
-
-    print('LOG: started - ${log.takeoffDateAndTime}, ended - ${log.landingDateAndTime}');
-    // started - 2024-04-14 00:00, ended - 2024-04-14 01:39
 
     edit () {
       flightLogsState.updateEditAndDeleteButtonsView(index, false);
@@ -71,6 +68,92 @@ class FlightLog extends StatelessWidget {
     var droneAccumRecord = '$droneAccum $droneAccumChargeLeft';
     var rcAccumRecord = log.rcAccumChargeLeft == -1 ? '' : '${log.rcAccumChargeLeft}%';
 
+    var gap4 = const SizedBox(width: 4);
+    var gap8 = const SizedBox(width: 8);
+    var gap12 = const SizedBox(width: 12);
+
+    var countCell = SizedBox(
+      width: 40,
+      height: 36,
+      child: Text(
+        '${index + 1}',
+        textAlign: TextAlign.start,
+        style: const TextStyle(height: 2.4),
+      ),
+    );
+
+    var dateCell = SizedBox(
+      width: 88,
+      height: 36,
+      child: Text(
+        log.takeoffDateAndTime,
+        textAlign: TextAlign.end,
+        style: const TextStyle(height: 2.4),
+      ),
+    );
+
+    var takeoffCell = SizedBox(
+      width: 64,
+      height: 36,
+      child: Text(
+        getTime(log.takeoffDateAndTime),
+        textAlign: TextAlign.end,
+        style: const TextStyle(height: 2.4),
+      ),
+    );
+
+    var landingCell = SizedBox(
+      width: 64,
+      height: 36,
+      child: Text(
+        getTime(log.landingDateAndTime),
+        textAlign: TextAlign.end,
+        style: const TextStyle(height: 2.4),
+      ),
+    );
+
+    var distanceCell = SizedBox(
+      width: 82,
+      height: 36,
+      child: Text(
+        getFlightLogDistanceKilometers(log.distanceMeters),
+        textAlign: TextAlign.end,
+        style: const TextStyle(height: 2.4),
+      ),
+    );
+
+    var locationCell = SizedBox(
+      width: 82,
+      height: 36,
+      child: Text(
+        log.location,
+        textAlign: TextAlign.end,
+        style: const TextStyle(height: 2.4),
+      ),
+    );
+
+    var buttonsCell = SizedBox(
+      width: 82,
+      child: Flex(
+        direction: Axis.horizontal,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: edit,
+            iconSize: 18,
+            visualDensity: VisualDensity.compact,
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: remove,
+            iconSize: 18,
+            visualDensity: VisualDensity.compact,
+          ),
+        ],
+      ),
+    );
+
     return Column(
       children: [
         Column(
@@ -84,80 +167,17 @@ class FlightLog extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          SizedBox(width: 8),
-                          SizedBox(
-                            width: 28,
-                            height: 36,
-                            child: isOrdinalShown
-                              ? Text(
-                                  '${index + 1}',
-                                  style: const TextStyle(height: 2.4),
-                                  // TODO: add fontSize 16 or 13 if count > 999 to not overflow
-                                )
-                              : null,
-                          ),
-                          SizedBox(
-                            width: 64,
-                            height: 36,
-                            child: Text(
-                              getTime(log.takeoffDateAndTime),
-                              // log.id.toString(),
-                              style: const TextStyle(height: 2.4),
-                              textAlign: TextAlign.right,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 64,
-                            height: 36,
-                            child: Text(
-                              getTime(log.landingDateAndTime),
-                              style: const TextStyle(height: 2.4),
-                              textAlign: TextAlign.right,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 80,
-                            height: 36,
-                            child: Text(
-                              '${getFlightLogDistanceKilometers(log.distanceMeters)} км',
-                              // '${log.shiftId}',
-                              style: const TextStyle(height: 2.4),
-                              textAlign: TextAlign.right,
-                            ),
-                          ),
+                          isSingleShiftMode ? countCell : dateCell,
+                          gap4,
+                          takeoffCell,
+                          gap8,
+                          landingCell,
+                          gap8,
+                          isSingleShiftMode ? distanceCell : Container(),
+                          isSingleShiftMode ? gap12 : Container(),
                           flightLogsState.areEditAndDeleteButtonsShown(index)
-                            ?
-                              SizedBox(
-                                width: 80,
-                                child: Flex(
-                                  direction: Axis.horizontal,
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.edit),
-                                      onPressed: edit,
-                                      iconSize: 18,
-                                      visualDensity: VisualDensity.compact,
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(Icons.delete),
-                                      onPressed: remove,
-                                      iconSize: 18,
-                                      visualDensity: VisualDensity.compact,
-                                    ),
-                                  ],
-                                ),
-                              )
-                            :
-                              SizedBox(
-                                width: 80,
-                                height: 36,
-                                child: Text(
-                                  log.location,
-                                  style: const TextStyle(height: 2.4),
-                                  textAlign: TextAlign.right,
-                                ),
-                              ),
+                            ? buttonsCell
+                            : isSingleShiftMode ? locationCell : distanceCell,
                         ],
                       ),
                       flightLogsState.isExpanded(log.id)
@@ -187,7 +207,7 @@ class FlightLog extends StatelessWidget {
                                           SizedBox(
                                             width: 96,
                                             child: Text(
-                                              '${log.flightTimeMinutes} хв',
+                                              '${log.flightTimeMinutes}m',
                                               textScaler: collapsibleRowScaler,
                                             ),
                                           ),
@@ -214,7 +234,7 @@ class FlightLog extends StatelessWidget {
                                           SizedBox(
                                             width: 72,
                                             child: Text(
-                                              '${log.altitudeMeters} м',
+                                              '${log.altitudeMeters} m',
                                               textScaler: collapsibleRowScaler,
                                             ),
                                           ),
@@ -279,7 +299,7 @@ class FlightLog extends StatelessWidget {
                                 ],
                               ),
 
-                              Padding(padding: EdgeInsetsGeometry.directional(top: 8)),
+                              const Padding(padding: EdgeInsetsGeometry.directional(top: 8)),
 
                               Flex(
                                 direction: Axis.horizontal,
@@ -303,7 +323,7 @@ class FlightLog extends StatelessWidget {
                                 ],
                               ),
 
-                              Padding(padding: EdgeInsetsGeometry.directional(top: 8)),
+                              const Padding(padding: EdgeInsetsGeometry.directional(top: 8)),
 
                               Flex(
                                 direction: Axis.horizontal,
@@ -327,7 +347,7 @@ class FlightLog extends StatelessWidget {
                                 ],
                               ),
 
-                              Padding(padding: EdgeInsetsGeometry.directional(top: 8)),
+                              const Padding(padding: EdgeInsetsGeometry.directional(top: 8)),
 
                               Flex(
                                 direction: Axis.horizontal,

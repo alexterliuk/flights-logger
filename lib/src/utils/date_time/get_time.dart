@@ -4,6 +4,6 @@ String getTime (String dateAndTime) {
     String time = dateAndTime.substring(11, 16);
     return time;
   } catch (e) {
-    return '';
+    return '-';
   }
 }

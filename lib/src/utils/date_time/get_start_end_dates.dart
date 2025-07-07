@@ -35,10 +35,14 @@ String getStartEndDates (
 
   String endMonthReadable = getMonthReadable(endMonth, Language.en);
 
-  if (startMonthReadable == endMonthReadable) {
+  if (startMonthReadable == endMonthReadable && startYear == endYear) {
     return withYear
       ? '$startDay-$endDay $startMonthReadable $startYear'
       : '$startDay-$endDay $startMonthReadable';
+  }
+
+  if (startMonthReadable == endMonthReadable && startYear != endYear) {
+    return '$startDay $startMonthReadable $startYear - $endDay $endMonthReadable $endYear';
   }
 
   return withYear

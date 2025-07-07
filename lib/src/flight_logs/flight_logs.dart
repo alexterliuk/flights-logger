@@ -20,13 +20,11 @@ class FlightLogs extends StatelessWidget {
   const FlightLogs({
     super.key,
     this.title,
-    this.isOrdinalShown = true,
     this.isAppBarShown = true,
     this.idsForReload = const [],
   });
 
   final String? title;
-  final bool isOrdinalShown;
   final bool isAppBarShown;
   final List<int> idsForReload;
 
@@ -156,7 +154,7 @@ class FlightLogs extends StatelessWidget {
 
         body: Column(
           children: [
-            FlightLogsHeader(isOrdinalShown: isOrdinalShown),
+            FlightLogsHeader(isSingleShiftMode: appState.isSingleShiftMode),
             Flexible(
               child: ListView.builder(
                 // Providing a restorationId allows the ListView to restore the
@@ -174,7 +172,11 @@ class FlightLogs extends StatelessWidget {
                     }
                   }
 
-                  return FlightLog(log: log, index: index, isOrdinalShown: true);
+                  return FlightLog(
+                    log: log,
+                    index: index,
+                    isSingleShiftMode: appState.isSingleShiftMode,
+                  );
                 },
               ),
             ),

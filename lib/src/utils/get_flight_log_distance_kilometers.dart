@@ -1,4 +1,8 @@
 String getFlightLogDistanceKilometers(int distanceMeters) {
+  if (distanceMeters == 0 || distanceMeters == -1) {
+    return '-';
+  }
+
   var distanceKm = (distanceMeters / 1000).toStringAsFixed(1);
 
   if (distanceKm.endsWith('0')) {
@@ -13,5 +17,5 @@ String getFlightLogDistanceKilometers(int distanceMeters) {
     distanceKm = distanceKm.splitMapJoin('.', onMatch: (s) => ',');
   }
 
-  return distanceKm;
+  return '$distanceKm km';
 }

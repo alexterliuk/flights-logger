@@ -73,7 +73,7 @@ class FlightLogsLoadingState extends State<FlightLogsLoading> {
                 idsForReload:  widget.idsForReload,
             );
 
-          return FlightLogs(title: 'Flight logs ${(snapshot.data ?? []).length}');
+          return FlightLogs(title: 'Flight logs');
         } else {
           return Scaffold(
             appBar: AppBar(
