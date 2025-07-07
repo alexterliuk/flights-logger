@@ -26,8 +26,6 @@ class Shift extends StatelessWidget {
     var shiftsState = context.watch<ShiftsNewState>();
     var appState = context.watch<MyAppState>();
 
-    print('SHIFT: started - ${shift.startedAtDateAndTime}, ended - ${shift.endedAtDateAndTime}');
-    // SHIFT: started - 2024-04-14 15:15, ended - 2024-04-14 15:30
     edit () {
       shiftsState.updateEditAndDeleteButtonsView(index, false);
 
@@ -77,11 +75,15 @@ class Shift extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    // SizedBox(width: 30, child: Text('#')),
-                    SizedBox(width: 90, child: Text('Started At')),
-                    SizedBox(width: 90, child: Text('Ended At')),
-                    SizedBox(width: 70, child: Text('Flights')),
-                    SizedBox(width: 70, child: Text('Total Time')),
+                    SizedBox(width: 40, child: Text('#', textAlign: TextAlign.start)),
+                    SizedBox(width: 4),
+                    SizedBox(width: 88, child: Text('Started At', textAlign: TextAlign.start)),
+                    SizedBox(width: 8),
+                    SizedBox(width: 88, child: Text('Ended At', textAlign: TextAlign.start)),
+                    SizedBox(width: 8),
+                    SizedBox(width: 48, child: Text('Flights', textAlign: TextAlign.start)),
+                    SizedBox(width: 8),
+                    SizedBox(width: 70, child: Text('Total Time', textAlign: TextAlign.start)),
                     SizedBox(width: 6),
                   ],
                 ),
@@ -102,34 +104,49 @@ class Shift extends StatelessWidget {
                       Row(
                         children: [
                           SizedBox(
-                            width: 90,
+                            width: 40,
+                            height: 36,
+                            child: Text(
+                              '${index + 1}',
+                              textAlign: TextAlign.start,
+                              style: const TextStyle(height: 2.4),
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+
+                          SizedBox(
+                            width: 88,
                             height: 36,
                             child: Text(
                               shift.startedAtDateAndTime.isEmpty ? 'none' : shift.startedAtDateAndTime.substring(0, 10),
+                              textAlign: TextAlign.end,
                               style: const TextStyle(height: 2.4),
                             ),
                           ),
+                          const SizedBox(width: 8),
+
                           SizedBox(
-                            width: 90,
+                            width: 88,
                             height: 36,
                             child: Text(
                               shift.endedAtDateAndTime.isEmpty ? 'none' : shift.endedAtDateAndTime.substring(0, 10),
-
-                              // '${appState.shiftsRes.totalCount}',
-
+                              textAlign: TextAlign.end,
                               style: const TextStyle(height: 2.4),
                             ),
                           ),
+                          const SizedBox(width: 8),
+
                           SizedBox(
-                            width: 70,
+                            width: 48,
                             height: 36,
                             child: Text(
                               '${shift.flightsQty}',
-                              // '${shift.id}',
-                              textAlign: TextAlign.center,
+                              textAlign: TextAlign.end,
                               style: const TextStyle(height: 2.4),
                             ),
                           ),
+                          const SizedBox(width: 8),
+
                           shiftsState.areEditAndDeleteButtonsShown(index)
                             ?
                               SizedBox(
@@ -179,6 +196,7 @@ class Shift extends StatelessWidget {
                                 height: 36,
                                 child: Text(
                                   getShiftTotalTime(shift.timeTotalMinutes),
+                                  textAlign: TextAlign.end,
                                   style: const TextStyle(height: 2.4),
                                 ),
                               ),
@@ -192,6 +210,7 @@ class Shift extends StatelessWidget {
                             children: [
                               Row(
                                 children: [
+                                  const SizedBox(width: 48),
                                   const SizedBox(
                                     width: 180,
                                     child: Text(
@@ -209,6 +228,7 @@ class Shift extends StatelessWidget {
                               ),
                               Row(
                                 children: [
+                                  const SizedBox(width: 48),
                                   const SizedBox(
                                     width: 180,
                                     child: Text(
@@ -226,6 +246,7 @@ class Shift extends StatelessWidget {
                               ),
                               Row(
                                 children: [
+                                  const SizedBox(width: 48),
                                   const SizedBox(
                                     width: 180,
                                     child: Text(

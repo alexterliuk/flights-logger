@@ -1,6 +1,6 @@
 String getShiftTotalTime(int totalMinutes) {
   if (totalMinutes < 60) {
-    return '$totalMinutes m';
+    return '${totalMinutes}m';
   }
 
   int hours = (totalMinutes / 60).floor();
@@ -8,5 +8,5 @@ String getShiftTotalTime(int totalMinutes) {
 
   String minutesStr = minutes < 10 ? '0$minutes' : '$minutes';
 
-  return '$hours h $minutesStr m';
+  return '${hours}h ${minutesStr}m';
 }
