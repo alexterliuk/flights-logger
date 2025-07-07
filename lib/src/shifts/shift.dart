@@ -113,9 +113,9 @@ class Shift extends StatelessWidget {
                             width: 90,
                             height: 36,
                             child: Text(
-                              // shift.endedAtDateAndTime.isEmpty ? 'none' : shift.endedAtDateAndTime.substring(0, 10),
+                              shift.endedAtDateAndTime.isEmpty ? 'none' : shift.endedAtDateAndTime.substring(0, 10),
 
-                              '${appState.shiftsRes.totalCount}',
+                              // '${appState.shiftsRes.totalCount}',
 
                               style: const TextStyle(height: 2.4),
                             ),

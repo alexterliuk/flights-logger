@@ -1,5 +1,5 @@
 class BaseShiftModel {
-  final List<int> logIds;
+  List<int> logIds;
   String startedAtDateAndTime; // '2024-07-20 08:13'
   String endedAtDateAndTime; // '2024-07-21 08:37'
   int flightsQty;

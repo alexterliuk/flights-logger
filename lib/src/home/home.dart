@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../db/test_data.dart';
 import '../settings/settings_view.dart';
 import '../shifts/start_new_shift.dart';
 import '../db/queries.dart';
@@ -73,6 +74,15 @@ class HomeState extends State<Home> {
           });
         })();
       });
+
+      /// uncomment when adding test data needed
+      // Future.delayed(const Duration(milliseconds: 3000), () async {
+      //   (() async {
+      //     print('creating dummy data...');
+      //     await createDummyData();
+      //     print('creating dummy data has finished');
+      //   })();
+      // });
     }
 
     return Scaffold(

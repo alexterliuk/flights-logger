@@ -522,6 +522,29 @@ Future<int> updateShiftInDb(int id, FlightLogModel log, FlightLogModel? logBefor
 }
 
 ///
+///
+///
+Future<bool> updateShiftInDbRaw(ShiftModel shift) async {
+  try {
+    final db = await database;
+
+    int changesCount = await db.update(
+      'Shift',
+      shift.toMap(),
+      where: 'id = ?',
+      whereArgs: [shift.id],
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+
+    return changesCount == 1 ? true : false;
+  } catch (err) {
+    print('[updateShiftInDbRaw] ERR: $err');
+
+    return false;
+  }
+}
+
+///
 /// Remove a shift from db
 ///
 Future<bool> removeShiftFromDb(int id) async {
