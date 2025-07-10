@@ -44,7 +44,7 @@ class ShiftsNew extends StatelessWidget {
     var appState = context.watch<MyAppState>();
 
     final List<ShiftModel> shifts = appState.shiftsRes.shifts;
-    final int shTotCou = appState.shiftsRes.totalCount;
+    final int shiftsTotalCount = appState.shiftsRes.totalCount;
 
     void getMoreShifts(int offset) async {
       ShiftsResult shiftsResult = await getShiftsFromDb(offset: offset, limit: 20);
@@ -81,7 +81,7 @@ class ShiftsNew extends StatelessWidget {
                     ),
                   ),
                   const Padding(padding: EdgeInsets.all(8)),
-                  Text('Shifts $shTotCou'),
+                  Text('Shifts $shiftsTotalCount'),
                 ],
               ),
               actions: [

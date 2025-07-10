@@ -81,11 +81,7 @@ class MyAppState with ChangeNotifier {
   List<FlightLogModel> newShiftFlightLogs = [];
   List<int> newShiftFlightLogsIds = [];
 
-  List<ShiftModel> shifts = [];
   List<int> shiftsIds = [];
-  int shiftsTotalCount = 0;
-  bool sho = false;
-  int shoInt = 0;
 
   /// TODO: split to shifts and shiftsTotalCount because there's an error
   ///       when you click 'New shift' --> 'New log' and then back, back:
@@ -227,58 +223,7 @@ class MyAppState with ChangeNotifier {
   }
 
   ///
-  /// UPDATE SHIFTS
-  ///
-  void updateShifts(List<ShiftModel> givenShifts) {
-  // void updateShifts(List<ShiftModel> givenShifts, { int? shiftsTotalCount }) {
-    try {
-      // WORK ==============================
-      // shiftsTotalCount -= 1;
-      // shiftsTotalCountArr.first = shiftsTotalCount - 1;
-
-      // shiftsTotalCou.value -= 1;
-
-      // shiftsTotalCountArr.first = shiftsTotalCountArr.first - 1;
-
-      // print('[updateShifts] ........... shiftsTotalCount - $shiftsTotalCount');
-      // print('[updateShifts] ........... shiftsTotalCountArr.first - ${shiftsTotalCountArr.first}');
-
-      if (
-        (shiftsIds.isEmpty && shifts.isNotEmpty) ||
-        (shiftsIds.isNotEmpty && shifts.isEmpty)
-      ) {
-        throw Error();
-      }
-
-      if (shiftsIds.isEmpty) {
-        shifts = givenShifts;
-        shiftsIds = givenShifts.map((shift) => shift.id).toList();
-      } else {
-        // print('shiftsIds.length - ${shiftsIds.length}');
-        /// check to avoid inserting a duplicate shift
-        for (final shift in givenShifts) {
-          bool isDuplicate = shiftsIds.contains(shift.id);
-          // print('isDuplicate - $isDuplicate');
-          // if (isDuplicate) {
-          //   print('duplicate id - ${shift.id}');
-          // }
-          if (!isDuplicate) {
-            shifts.add(shift);
-            shiftsIds.add(shift.id);
-          }
-        }
-      }
-
-      // if (shiftsTotalCount != null) {
-      //   shiftsTotalCou.value = shiftsTotalCount;
-      // }
-    } catch (e) {
-      print('[ERR]: shifts and shiftsIds length are not equal');
-    }
-  }
-
-  ///
-  ///
+  /// UPDATE SHIFTS_RES
   ///
   void updateShiftsRes(ShiftsResult givenShiftsRes) {
     try {
@@ -324,16 +269,14 @@ class MyAppState with ChangeNotifier {
   ///
   void updateShiftsResAfterShiftRemoved(int removedShiftId) {
     shiftsRes.shifts.retainWhere((shift) => shift.id != removedShiftId);
-    shifts.retainWhere((shift) => shift.id != removedShiftId);
     shiftsIds.retainWhere((id) => id != removedShiftId);
     shiftsRes.totalCount = shiftsRes.shifts.length;
-    shiftsTotalCount = shifts.length;
   }
 
   ///
   ///
   ///
-  void updateShiftsTotalCount(int count) => shiftsTotalCount = count;
+  // void updateShiftsTotalCount(int count) => shiftsTotalCount = count;
   // void updateShiftsTotalCount(int count) => shiftsTotalCou['value'] = count;
   // void updateShiftsTotalCount(int count) => shiftsTotalCou.value = count;
   // void updateShiftsTotalCount(int count) => shiftsTotalCountArr.first = count;
@@ -348,7 +291,8 @@ class MyAppState with ChangeNotifier {
   ///
   ///
   void resetShifts() {
-    shifts = [];
+    shiftsRes.shifts = [];
+    // shiftsRes.totalCount = 0;
     shiftsIds = [];
   }
 
@@ -356,10 +300,9 @@ class MyAppState with ChangeNotifier {
   ///
   ///
   void replaceShift(ShiftModel givenShift) {
-    int index = shifts.indexWhere((shift) => shift.id == givenShift.id);
-
+    int index = shiftsRes.shifts.indexWhere((shift) => shift.id == givenShift.id);
     if (index != -1) {
-      shifts.fillRange(index, index + 1, givenShift);
+      shiftsRes.shifts.fillRange(index, index + 1, givenShift);
     }
   }
 
@@ -502,7 +445,9 @@ class MyAppState with ChangeNotifier {
   bool hasShiftsSelectionEnded = false;
 
   void updateSelectedShifts(DateTime from, DateTime to) {
-    selectedShifts = filterShifts(from, to, shifts);
+    /// TODO: should invoke fetching from db if from or to is off the range
+    /// of already fetched shifts in shiftsRes.shifts
+    selectedShifts = filterShifts(from, to, shiftsRes.shifts);
     hasShiftsSelectionEnded = true;
   }
 
@@ -636,14 +581,14 @@ class MyAppState with ChangeNotifier {
   ///
   ///
   ///
-  void updateFlightLog(BaseFlightLogModel log, int id) {
-    final existingLog = getFlightLogById(id);
-
-    if (existingLog != null) {
-      // var l = getUpdatedFlightLog(existingLog, log);
-      // TODO: update log in db
-    }
-  }
+  // void updateFlightLog(BaseFlightLogModel log, int id) {
+  //   final existingLog = getFlightLogById(id);
+  //
+  //   if (existingLog != null) {
+  //     // var l = getUpdatedFlightLog(existingLog, log);
+  //     // TODO: update log in db
+  //   }
+  // }
 
   ///
   ///
@@ -1014,7 +959,8 @@ class MyAppState with ChangeNotifier {
   ///
   Future<bool> dbRemoveShift(int id) async {
     bool isRemoved = await removeShiftFromDb(id);
-    print('[dbRemoveShift] is removed - $isRemoved, was id - $id, shifts.length - ${shifts.length}');
+    /// TODO: get from db real count of shifts?
+    print('[dbRemoveShift] is removed - $isRemoved, was id - $id, shiftsRes.shifts.length - ${shiftsRes.shifts.length}');
 
     if (isRemoved) {
       removeShift(id);
