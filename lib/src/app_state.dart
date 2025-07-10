@@ -6,7 +6,7 @@ import 'flight_logs/flight_log.dart';
 import 'flight_logs/flight_log_model.dart';
 import 'shifts/shift.dart';
 import 'shifts/shift_model.dart';
-import 'shifts/filter_shifts.dart';
+import 'shifts/utils.dart';
 import 'utils/date_time/parse_date_and_time.dart';
 import 'utils/date_time/to_date_time.dart';
 import 'utils/date_time/from_date_time.dart';
