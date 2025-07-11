@@ -234,7 +234,7 @@ class FlightLogFormState extends State<FlightLogForm> {
       Navigator.push(context,
         MaterialPageRoute(builder: (context) =>
           FlightLogs(
-            title: 'Flight logs ${appState.flightLogs.length}',
+            title: 'Flight logs',
           )),
       );
     }

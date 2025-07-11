@@ -104,7 +104,6 @@ class NewShiftState extends State<NewShift> {
       ),
       body: Column(
         children: [
-          const Text('bla bla BLA'),
           const FlightLogsHeader(),
           Flexible(
             child:

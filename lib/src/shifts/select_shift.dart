@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../shifts/shifts_loading.dart';
 import '../calendar/calendar_period.dart';
-import './shifts.dart';
 
 // class ShowCalendar with ChangeNotifier {
 //   var isShown = false;

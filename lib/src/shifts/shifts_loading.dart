@@ -1,9 +1,9 @@
-import 'package:flights_logger/src/db/queries.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../db/queries.dart';
 import '../app_state.dart';
-import 'shifts_new.dart';
+import 'shifts.dart';
 
 class ShiftsLoading extends StatefulWidget {
   const ShiftsLoading({
@@ -53,10 +53,10 @@ class ShiftsLoadingState extends State<ShiftsLoading> {
           // apply logic only for initial load
           if (appState.shiftsRes.shifts.isEmpty) {
             appState.updateShiftsRes(snapshot.data ?? ShiftsResult(shifts: []));
-            appState.addToHistory(ShiftsNew.routeName);
+            appState.addToHistory(Shifts.routeName);
           }
 
-          return ShiftsNew(fromDate: widget.fromDate, toDate: widget.toDate);
+          return Shifts(fromDate: widget.fromDate, toDate: widget.toDate);
         } else {
           return Scaffold(
             appBar: AppBar(

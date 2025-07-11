@@ -9,7 +9,7 @@ import '../flight_logs/flight_logs.dart';
 import '../utils/date_time/get_start_end_dates.dart';
 import '../utils/get_shift_total_time.dart';
 import './shift_model.dart';
-import './shifts_new.dart';
+import './shifts.dart';
 
 class Shift extends StatelessWidget {
   const Shift({
@@ -23,7 +23,7 @@ class Shift extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var shiftsState = context.watch<ShiftsNewState>();
+    var shiftsState = context.watch<ShiftsState>();
     var appState = context.watch<MyAppState>();
 
     edit () {

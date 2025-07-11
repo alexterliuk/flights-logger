@@ -11,7 +11,7 @@ import './flight_log_model.dart';
 import './flight_log.dart';
 import '../table_methods/table_methods.dart';
 import '../home/home.dart';
-import '../shifts/shifts_new.dart';
+import '../shifts/shifts.dart';
 import 'utils.dart';
 
 class FlightLogsState extends TableMethods {}
@@ -52,7 +52,7 @@ class FlightLogs extends StatelessWidget {
 
       appState.removeFromHistory(FlightLogs.routeName);
 
-      if (prevRouteName == ShiftsNew.routeName) {
+      if (prevRouteName == Shifts.routeName) {
         appState.resetSingleShiftMode();
         appState.resetShifts();
 

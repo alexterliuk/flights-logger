@@ -15,9 +15,8 @@ import 'home/home_model.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
 import 'flight_log_form/flight_log_form.dart';
-import 'shifts/shifts.dart';
 import 'shifts/shifts_loading.dart';
-import 'shifts/shifts_new.dart';
+import 'shifts/shifts.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({
@@ -128,8 +127,8 @@ class MyApp extends StatelessWidget {
                         ? const FlightLogsLoading()
                         : FlightLogsLoading(
                             /// THIS VARIANT LEADS TO TYPE ERROR
-/// Exception has occurred.
-/// _TypeError (type '_Map<String, Object>' is not a subtype of type 'FlightLogsLoadingArguments' in type cast)
+                            /// Exception has occurred.
+                            /// _TypeError (type '_Map<String, Object>' is not a subtype of type 'FlightLogsLoadingArguments' in type cast)
                             // isLoadByIds: (routeSettings.arguments as FlightLogsLoadingArguments).isLoadByIds,
                             // ids: (routeSettings.arguments as FlightLogsLoadingArguments).ids,
                             isLoadByIds: (routeSettings.arguments as FlightLogsLoadingArguments)['isLoadByIds'] as bool,
@@ -142,14 +141,8 @@ class MyApp extends StatelessWidget {
                       return const ShiftsLoading();
                     }
 
-                    case ShiftsNew.routeName: {
-                      // String title = routeSettings.arguments == null
-                      //   ? ''
-                      //   : (routeSettings.arguments as Map<String, Object>)['title'] as String;
-
-                      // return ShiftsNew(title: title);
-                      // return const ShiftsNew();
-                      return ShiftsNew();
+                    case Shifts.routeName: {
+                      return Shifts();
                     }
 
                     case Home.routeName: {
