@@ -109,16 +109,16 @@ class MyApp extends StatelessWidget {
                     //   return SampleItemDetailsView();
                     // case SampleItemListView.routeName:
                     //   // return const SampleItemListView();
-                    case Shifts.routeName:
-                      final fromDate = routeSettings.arguments == null
-                        ? DateTime.now().subtract(const Duration(days: 30))
-                        : (routeSettings.arguments as ShiftsArguments).fromDate;
-
-                      final toDate = routeSettings.arguments == null
-                        ? DateTime.now()
-                        : (routeSettings.arguments as ShiftsArguments).toDate;
-
-                      return Shifts(fromDate: fromDate, toDate: toDate);
+                    // case Shifts.routeName:
+                    //   final fromDate = routeSettings.arguments == null
+                    //     ? DateTime.now().subtract(const Duration(days: 30))
+                    //     : (routeSettings.arguments as ShiftsArguments).fromDate;
+                    //
+                    //   final toDate = routeSettings.arguments == null
+                    //     ? DateTime.now()
+                    //     : (routeSettings.arguments as ShiftsArguments).toDate;
+                    //
+                    //   return Shifts(fromDate: fromDate, toDate: toDate);
                     // case SampleItemListView.routeName:
                     //   // print('Sample itemsss');
                     //   return const SampleItemListView();

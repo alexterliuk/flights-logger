@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../shifts/shifts_loading.dart';
 import '../calendar/calendar_period.dart';
 import './shifts.dart';
 
@@ -43,7 +44,9 @@ class SelectShift extends StatelessWidget {
     void showShifts({ required DateTime fromDate, required DateTime toDate }) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Shifts(fromDate: fromDate, toDate: toDate)),
+        MaterialPageRoute(builder: (context) =>
+          ShiftsLoading(fromDate: fromDate, toDate: toDate),
+        ),
       );
     }
 
@@ -54,7 +57,9 @@ class SelectShift extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => CalendarPeriod(callback: showShifts)),
+              MaterialPageRoute(builder: (context) =>
+                CalendarPeriod(callback: showShifts),
+              ),
             );
           },
         ),

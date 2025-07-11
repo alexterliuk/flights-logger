@@ -31,11 +31,15 @@ class ShiftsNew extends StatelessWidget {
     this.title,
     this.isOrdinalShown = true,
     this.isAppBarShown = true,
+    this.fromDate,
+    this.toDate,
   });
 
   final String? title;
   final bool isOrdinalShown;
   final bool isAppBarShown;
+  final DateTime? fromDate;
+  final DateTime? toDate;
 
   static const routeName = '/shifts_new';
 
@@ -47,7 +51,11 @@ class ShiftsNew extends StatelessWidget {
     final int shiftsTotalCount = appState.shiftsRes.totalCount;
 
     void getMoreShifts(int offset) async {
-      ShiftsResult shiftsResult = await getShiftsFromDb(offset: offset, limit: 20);
+      ShiftsResult shiftsResult = await getShiftsFromDb(
+        offset: offset,
+        fromDate: fromDate,
+        toDate: toDate,
+      );
       List<ShiftModel> moreShifts = shiftsResult.shifts;
 
       if (moreShifts.isNotEmpty) {
@@ -58,6 +66,7 @@ class ShiftsNew extends StatelessWidget {
 
     void onPressBackButton() async {
       appState.removeFromHistory(ShiftsNew.routeName);
+      appState.resetShifts();
       Navigator.push(context,
         MaterialPageRoute(builder: (context) => const Home(
           isInitLoading: false,

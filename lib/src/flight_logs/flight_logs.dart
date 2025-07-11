@@ -54,6 +54,7 @@ class FlightLogs extends StatelessWidget {
 
       if (prevRouteName == ShiftsNew.routeName) {
         appState.resetSingleShiftMode();
+        appState.resetShifts();
 
         // ADDING UPDATE DOESN'T FIX BECAUSE LOGS ARE ERASED ONLY IN 'ACTIVE' VIEWS
         // BUT IN NOT VISIBLE VIEWS THERE'S STILL OLD STATE OF APP_STATE AND LOGS ARE PRESENT

@@ -81,23 +81,8 @@ class MyAppState with ChangeNotifier {
   List<FlightLogModel> newShiftFlightLogs = [];
   List<int> newShiftFlightLogsIds = [];
 
-  List<int> shiftsIds = [];
-
-  /// TODO: split to shifts and shiftsTotalCount because there's an error
-  ///       when you click 'New shift' --> 'New log' and then back, back:
-  /// 'UnsupportedError (Unsupported operation: Cannot remove from an unmodifiable list)'
-
   ShiftsResult shiftsRes = ShiftsResult(shifts: []);
-
-  // WORK ======================
-  // List<int> shiftsTotalCountArr = [0];
-
-  // Map<String, int> shiftsTotalCou = { 'value': 0 };
-  // ShiftsTotalCou shiftsTotalCou = ShiftsTotalCou(100);
-  // ShiftsTotalCou shiftsTotalCouInit = ShiftsTotalCou(50);
-
-  List<ShiftModel> selectedShifts = [];
-  // selectedShifts.add(shifts.get[0]);
+  List<int> shiftsIds = [];
 
   ///
   /// UPDATE FLIGHT LOGS
@@ -310,21 +295,17 @@ class MyAppState with ChangeNotifier {
   ///
   ///
   bool removeShift(int id) {
-    // int beforeCount = shifts.length;
-    // shifts.removeWhere((shift) => shift.id == id);
-    // int afterCount = shifts.length;
-
-    // return beforeCount != afterCount;
-
     int beforeCount = shiftsRes.shifts.length;
     shiftsRes.shifts.removeWhere((shift) => shift.id == id);
     int afterCount = shiftsRes.shifts.length;
 
-    print('[removeShift]: shift id $id');
-    if (beforeCount != afterCount) {
-      print('[removeShift]: shift with id $id has been removed');
+    bool isRemoved = beforeCount != afterCount;
+    if (isRemoved) {
+      shiftsIds.removeWhere((shiftId) => shiftId == id);
+      shiftsRes.totalCount -= 1;
     }
-    return beforeCount != afterCount;
+
+    return isRemoved;
   }
 
   ///
@@ -442,22 +423,6 @@ class MyAppState with ChangeNotifier {
 
 
 
-  bool hasShiftsSelectionEnded = false;
-
-  void updateSelectedShifts(DateTime from, DateTime to) {
-    /// TODO: should invoke fetching from db if from or to is off the range
-    /// of already fetched shifts in shiftsRes.shifts
-    selectedShifts = filterShifts(from, to, shiftsRes.shifts);
-    hasShiftsSelectionEnded = true;
-  }
-
-  void resetShiftsSelection() {
-    hasShiftsSelectionEnded = false;
-    // print('resetShiftsSelection');
-  }
-
-  // NewShiftModel? newShift;
-  // ShiftModel? newShift;
   var newShiftId = -1;
 
   void setNewShiftId(int id) async {
@@ -948,11 +913,11 @@ class MyAppState with ChangeNotifier {
   ///
   ///
   ///
-  Future<ShiftModel?> dbGetShift(int id) async {
-    ShiftModel? shift = await getShiftFromDb(id);
-
-    return shift;
-  }
+  // Future<ShiftModel?> dbGetShift(int id) async {
+  //   ShiftModel? shift = await getShiftFromDb(id);
+  //
+  //   return shift;
+  // }
 
   ///
   ///

@@ -8,7 +8,12 @@ import 'shifts_new.dart';
 class ShiftsLoading extends StatefulWidget {
   const ShiftsLoading({
     super.key,
+    this.fromDate,
+    this.toDate,
   });
+
+  final DateTime? fromDate;
+  final DateTime? toDate;
 
   static const routeName = '/shifts_loading';
 
@@ -27,7 +32,10 @@ class ShiftsLoadingState extends State<ShiftsLoading> {
   }
 
   void loadShifts() {
-    Future<ShiftsResult> loadedShiftsResult = getShiftsFromDb(offset: 0, limit: 20);
+    Future<ShiftsResult> loadedShiftsResult = getShiftsFromDb(
+      fromDate: widget.fromDate,
+      toDate: widget.toDate,
+    );
 
     setState(() {
       shiftsResult = loadedShiftsResult;
@@ -48,7 +56,7 @@ class ShiftsLoadingState extends State<ShiftsLoading> {
             appState.addToHistory(ShiftsNew.routeName);
           }
 
-          return const ShiftsNew();
+          return ShiftsNew(fromDate: widget.fromDate, toDate: widget.toDate);
         } else {
           return Scaffold(
             appBar: AppBar(

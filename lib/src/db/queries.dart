@@ -1,3 +1,4 @@
+import '../utils/date_time/get_date_string_without_time.dart';
 import '../utils/date_time/is_first_date_and_time_earlier.dart';
 import '../utils/date_time/is_first_date_and_time_later.dart';
 import '../utils/date_time/parse_date_and_time.dart';
@@ -339,11 +340,35 @@ class ShiftsResult {
 ///
 /// Get many shifts from db
 ///
-Future<ShiftsResult> getShiftsFromDb({ int? offset, int? limit }) async {
+Future<ShiftsResult> getShiftsFromDb({
+  int? limit,
+  int? offset,
+  DateTime? fromDate,
+  DateTime? toDate,
+}) async {
   final db = await database;
 
-  final List<Map<String, Object?>> shiftsMap = await db.query('Shift', offset: offset, limit: limit);
-  final List<Map<String, Object?>> totalCountMap = await db.rawQuery('SELECT COUNT(*) FROM SHIFT'); // [{COUNT(*): 117}]
+  final limitInt = limit ?? 20;
+  final offsetInt = offset ?? 0;
+  final fromStr = getDateStringWithoutTimeFromDateTime(
+    fromDate ?? DateTime(1970),
+  );
+  final toStr = getDateStringWithoutTimeFromDateTime(
+    // adding one day to include shifts ended till 23:59 of toDate
+    (toDate ?? DateTime.now()).add(const Duration(days: 1))
+  );
+
+  final List<Map<String, Object?>> shiftsMap = await db.rawQuery(
+    '''SELECT * FROM SHIFT WHERE
+         strftime("%s", startedAtDateAndTime)
+         BETWEEN strftime("%s", "$fromStr") AND strftime("%s", "$toStr")
+         LIMIT $limitInt
+         OFFSET $offsetInt
+    '''
+  );
+  final List<Map<String, Object?>> totalCountMap = await db.rawQuery(
+    'SELECT COUNT(*) FROM SHIFT'
+  ); // e.g. [{COUNT(*): 117}]
 
   List<ShiftModel> shifts = [];
   int totalCount = totalCountMap.first['COUNT(*)'] as int;

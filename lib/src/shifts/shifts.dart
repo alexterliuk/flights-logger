@@ -1,93 +1,97 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../app_state.dart';
-import '../settings/settings_view.dart';
-import '../table_methods/table_methods.dart';
-import './shift_model.dart';
-import './shift.dart';
-
-class ShiftsArguments {
-  final DateTime fromDate;
-  final DateTime toDate;
-
-  ShiftsArguments(this.fromDate, this.toDate);
-}
-
-class ShiftsState extends TableMethods {}
-
-class Shifts extends StatelessWidget {
-  const Shifts({
-    super.key,
-    this.fromDate,
-    this.toDate,
-  });
-
-  final DateTime? fromDate;
-  final DateTime? toDate;
-
-  static const routeName = '/shifts';
-
-  @override
-  Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-
-    // print('fromDate: $fromDate');
-    // print('toDate: $toDate');
-    final to = toDate ?? DateTime.now();
-    final from = fromDate ?? to.subtract(const Duration(days: 14));
-
-    Future.delayed(Duration.zero, () async {
-      if (!appState.hasShiftsSelectionEnded) {
-        appState.updateSelectedShifts(from, to);
-        // print('Future selectedShifts: ${appState.selectedShifts}');
-        appState.update();
-      }
-    });
-
-    Future.delayed(const Duration(seconds: 1), () async {
-      appState.resetShiftsSelection();
-    });
-
-    return ChangeNotifierProvider(
-      create: (context) => ShiftsState(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Shifts'),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.settings),
-              onPressed: () {
-                Navigator.restorablePushNamed(context, SettingsView.routeName);
-              },
-            ),
-            // IconButton(
-            //   icon: const Icon(Icons.abc),
-            //   onPressed: () {
-            //     // Navigate to the settings page. If the user leaves and returns
-            //     // to the app after it has been killed while running in the
-            //     // background, the navigation stack is restored.
-            //     Navigator.restorablePushNamed(context, '/flight_log_form');
-            //   },
-            // ),
-          ],
-        ),
-
-        body:
-          ListView.builder(
-            restorationId: 'shifts',
-            itemCount: appState.selectedShifts.length,
-            itemBuilder: (BuildContext context, int index) {
-              final shift = appState.selectedShifts[index];
-
-              return Shift(shift: shift, index: index);
-            },
-          ),
-      ),
-    );
-  }
-}
+// import 'package:flights_logger/src/db/queries.dart';
+// import 'package:flutter/foundation.dart';
+// import 'package:flutter/material.dart';
+// import 'package:provider/provider.dart';
+//
+// import '../app_state.dart';
+// import '../settings/settings_view.dart';
+// import '../table_methods/table_methods.dart';
+// import './shift_model.dart';
+// import './shift.dart';
+//
+// class ShiftsArguments {
+//   final DateTime fromDate;
+//   final DateTime toDate;
+//
+//   ShiftsArguments(this.fromDate, this.toDate);
+// }
+//
+// class ShiftsState extends TableMethods {}
+//
+// class Shifts extends StatelessWidget {
+//   const Shifts({
+//     super.key,
+//     this.fromDate,
+//     this.toDate,
+//   });
+//
+//   final DateTime? fromDate;
+//   final DateTime? toDate;
+//
+//   static const routeName = '/shifts';
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     var appState = context.watch<MyAppState>();
+//
+//     // print('fromDate: $fromDate');
+//     // print('toDate: $toDate');
+//     final to = toDate ?? DateTime.now();
+//     final from = fromDate ?? to.subtract(const Duration(days: 14));
+//
+//     Future.delayed(Duration.zero, () async {
+//       if (!appState.hasShiftsSelectionEnded) {
+//         // appState.resetShiftsSelection();
+//         var shiftsRes = await getShiftsFromDb(offset: 0, limit: 20);
+//         print('shiftsRes.shifts.length - ${shiftsRes.shifts.length}');
+//         // appState.updateSelectedShifts(from, to);
+//         // print('Future selectedShifts: ${appState.selectedShifts}');
+//         // appState.update();
+//       }
+//     });
+//
+//     // Future.delayed(const Duration(seconds: 1), () async {
+//     //   appState.resetShiftsSelection();
+//     // });
+//
+//     return ChangeNotifierProvider(
+//       create: (context) => ShiftsState(),
+//       child: Scaffold(
+//         appBar: AppBar(
+//           title: const Text('Shifts'),
+//           actions: [
+//             IconButton(
+//               icon: const Icon(Icons.settings),
+//               onPressed: () {
+//                 Navigator.restorablePushNamed(context, SettingsView.routeName);
+//               },
+//             ),
+//             // IconButton(
+//             //   icon: const Icon(Icons.abc),
+//             //   onPressed: () {
+//             //     // Navigate to the settings page. If the user leaves and returns
+//             //     // to the app after it has been killed while running in the
+//             //     // background, the navigation stack is restored.
+//             //     Navigator.restorablePushNamed(context, '/flight_log_form');
+//             //   },
+//             // ),
+//           ],
+//         ),
+//
+//         body:
+//           ListView.builder(
+//             restorationId: 'shifts',
+//             itemCount: appState.selectedShifts.length,
+//             itemBuilder: (BuildContext context, int index) {
+//               final shift = appState.selectedShifts[index];
+//
+//               return Shift(shift: shift, index: index);
+//             },
+//           ),
+//       ),
+//     );
+//   }
+// }
 
 
 
@@ -109,7 +113,7 @@ class Shifts extends StatelessWidget {
 //   final DateTime? toDate;
 
 //   static const routeName = '/shifts';
-  
+
 //   @override
 //   Widget build(BuildContext context) {
 //     var appState = context.watch<MyAppState>();
@@ -140,7 +144,7 @@ class Shifts extends StatelessWidget {
 //   });
 
 //   final List<ShiftModel> shifts;
-  
+
 //   @override
 //   Widget build(BuildContext context) {
 //     // return ChangeNotifierProvider(
