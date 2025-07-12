@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../db/test_data.dart';
+import '../flight_logs/flight_log_model.dart';
 import '../settings/settings_view.dart';
 import '../shifts/start_new_shift.dart';
 import '../db/queries.dart';
@@ -49,9 +50,17 @@ class HomeState extends State<Home> {
     if (isInit) {
       Future.delayed(const Duration(milliseconds: 300), () async {
         (() async {
-          /// =================== THIS WORKS - UPDATES TOP NUMBERS ==================
           HomeModel homeData = await getHomeFromDb();
-          // HomeModel homeData = HomeModel();
+
+          bool isLastFlightLogChanged = appState.lastFlightLogId != homeData.lastFlightLogId;
+          if (isLastFlightLogChanged && homeData.lastFlightLogId != -1) {
+            FlightLogModel? lastLog = await getFlightLogFromDb(homeData.lastFlightLogId);
+
+            if (lastLog is FlightLogModel) {
+              appState.updateLastFlightLog(lastLog);
+              appState.updateLastFlightLogId(homeData.lastFlightLogId);
+            }
+          }
           bool isTopFlightTimeChanged = appState.topFlightTimeMinutes != homeData.topFlightTimeMinutes;
           bool isTopDistanceChanged = appState.topDistanceMeters != homeData.topDistanceMeters;
           bool isTopAltitudeChanged = appState.topAltitudeMeters != homeData.topAltitudeMeters;
@@ -110,7 +119,7 @@ class HomeState extends State<Home> {
           ),
           Container(height: 12),
           // LastFlight(log: appState.lastFlightLog),
-          const LastFlight(),
+          LastFlight(),
           // // ?EditFlightBtn,
           const SelectShift(),
           const ShowAllShifts(),
