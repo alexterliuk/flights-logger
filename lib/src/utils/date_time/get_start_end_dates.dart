@@ -1,6 +1,6 @@
 import '../extract_int.dart';
-import './get_month_readable.dart';
-import './get_date.dart';
+import 'get_month_readable.dart';
+import 'get_date_string_without_time.dart';
 
 /// dateAndTimeStart, dateAndTimeEnd - 'YYYY-MM-DD HH:mm'
 String getStartEndDates (
@@ -14,8 +14,8 @@ String getStartEndDates (
 
   if (dateAndTimeStart.isEmpty || dateAndTimeEnd.isEmpty) return '';
 
-  final start = getDate(dateAndTimeStart);
-  final end = getDate(dateAndTimeEnd);
+  final start = getDateStringWithoutTimeFromDateString(dateAndTimeStart);
+  final end = getDateStringWithoutTimeFromDateString(dateAndTimeEnd);
 
   int startYear = extractInt(start.substring(0, 4));
   int startMonth = extractInt(start.substring(5, 7));
