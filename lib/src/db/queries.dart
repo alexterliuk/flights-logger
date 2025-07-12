@@ -18,6 +18,7 @@ Future<int> getLastShiftIdFromDb() async {
     final db = await database;
 
     final List<Map<String, Object?>> shiftMap = await db.query('Shift');
+    /// TODO: get from home
     final lastShiftId = shiftMap.isNotEmpty
       ? shiftMap[shiftMap.length - 1]['id'] as int
       : -1;
@@ -362,6 +363,7 @@ Future<ShiftsResult> getShiftsFromDb({
     '''SELECT * FROM SHIFT WHERE
          strftime("%s", startedAtDateAndTime)
          BETWEEN strftime("%s", "$fromStr") AND strftime("%s", "$toStr")
+         ORDER BY startedAtDateAndTime DESC
          LIMIT $limitInt
          OFFSET $offsetInt
     '''
