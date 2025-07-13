@@ -133,44 +133,60 @@ class FlightLogsResult {
 /// Get many flight logs from db
 ///
 Future<List<FlightLogModel>> getFlightLogsFromDb({ int? offset, int? limit }) async {
-  final db = await database;
-  final List<Map<String, Object?>> logsMap = await db.query('FlightLog', offset: offset, limit: limit);
+  try {
+    final db = await database;
 
-  // Convert the list of each log's fields into a list of `Log` objects.
-  return [
-    for (final {
-          'id': id as int,
-          'shiftId': shiftId as int,
-          'droneName': droneName as String,
-          'droneId': droneId as String,
-          'takeoffDateAndTime': takeoffDateAndTime as String,
-          'landingDateAndTime': landingDateAndTime as String,
-          'flightTimeMinutes': flightTimeMinutes as int,
-          'distanceMeters': distanceMeters as int,
-          'altitudeMeters': altitudeMeters as int,
-          'location': location as String,
-          'droneAccum': droneAccum as String,
-          'droneAccumChargeLeft': droneAccumChargeLeft as int,
-          'rcAccumChargeLeft': rcAccumChargeLeft as int,
-          'note': note as String,
-        } in logsMap)
-      FlightLogModel(
-        id: id,
-        shiftId: shiftId,
-        droneName: droneName,
-        droneId: droneId,
-        takeoffDateAndTime: takeoffDateAndTime,
-        landingDateAndTime: landingDateAndTime,
-        flightTimeMinutes: flightTimeMinutes,
-        distanceMeters: distanceMeters,
-        altitudeMeters: altitudeMeters,
-        location: location,
-        droneAccum: droneAccum,
-        droneAccumChargeLeft: droneAccumChargeLeft,
-        rcAccumChargeLeft: rcAccumChargeLeft,
-        note: note,
-      ),
-  ];
+    final limitInt = limit ?? 20;
+    final offsetInt = offset ?? 0;
+
+    final List<Map<String, Object?>> logsMap = await db.rawQuery(
+        '''SELECT * FROM FLIGHTLOG
+         ORDER BY takeoffDateAndTime DESC
+         LIMIT $limitInt
+         OFFSET $offsetInt
+    '''
+    );
+
+    // Convert the list of each log's fields into a list of `Log` objects.
+    return [
+      for (final {
+      'id': id as int,
+      'shiftId': shiftId as int,
+      'droneName': droneName as String,
+      'droneId': droneId as String,
+      'takeoffDateAndTime': takeoffDateAndTime as String,
+      'landingDateAndTime': landingDateAndTime as String,
+      'flightTimeMinutes': flightTimeMinutes as int,
+      'distanceMeters': distanceMeters as int,
+      'altitudeMeters': altitudeMeters as int,
+      'location': location as String,
+      'droneAccum': droneAccum as String,
+      'droneAccumChargeLeft': droneAccumChargeLeft as int,
+      'rcAccumChargeLeft': rcAccumChargeLeft as int,
+      'note': note as String,
+      } in logsMap)
+        FlightLogModel(
+          id: id,
+          shiftId: shiftId,
+          droneName: droneName,
+          droneId: droneId,
+          takeoffDateAndTime: takeoffDateAndTime,
+          landingDateAndTime: landingDateAndTime,
+          flightTimeMinutes: flightTimeMinutes,
+          distanceMeters: distanceMeters,
+          altitudeMeters: altitudeMeters,
+          location: location,
+          droneAccum: droneAccum,
+          droneAccumChargeLeft: droneAccumChargeLeft,
+          rcAccumChargeLeft: rcAccumChargeLeft,
+          note: note,
+        ),
+    ];
+  } catch (err) {
+    print('[getFlightLogsFromDb] ERR: $err');
+
+    return [];
+  }
 }
 
 ///
