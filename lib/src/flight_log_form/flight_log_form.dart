@@ -233,9 +233,8 @@ class FlightLogFormState extends State<FlightLogForm> {
       Navigator.pop(context);
       Navigator.push(context,
         MaterialPageRoute(builder: (context) =>
-          FlightLogs(
-            title: 'Flight logs',
-          )),
+          FlightLogs(),
+        ),
       );
     }
 

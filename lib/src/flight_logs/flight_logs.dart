@@ -7,6 +7,7 @@ import '../settings/settings_view.dart';
 import '../app_state.dart';
 import '../shifts/shift_model.dart';
 import '../shifts/shifts_loading.dart';
+import '../utils/date_time/get_start_end_dates.dart';
 import './flight_log_model.dart';
 import './flight_log.dart';
 import '../table_methods/table_methods.dart';
@@ -19,12 +20,10 @@ class FlightLogsState extends TableMethods {}
 class FlightLogs extends StatelessWidget {
   const FlightLogs({
     super.key,
-    this.title,
     this.isAppBarShown = true,
     this.idsForReload = const [],
   });
 
-  final String? title;
   final bool isAppBarShown;
   final List<int> idsForReload;
 
@@ -37,6 +36,15 @@ class FlightLogs extends StatelessWidget {
     final List<FlightLogModel> logs = appState.isSingleShiftMode
       ? appState.singleShiftFlightLogs
       : appState.flightLogs;
+
+    var title = 'Flight Logs';
+    if (appState.isSingleShiftMode) {
+      var dateStr = getStartEndDates(
+        (appState.singleShift as ShiftModel).startedAtDateAndTime,
+        (appState.singleShift as ShiftModel).endedAtDateAndTime,
+      );
+      title = '$title, $dateStr';
+    }
 
     void getMoreFlightLogs(int offset) async {
       List<FlightLogModel> moreLogs = await getFlightLogsFromDb(offset: offset, limit: 20);
@@ -130,7 +138,7 @@ class FlightLogs extends StatelessWidget {
                     ),
                   ),
                   const Padding(padding: EdgeInsets.all(8)),
-                  Text(title ?? 'Flight Logs'),
+                  Text(title),
                 ],
               ),
               actions: [
