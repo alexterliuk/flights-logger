@@ -53,8 +53,11 @@ class FlightLogs extends StatelessWidget {
       appState.removeFromHistory(FlightLogs.routeName);
 
       if (prevRouteName == Shifts.routeName) {
-        appState.resetSingleShiftMode();
         appState.resetShifts();
+
+        if (appState.isSingleShiftMode) {
+          appState.resetSingleShiftMode();
+        }
 
         // ADDING UPDATE DOESN'T FIX BECAUSE LOGS ARE ERASED ONLY IN 'ACTIVE' VIEWS
         // BUT IN NOT VISIBLE VIEWS THERE'S STILL OLD STATE OF APP_STATE AND LOGS ARE PRESENT
@@ -66,7 +69,10 @@ class FlightLogs extends StatelessWidget {
         // appState.update();
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const ShiftsLoading(),
+          MaterialPageRoute(builder: (context) => ShiftsLoading(
+            fromDate: appState.selectShiftsFromDate,
+            toDate: appState.selectShiftsToDate,
+          ),
         ));
       } else if (prevRouteName == FlightLogs.routeName) {
         print('-------------- TODO --------------');

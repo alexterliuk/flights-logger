@@ -16,11 +16,6 @@ import 'utils/get_last_date_and_time_index.dart';
 import 'db/queries.dart';
 import 'home/home_model.dart';
 
-class ShiftsTotalCou {
-  int value;
-  ShiftsTotalCou(this.value);
-}
-
 class RemovalResult {
   bool isLogRemoved;
   int removedLogId;
@@ -71,6 +66,11 @@ class MyAppState with ChangeNotifier {
 
   bool isSingleShiftMode = false;
   ShiftModel? singleShift;
+
+  // used when you select shifts from/to in calendar
+  bool isSelectedShiftsMode = false;
+  DateTime? selectShiftsFromDate;
+  DateTime? selectShiftsToDate;
 
   List<FlightLogModel> flightLogs = [];
   List<int> flightLogsIds = [];
@@ -240,10 +240,6 @@ class MyAppState with ChangeNotifier {
           }
         }
       }
-
-      // if (shiftsTotalCount != null) {
-      //   shiftsTotalCou.value = shiftsTotalCount;
-      // }
     } catch (e) {
       print('[ERR]: shifts and shiftsIds length are not equal');
     }
@@ -257,20 +253,6 @@ class MyAppState with ChangeNotifier {
     shiftsIds.retainWhere((id) => id != removedShiftId);
     shiftsRes.totalCount = shiftsRes.shifts.length;
   }
-
-  ///
-  ///
-  ///
-  // void updateShiftsTotalCount(int count) => shiftsTotalCount = count;
-  // void updateShiftsTotalCount(int count) => shiftsTotalCou['value'] = count;
-  // void updateShiftsTotalCount(int count) => shiftsTotalCou.value = count;
-  // void updateShiftsTotalCount(int count) => shiftsTotalCountArr.first = count;
-
-  // void updateShiftsTotalCou(int count) => shiftsTotalCou.value = count;
-  // void updateShiftsTotalCouInit(int count) {
-  //   shiftsTotalCouInit.value = count;
-  //   shiftsTotalCou.value = count;
-  // }
 
   ///
   ///
@@ -335,6 +317,24 @@ class MyAppState with ChangeNotifier {
   void resetSingleShiftFlightLogs() {
     singleShiftFlightLogs = [];
     singleShiftFlightLogsIds = [];
+  }
+
+  ///
+  ///
+  ///
+  void setSelectedShiftsMode(DateTime? fromDate, DateTime? toDate) {
+    isSelectedShiftsMode = true;
+    selectShiftsFromDate = fromDate;
+    selectShiftsToDate = toDate;
+  }
+
+  ///
+  ///
+  ///
+  void resetSelectedShiftsMode() {
+    isSelectedShiftsMode = false;
+    selectShiftsFromDate = null;
+    selectShiftsToDate = null;
   }
 
   ///
@@ -410,28 +410,6 @@ class MyAppState with ChangeNotifier {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-  var newShiftId = -1;
-
-  void setNewShiftId(int id) async {
-    newShiftId = id;
-  }
-
-  void removeNewShiftId() {
-    newShiftId = -1;
-  }
 
 
 

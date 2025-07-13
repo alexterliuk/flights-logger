@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../app_state.dart';
 import '../shifts/shifts_loading.dart';
 import '../calendar/calendar_period.dart';
 
@@ -40,7 +42,11 @@ class SelectShift extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+
     void showShifts({ required DateTime fromDate, required DateTime toDate }) {
+      appState.setSelectedShiftsMode(fromDate, toDate);
+
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) =>

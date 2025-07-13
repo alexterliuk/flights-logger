@@ -67,6 +67,11 @@ class Shifts extends StatelessWidget {
     void onPressBackButton() async {
       appState.removeFromHistory(Shifts.routeName);
       appState.resetShifts();
+
+      if (appState.isSelectedShiftsMode) {
+        appState.resetSelectedShiftsMode();
+      }
+
       Navigator.push(context,
         MaterialPageRoute(builder: (context) => const Home(
           isInitLoading: false,
