@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../flight_logs/flight_logs_header.dart';
 import '../db/queries.dart';
 import '../home/home.dart';
 import '../settings/settings_view.dart';
@@ -9,6 +8,7 @@ import '../app_state.dart';
 import './shift_model.dart';
 import './shift.dart';
 import '../table_methods/table_methods.dart';
+import 'shifts_header.dart';
 
 class ShiftsTitle extends StatelessWidget {
   const ShiftsTitle({
@@ -29,14 +29,12 @@ class Shifts extends StatelessWidget {
   const Shifts({
     super.key,
     this.title,
-    this.isOrdinalShown = true,
     this.isAppBarShown = true,
     this.fromDate,
     this.toDate,
   });
 
   final String? title;
-  final bool isOrdinalShown;
   final bool isAppBarShown;
   final DateTime? fromDate;
   final DateTime? toDate;
@@ -110,7 +108,7 @@ class Shifts extends StatelessWidget {
           : null,
         body: Column(
           children: [
-            // ShiftsHeader(isOrdinalShown: isOrdinalShown),
+            const ShiftsHeader(),
             Flexible(
               child:
                 ListView.builder(

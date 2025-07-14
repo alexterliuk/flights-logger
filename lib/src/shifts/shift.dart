@@ -5,8 +5,6 @@ import 'package:pointer_interceptor/pointer_interceptor.dart';
 
 import '../app_state.dart';
 import '../db/queries.dart';
-import '../flight_logs/flight_logs.dart';
-import '../utils/date_time/get_start_end_dates.dart';
 import '../utils/get_shift_total_time.dart';
 import './shift_model.dart';
 import './shifts.dart';
@@ -67,34 +65,10 @@ class Shift extends StatelessWidget {
 
     return Column(
       children: [
-        index == 0
-          ?
-            const Flex(
-              direction: Axis.horizontal,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Row(
-                  children: [
-                    SizedBox(width: 40, child: Text('#', textAlign: TextAlign.start)),
-                    SizedBox(width: 4),
-                    SizedBox(width: 88, child: Text('Started At', textAlign: TextAlign.start)),
-                    SizedBox(width: 8),
-                    SizedBox(width: 88, child: Text('Ended At', textAlign: TextAlign.start)),
-                    SizedBox(width: 8),
-                    SizedBox(width: 48, child: Text('Flights', textAlign: TextAlign.start)),
-                    SizedBox(width: 8),
-                    SizedBox(width: 70, child: Text('Total Time', textAlign: TextAlign.start)),
-                    SizedBox(width: 6),
-                  ],
-                ),
-              ],
-            )
-          :
-            Container(),
         Column(
           children: [
             ListTile(
-              minVerticalPadding: 6,
+              // minVerticalPadding: 6,
               title: Flex(
                 direction: Axis.horizontal,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
