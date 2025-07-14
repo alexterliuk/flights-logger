@@ -1,10 +1,9 @@
-import 'package:flights_logger/src/db/queries.dart';
-import 'package:flights_logger/src/flight_logs/flight_logs_header.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../settings/settings_view.dart';
 import '../app_state.dart';
+import '../db/queries.dart';
 import '../shifts/shift_model.dart';
 import '../shifts/shifts_loading.dart';
 import '../utils/date_time/get_start_end_dates.dart';
@@ -13,6 +12,7 @@ import './flight_log.dart';
 import '../table_methods/table_methods.dart';
 import '../home/home.dart';
 import '../shifts/shifts.dart';
+import 'flight_logs_header.dart';
 import 'utils.dart';
 
 class FlightLogsState extends TableMethods {}
@@ -83,7 +83,15 @@ class FlightLogs extends StatelessWidget {
           ),
         ));
       } else if (prevRouteName == FlightLogs.routeName) {
-        print('-------------- TODO --------------');
+        /// is is a rare case that prev route might be /flight_logs
+        print('''\x1B[33mDuplicate /flight_logs path in history:
+  you are currently redirecting from Flight Logs page to previous page
+  which is also Flight Logs though this should not occur\x1B[0m''');
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Home()),
+        );
       } else {
         Navigator.push(context,
           MaterialPageRoute(builder: (context) => const Home(

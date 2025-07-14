@@ -7,6 +7,8 @@ import '../db/queries.dart';
 import '../calendar/calendar.dart';
 import '../flight_logs/flight_log_model.dart';
 import '../flight_logs/flight_logs.dart';
+import '../flight_logs/flight_logs_loading.dart';
+import '../home/home.dart';
 import '../shifts/new_shift.dart';
 import '../shifts/shift_model.dart';
 import '../utils/extract_int.dart';
@@ -233,14 +235,29 @@ class FlightLogFormState extends State<FlightLogForm> {
       Navigator.pop(context);
       Navigator.push(context,
         MaterialPageRoute(builder: (context) =>
-          FlightLogs(),
+          FlightLogsLoading(),
+        ),
+      );
+    }
+
+    void proceedToHome() {
+      appState.removeFromHistory(FlightLogForm.routeName);
+      Navigator.pop(context);
+      Navigator.push(context,
+        MaterialPageRoute(builder: (context) =>
+          Home(),
         ),
       );
     }
 
     void navigateByOKButton(BaseFlightLogModel editedLog) {
-      /// form being used for a new log
-      if (widget.log == null || appState.newShiftFlightLogs.isNotEmpty) {
+      String prevRouteName = appState.getPrevRouteFromHistory();
+
+      if (prevRouteName == Home.routeName) {
+        /// form was open by edit button of Last Flight on Home page
+        proceedToHome();
+      } else if (widget.log == null || appState.newShiftFlightLogs.isNotEmpty) {
+        /// form being used for a new log
         proceedToNewShift(editedLog);
       } else {
         bool isLogChanged = hasFlightLogChanged(widget.log as FlightLogModel, editedLog);
