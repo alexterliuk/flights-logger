@@ -84,7 +84,9 @@ class HomeState extends State<Home> {
         })();
       });
 
-      /// uncomment when adding test data needed
+      /// uncomment when adding test data needed,
+      /// after test data added, comment it again and reload app,
+      /// so that correct top numbers shown on home page
       // Future.delayed(const Duration(milliseconds: 3000), () async {
       //   (() async {
       //     print('creating dummy data...');
