@@ -142,7 +142,7 @@ class MyApp extends StatelessWidget {
                     }
 
                     case Shifts.routeName: {
-                      return Shifts();
+                      return const Shifts();
                     }
 
                     case Home.routeName: {

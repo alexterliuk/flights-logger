@@ -51,7 +51,7 @@ class ShiftsLoadingState extends State<ShiftsLoading> {
       builder:(context, AsyncSnapshot<ShiftsResult> snapshot) {
         if (snapshot.hasData) {
           // apply logic only for initial load
-          if (appState.shiftsRes.shifts.isEmpty) {
+          if (appState.shiftsRes.shifts.isEmpty) { /// TODO: do I really need this if check?
             appState.updateShiftsRes(snapshot.data ?? ShiftsResult(shifts: []));
             appState.addToHistory(Shifts.routeName);
           }

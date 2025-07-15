@@ -48,17 +48,17 @@ class MyAppState with ChangeNotifier {
   }
 
   void addToHistory(String routeName) {
-    print('           [history ADD BEF] - $history');
     // if (history.isEmpty || history.last != routeName) {
     if (history.isEmpty || !history.contains(routeName)) {
+      print('           [history ADD BEF] - $history');
       history.add(routeName);
       print('           [history ADD AFT] - $history');
     }
   }
 
   void removeFromHistory(String routeName) {
-    print('           [history REM BEF] - $history');
     if (history.isNotEmpty && history.last == routeName) {
+      print('           [history REM BEF] - $history');
       history.removeLast();
       print('           [history REM AFT] - $history');
     }

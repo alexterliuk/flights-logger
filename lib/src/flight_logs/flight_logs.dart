@@ -60,6 +60,10 @@ class FlightLogs extends StatelessWidget {
 
       appState.removeFromHistory(FlightLogs.routeName);
 
+      while(Navigator.canPop(context)) {
+        Navigator.pop(context);
+      }
+
       if (prevRouteName == Shifts.routeName) {
         appState.resetShifts();
 
@@ -82,16 +86,6 @@ class FlightLogs extends StatelessWidget {
             toDate: appState.selectShiftsToDate,
           ),
         ));
-      } else if (prevRouteName == FlightLogs.routeName) {
-        /// is is a rare case that prev route might be /flight_logs
-        print('''\x1B[33mDuplicate /flight_logs path in history:
-  you are currently redirecting from Flight Logs page to previous page
-  which is also Flight Logs though this should not occur\x1B[0m''');
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Home()),
-        );
       } else {
         Navigator.push(context,
           MaterialPageRoute(builder: (context) => const Home(
@@ -115,17 +109,22 @@ class FlightLogs extends StatelessWidget {
         if (appState.singleShift == null) {
           proceedToShiftsWithReload();
         } else {
-          ShiftModel? editedShift = await getShiftFromDb(appState.singleShift!.id);
+          ShiftModel? editedShift = await getShiftFromDb(
+            appState.singleShift!.id,
+          );
 
-          bool isShiftChanged = hasShiftChanged(appState.singleShift as ShiftModel, editedShift as ShiftModel);
+          bool isShiftChanged = hasShiftChanged(
+            appState.singleShift as ShiftModel,
+            editedShift as ShiftModel,
+          );
 
           if (isShiftChanged) {
-            /// when replaceShift called, changes in edited shift are visible (no appState.resetShifts call is needed)
+            /// when replaceShift called, changes in edited shift are visible
+            /// (no appState.resetShifts call is needed)
             appState.replaceShift(editedShift);
-            proceedToShiftsWithReload();
-          } else {
-            proceedToShiftsWithReload();
           }
+
+          proceedToShiftsWithReload();
         }
       // });
     }

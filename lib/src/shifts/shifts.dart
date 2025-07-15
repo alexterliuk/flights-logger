@@ -70,6 +70,10 @@ class Shifts extends StatelessWidget {
         appState.resetSelectedShiftsMode();
       }
 
+      while (Navigator.canPop(context)) {
+        Navigator.pop(context);
+      }
+
       Navigator.push(context,
         MaterialPageRoute(builder: (context) => const Home(
           isInitLoading: false,

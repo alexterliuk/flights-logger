@@ -1,8 +1,8 @@
-import 'package:flights_logger/src/db/queries.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../app_state.dart';
+import '../db/queries.dart';
 import 'flight_log_model.dart';
 import 'flight_logs.dart';
 
