@@ -99,6 +99,7 @@ class HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home Route'),
+        automaticallyImplyLeading: false, // needed for not showing back button
         // title: Text(AppLocalizations.of(context)!.helloWorld),
         actions: [
           IconButton(
