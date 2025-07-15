@@ -104,7 +104,19 @@ class NewShiftState extends State<NewShift> {
       ),
       body: Column(
         children: [
-          const FlightLogsHeader(),
+          const Center(
+            child: SizedBox(
+              width: 296,
+              child: Text(
+                'Flight Logs',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+                // style
+              ),
+            ),
+          ),
           Flexible(
             child:
               ListView.builder(
