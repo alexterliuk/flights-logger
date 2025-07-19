@@ -28,6 +28,17 @@ class NewShiftFlightLog extends StatelessWidget {
       );
     }
 
+    var droneAccumChargeLeft = log.droneAccumChargeLeft <= 0
+      ? ''
+      : '${log.droneAccumChargeLeft}%';
+    var droneAccumLine =
+      'Drone accum - ${log.droneAccum} $droneAccumChargeLeft';
+
+    var rcAccumChargeLeft = log.rcAccumChargeLeft <= 0
+        ? ''
+        : '${log.rcAccumChargeLeft}%';
+    var rcAccumLine = 'RC - $rcAccumChargeLeft';
+
     return Center(
       child: SizedBox(
         width: 296,
@@ -105,18 +116,18 @@ class NewShiftFlightLog extends StatelessWidget {
               children: [
                 const SizedBox(width: 30, height: 26),
                 SizedBox(
-                  width: 156,
+                  width: 186,
                   height: 26,
                   child: Text(
-                    'Drone accum - ${log.droneAccum} ${log.droneAccumChargeLeft}',
+                    droneAccumLine,
                     style: const TextStyle(height: 2.4),
                   ),
                 ),
                 SizedBox(
-                  width: 110,
+                  width: 80,
                   height: 26,
                   child: Text(
-                    'RC - ${log.rcAccumChargeLeft}',
+                    rcAccumLine,
                     style: const TextStyle(height: 2.4),
                   ),
                 ),
