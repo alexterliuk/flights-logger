@@ -67,8 +67,14 @@ class NewShiftState extends State<NewShift> {
 
     final List<FlightLogModel> logs = appState.newShiftFlightLogs;
 
+    print('[NewShift] logs.first - ${logs.isEmpty ? null : logs.first.toMapWithId()}');
+
     void proceedToHome() {
       appState.resetNewShiftFlightLogs();
+      /// reset logs to be sure appState.flightLogs will contain a new log(s)
+      /// added in new shift, otherwise if you previously visited Flight Logs,
+      /// new log(s) might not be present due to stale state
+      appState.resetFlightLogs();
 
       Navigator.popAndPushNamed(
         context,
