@@ -100,4 +100,11 @@ class FlightLogModel extends BaseFlightLogModel {
     required super.shiftId,
     required this.id,
   });
+
+  Map<String, Object?> toMapWithId() {
+    return {
+      ...super.toMap(),
+      'id': id,
+    };
+  }
 }
