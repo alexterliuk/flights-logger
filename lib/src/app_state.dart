@@ -426,18 +426,6 @@ class MyAppState with ChangeNotifier {
   int topDistanceMeters = 0;
   int topAltitudeMeters = 0;
   int lastShiftId = -1;
-  /// TODO: last flight log means 'last added log' but on home page
-  /// there should be last flight log in the meaning of 'the latest flight'.
-  /// SOLUTION:
-  /// 1. In db make table FlightLogLandingRecord
-  /// where a unit is FlightLogLandingRecord { id: logId, landingDateAndTime, landingDateAndTimeMs }
-  /// 2. added or edited log --> if > last in table --> add to end in table
-  ///                            if < last in table --> find by landingDateAndTimeMs where to insert in table
-  /// DO NOT IMPLEMENT BEC. EDITING LAST LOG SO THAT IT BECOMES NOT LATEST IS A RARE CASE
-  ///                    OR EDITING OTHER LOG SO THAT IT BECOMES LATEST IS A RARE CASE TOO
-  /// IF TO IMPLEMENT IT WOULD BE EXPENSIVE SOLUTION WITH TRACKING INDEXES,
-  /// HANDLING DUPLICATES IN ms, REWRITING INDEXES OF MANY ITEMS ETC.
-  /// 
   /// POSSIBLE SOLUTION: better to make a func which searches a real latest log in db (orderBy),
   /// and call it, and show spinner while waiting of updating Last flight field on Home page.
   int lastFlightLogId = -1;
@@ -489,20 +477,21 @@ class MyAppState with ChangeNotifier {
 
   ///
   ///
-  /// TODO: make similar func findLastShift (probably without logs parameter)
-  FlightLogModel? findLastFlightLog(List<FlightLogModel>? logs) {
-    List<String> dateAndTimes = [];
-    List<FlightLogModel> targetLogs = logs ?? flightLogs;
-
-    for (final FlightLogModel(:landingDateAndTime) in targetLogs) {
-      dateAndTimes.add(landingDateAndTime);
-    }
-
-    int lastFlightLogIndex = getLastDateAndTimeIndex(dateAndTimes);
-    lastFlightLog = targetLogs[lastFlightLogIndex];
-
-    return lastFlightLog;
-  }
+  /// COMMENTED BECAUSE THERE'S NO CALLER OF THE FUNC IN THE APP
+  // /// TODO: make similar func findLastShift (probably without logs parameter)
+  // FlightLogModel? findLastFlightLog(List<FlightLogModel>? logs) {
+  //   List<String> dateAndTimes = [];
+  //   List<FlightLogModel> targetLogs = logs ?? flightLogs;
+  //
+  //   for (final FlightLogModel(:landingDateAndTime) in targetLogs) {
+  //     dateAndTimes.add(landingDateAndTime);
+  //   }
+  //
+  //   int lastFlightLogIndex = getLastDateAndTimeIndex(dateAndTimes);
+  //   lastFlightLog = targetLogs[lastFlightLogIndex];
+  //
+  //   return lastFlightLog;
+  // }
 
   ///
   ///
@@ -577,6 +566,8 @@ class MyAppState with ChangeNotifier {
   ///
   Future<void> dbUpdateHome({ bool shouldRefresh = false }) async {
     HomeModel home = await getHomeFromDb();
+    /// TODO: get all shifts and logs might be expensive,
+    /// consider using another approach
     List<ShiftModel> shifts = (await getShiftsFromDb()).shifts;
     List<FlightLogModel> logs = await getFlightLogsFromDb();
 
@@ -686,7 +677,7 @@ class MyAppState with ChangeNotifier {
         updateNewShiftFlightLogs(givenLogs: [log]);
       }
 
-      _updateHomeInDbAndRefresh(log, true);
+      _updateHomeInDb(log);
     }
   }
 
@@ -730,19 +721,22 @@ class MyAppState with ChangeNotifier {
                               // }
 
       /// NB: this also notifies subscribers about changes in lastFlightLogs - NOT ACTUAL COMMENTARY
-      await _updateHomeInDbAndRefresh(log, false);
+      await _updateHomeInDb(log);
     }
   }
 
   ///
   ///
   ///
-  Future<void> _updateHomeInDbAndRefresh(FlightLogModel log, bool isNewLog) async {
+  Future<void> _updateHomeInDb(FlightLogModel log) async {
     bool shouldUpdateTopFlightTime = log.flightTimeMinutes > topFlightTimeMinutes;
     bool shouldUpdateTopDistance = log.distanceMeters > topDistanceMeters;
     bool shouldUpdateTopAltitude = log.altitudeMeters > topAltitudeMeters;
-    print('[_updateHomeInDbAndRefresh] log.shiftId - ${log.shiftId}, lastShiftId - $lastShiftId');
-    bool shouldUpdateLastShiftId = log.shiftId != lastShiftId;
+
+    int lastShiftIdFromDb = await getLastShiftIdFromDb();
+    int lastFlightLogIdFromDb = await getLastFlightLogIdFromDb();
+    bool shouldUpdateLastShiftId = lastShiftId != lastShiftIdFromDb;
+    bool shouldUpdateLastFlightLogId = lastFlightLogId != lastFlightLogIdFromDb;
 
     await updateHomeInDb(
       topFlightTimeMinutes: shouldUpdateTopFlightTime
@@ -755,10 +749,10 @@ class MyAppState with ChangeNotifier {
         ? log.altitudeMeters
         : null,
       lastShiftId: shouldUpdateLastShiftId
-        ? log.shiftId
+        ? lastShiftIdFromDb
         : null,
-      lastFlightLogId: isNewLog
-        ? log.id
+      lastFlightLogId: shouldUpdateLastFlightLogId
+        ? lastFlightLogIdFromDb
         : null,
     );
 
@@ -771,25 +765,20 @@ class MyAppState with ChangeNotifier {
     }
 
     if (shouldUpdateTopAltitude) {
-      print('[_updateHomeInDbAndRefresh] changing top altitude to ${log.altitudeMeters}');
       updateTopAltitude(log.altitudeMeters);
     }
 
     if (shouldUpdateLastShiftId) {
-      updateLastShiftId(log.shiftId);
+      updateLastShiftId(lastShiftIdFromDb);
     }
 
-    if (isNewLog) {
-      updateLastFlightLogId(log.id);
+    if (shouldUpdateLastFlightLogId) {
+      updateLastFlightLogId(lastFlightLogIdFromDb);
     }
 
-    print('[_updateHomeInDbAndRefresh] log.id - ${log.id}, lastFlightLogId - $lastFlightLogId');
-
-    if (isNewLog || log.id == lastFlightLogId) {
+    if (shouldUpdateLastFlightLogId || log.id == lastFlightLogId) {
       updateLastFlightLog(log);
     }
-
-    // update();
   }
 
   ///

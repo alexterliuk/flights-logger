@@ -11,25 +11,7 @@ import '../home/home_model.dart';
 import '../shifts/shift_model.dart';
 import 'db.dart';
 
-// ====================== DIFF ======================
-
-Future<int> getLastShiftIdFromDb() async {
-  try {
-    final db = await database;
-
-    final List<Map<String, Object?>> shiftMap = await db.query('Shift');
-    /// TODO: get from home
-    final lastShiftId = shiftMap.isNotEmpty
-      ? shiftMap[shiftMap.length - 1]['id'] as int
-      : -1;
-
-    return lastShiftId;
-  } catch (err) {
-    print('[getLastShiftIdFromDb] ERR: $err');
-
-    return -1;
-  }
-}
+// ====================== HOME ======================
 
 ///
 /// Get home from db
@@ -139,12 +121,12 @@ Future<List<FlightLogModel>> getFlightLogsFromDb({ int? offset, int? limit }) as
     final limitInt = limit ?? 20;
     final offsetInt = offset ?? 0;
 
-    final List<Map<String, Object?>> logsMap = await db.rawQuery(
-        '''SELECT * FROM FLIGHTLOG
-         ORDER BY takeoffDateAndTime DESC
-         LIMIT $limitInt
-         OFFSET $offsetInt
-    '''
+    final List<Map<String, Object?>> logsMapList = await db.rawQuery(
+      '''SELECT * FROM FLIGHTLOG
+           ORDER BY takeoffDateAndTime DESC
+           LIMIT $limitInt
+           OFFSET $offsetInt
+      '''
     );
 
     // Convert the list of each log's fields into a list of `Log` objects.
@@ -164,7 +146,7 @@ Future<List<FlightLogModel>> getFlightLogsFromDb({ int? offset, int? limit }) as
       'droneAccumChargeLeft': droneAccumChargeLeft as int,
       'rcAccumChargeLeft': rcAccumChargeLeft as int,
       'note': note as String,
-      } in logsMap)
+      } in logsMapList)
         FlightLogModel(
           id: id,
           shiftId: shiftId,
@@ -197,7 +179,7 @@ Future<List<FlightLogModel>> getFlightLogsByIdsFromDb({ List<int> ids = const []
   List<FlightLogModel> logs = [];
 
   for (final id in ids) {
-    final List<Map<String, Object?>> logsMap = await db.query(
+    final List<Map<String, Object?>> logsMapList = await db.query(
       'FlightLog',
       where: 'id = ?',
       whereArgs: [id],
@@ -218,7 +200,7 @@ Future<List<FlightLogModel>> getFlightLogsByIdsFromDb({ List<int> ids = const []
           'droneAccumChargeLeft': droneAccumChargeLeft as int,
           'rcAccumChargeLeft': rcAccumChargeLeft as int,
           'note': note as String,
-        } in logsMap) {
+        } in logsMapList) {
       logs.add(
         FlightLogModel(
           id: id,
@@ -318,6 +300,32 @@ Future<bool> removeFlightLogFromDb(int id) async {
   }
 }
 
+///
+///
+///
+Future<int> getLastFlightLogIdFromDb() async {
+  try {
+    final db = await database;
+    final List<Map<String, Object?>> shiftsMapList = await db.rawQuery(
+      '''SELECT * FROM FLIGHTLOG
+           ORDER BY takeoffDateAndTime DESC
+           LIMIT 1
+           OFFSET 0
+      '''
+    );
+
+    final lastShiftId = shiftsMapList.isNotEmpty
+        ? shiftsMapList.first['id'] as int
+        : -1;
+
+    return lastShiftId;
+  } catch (err) {
+    print('[getLastShiftIdFromDb] ERR: $err');
+
+    return -1;
+  }
+}
+
 // ====================== SHIFTS ======================
 
 ///
@@ -375,7 +383,7 @@ Future<ShiftsResult> getShiftsFromDb({
     (toDate ?? DateTime.now()).add(const Duration(days: 1))
   );
 
-  final List<Map<String, Object?>> shiftsMap = await db.rawQuery(
+  final List<Map<String, Object?>> shiftsMapList = await db.rawQuery(
     '''SELECT * FROM SHIFT WHERE
          strftime("%s", startedAtDateAndTime)
          BETWEEN strftime("%s", "$fromStr") AND strftime("%s", "$toStr")
@@ -401,7 +409,7 @@ Future<ShiftsResult> getShiftsFromDb({
         'longestFlightTimeMinutes': longestFlightTimeMinutes as int,
         'longestDistanceMeters': longestDistanceMeters as int,
         'highestAltitudeMeters': highestAltitudeMeters as int,
-      } in shiftsMap) {
+      } in shiftsMapList) {
 
     shifts.add(ShiftModel(
       id: id,
@@ -602,15 +610,46 @@ Future<bool> removeShiftFromDb(int id) async {
   }
 }
 
+///
+///
+///
 Future<int> getShiftsTotalCountFromDb() async {
   try {
     final db = await database;
-    final List<Map<String, Object?>> totalCountMap = await db.rawQuery('SELECT COUNT(*) FROM SHIFT'); // [{COUNT(*): int}]
+    final List<Map<String, Object?>> totalCountMap = await db.rawQuery(
+      'SELECT COUNT(*) FROM SHIFT',
+    ); // [{COUNT(*): int}]
     final int totalCount = totalCountMap.first['COUNT(*)'] as int;
 
     return totalCount;
   } catch (err) {
     print('[getShiftsTotalCountFromDb] ERR: $err');
+
+    return -1;
+  }
+}
+
+///
+///
+///
+Future<int> getLastShiftIdFromDb() async {
+  try {
+    final db = await database;
+    final List<Map<String, Object?>> shiftsMapList = await db.rawQuery(
+      '''SELECT * FROM SHIFT
+           ORDER BY startedAtDateAndTime DESC
+           LIMIT 1
+           OFFSET 0
+      '''
+    );
+
+    final lastShiftId = shiftsMapList.isNotEmpty
+        ? shiftsMapList.first['id'] as int
+        : -1;
+
+    return lastShiftId;
+  } catch (err) {
+    print('[getLastShiftIdFromDb] ERR: $err');
 
     return -1;
   }

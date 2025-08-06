@@ -61,9 +61,15 @@ class HomeState extends State<Home> {
               appState.updateLastFlightLogId(homeData.lastFlightLogId);
             }
           }
+
+          bool isLastShiftIdChanged = appState.lastShiftId != homeData.lastShiftId;
           bool isTopFlightTimeChanged = appState.topFlightTimeMinutes != homeData.topFlightTimeMinutes;
           bool isTopDistanceChanged = appState.topDistanceMeters != homeData.topDistanceMeters;
           bool isTopAltitudeChanged = appState.topAltitudeMeters != homeData.topAltitudeMeters;
+
+          if (isLastShiftIdChanged) {
+            appState.updateLastShiftId(homeData.lastShiftId);
+          }
 
           if (isTopFlightTimeChanged) {
             appState.updateTopFlightTime(homeData.topFlightTimeMinutes);
