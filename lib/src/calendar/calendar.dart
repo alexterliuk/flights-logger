@@ -44,7 +44,8 @@ class Calendar extends StatelessWidget {
     // }
 
     DateTime firstDate = (int year) { return DateTime(year - 3); }(DateTime.now().year);
-    DateTime lastDate = (int year) { return DateTime(year + 1); }(DateTime.now().year);
+    // restrict selection by today
+    DateTime lastDate = DateTime.now();
     DateTime initialDate = DateTime.now();
 
     return Scaffold(

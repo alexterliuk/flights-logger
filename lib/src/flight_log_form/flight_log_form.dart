@@ -315,10 +315,14 @@ class FlightLogFormState extends State<FlightLogForm> {
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => Calendar(callback: (d) {
-                                    setDate(d, null);
-                                    Navigator.pop(context);
-                                  })),
+                                  MaterialPageRoute(builder: (context) =>
+                                    Calendar(
+                                      callback: (d) {
+                                        setDate(d, null);
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ),
                                 );
                               },
                               child: Text(date),

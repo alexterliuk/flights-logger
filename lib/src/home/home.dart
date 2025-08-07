@@ -52,13 +52,18 @@ class HomeState extends State<Home> {
         (() async {
           HomeModel homeData = await getHomeFromDb();
 
-          bool isLastFlightLogChanged = appState.lastFlightLogId != homeData.lastFlightLogId;
-          if (isLastFlightLogChanged && homeData.lastFlightLogId != -1) {
+          if (homeData.lastFlightLogId != -1) {
             FlightLogModel? lastLog = await getFlightLogFromDb(homeData.lastFlightLogId);
 
             if (lastLog is FlightLogModel) {
               appState.updateLastFlightLog(lastLog);
-              appState.updateLastFlightLogId(homeData.lastFlightLogId);
+
+              if (appState.flightLogs.isNotEmpty) {
+                // reset logs, so that if last log is edited from Home page, and got
+                // earlier date, and thus becomes not last log, Flight Logs page will show
+                // correct order of logs (not last log won't be on top of logs in the table)
+                appState.resetFlightLogs();
+              }
             }
           }
 
