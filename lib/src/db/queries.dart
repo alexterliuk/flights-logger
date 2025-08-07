@@ -497,7 +497,9 @@ Future<int> updateShiftInDb(int id, FlightLogModel log, FlightLogModel? logBefor
       updatedShift.logIds.add(log.id);
     }
 
-    if (updatedShift.startedAtDateAndTime.isEmpty) {
+    bool isSingleLog = updatedShift.logIds.length == 1;
+
+    if (updatedShift.startedAtDateAndTime.isEmpty || isSingleLog) {
       updatedShift.startedAtDateAndTime = log.takeoffDateAndTime;
     } else {
       bool isLogTakeoffEarlier = isFirstDateAndTimeEarlier(
@@ -510,7 +512,7 @@ Future<int> updateShiftInDb(int id, FlightLogModel log, FlightLogModel? logBefor
       }
     }
 
-    if (updatedShift.endedAtDateAndTime.isEmpty) {
+    if (updatedShift.endedAtDateAndTime.isEmpty || isSingleLog) {
       updatedShift.endedAtDateAndTime = log.landingDateAndTime;
     } else {
       bool isLogLandingLater = isFirstDateAndTimeLater(
