@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/date_time/to_date_time.dart';
 
 enum CalendarSelectable {
   shift,
@@ -10,10 +11,12 @@ class Calendar extends StatelessWidget {
     super.key,
     // required this.type,
     required this.callback,
+    this.initialDate = '',
   });
 
   // final CalendarSelectable type;
   final void Function(DateTime) callback;
+  final String initialDate; // e.g. '2024-07-20'
 
   // static String trimSeconds (String dateString) {
   //   // e.g. 2024-07-10 08:44:00.000 -->
@@ -46,14 +49,26 @@ class Calendar extends StatelessWidget {
     DateTime firstDate = (int year) { return DateTime(year - 3); }(DateTime.now().year);
     // restrict selection by today
     DateTime lastDate = DateTime.now();
-    DateTime initialDate = DateTime.now();
+    DateTime initDate = (() {
+      try {
+        if (initialDate.isEmpty) {
+          return DateTime.now();
+        }
+
+        return initialDate.length == 10
+          ? toDateTime('$initialDate 00:00')
+          : toDateTime(initialDate);
+      } catch (err) {
+        return DateTime.now();
+      }
+    })();
 
     return Scaffold(
       body: Column(
         children: [
           CalendarDatePicker(
             // currentDate: today,
-            initialDate: initialDate,
+            initialDate: initDate,
             firstDate: firstDate,
             lastDate: lastDate,
             onDateChanged: onDateChanged,

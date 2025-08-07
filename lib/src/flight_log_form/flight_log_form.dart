@@ -321,6 +321,7 @@ class FlightLogFormState extends State<FlightLogForm> {
                                         setDate(d, null);
                                         Navigator.pop(context);
                                       },
+                                      initialDate: dateISO,
                                     ),
                                   ),
                                 );
