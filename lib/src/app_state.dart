@@ -688,12 +688,25 @@ class MyAppState with ChangeNotifier {
     FlightLogModel? logBeforeUpdate = await getFlightLogFromDb(logId);
 
     int changesMade = await updateFlightLogInDb(logId, flightLog);
-    print('[dbUpdateFlightLog] changes made: $changesMade');
 
     if (changesMade > 0) {
       FlightLogModel log = flightLog.toLog(id: logId);
 
-      await updateShiftInDb(log.shiftId, log, logBeforeUpdate);
+      int changesInShiftMade = await updateShiftInDb(
+        log.shiftId,
+        log,
+        logBeforeUpdate,
+      );
+      if (changesInShiftMade > 0) {
+        var shift = await getShiftFromDb(log.shiftId);
+        if (shift is ShiftModel) {
+          replaceShift(shift);
+
+          if (isSingleShiftMode) {
+            singleShift = shift;
+          }
+        }
+      }
 
       /// TODO: wrap into single function replaceItem
       replaceFlightLog(log);
