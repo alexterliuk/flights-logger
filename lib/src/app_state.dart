@@ -386,6 +386,22 @@ class MyAppState with ChangeNotifier {
   ///
   ///
   ///
+  bool removeSingleShiftFlightLog(int id) {
+    int beforeCount = singleShiftFlightLogs.length;
+    singleShiftFlightLogs.removeWhere((log) => log.id == id);
+    int afterCount = singleShiftFlightLogs.length;
+
+    bool isRemoved = beforeCount != afterCount;
+    if (isRemoved) {
+      singleShiftFlightLogsIds.removeWhere((logId) => logId == id);
+    }
+
+    return isRemoved;
+  }
+
+  ///
+  ///
+  ///
   void resetNewShiftFlightLogs() {
     newShiftFlightLogs = [];
     newShiftFlightLogsIds = [];
@@ -807,10 +823,11 @@ class MyAppState with ChangeNotifier {
 
     if (isLogRemoved) {
       removeFlightLog(id);
+      removeSingleShiftFlightLog(id);
       var shiftRemovalResult = await dbUpdateShiftAfterFlightLogRemoved(shiftId, id);
       removalResult.isShiftRemoved = shiftRemovalResult.isShiftRemoved;
       removalResult.removedShiftId = shiftRemovalResult.removedShiftId;
-      dbUpdateHome();
+      await dbUpdateHome();
     }
 
     return removalResult;

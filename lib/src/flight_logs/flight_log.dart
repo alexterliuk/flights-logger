@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../home/home.dart';
 import '../app_state.dart';
 import '../flight_log_form/flight_log_form.dart';
+import '../shifts/shifts_loading.dart';
 import 'flight_log_model.dart';
 import 'flight_logs.dart';
 import 'flight_log_cells.dart';
@@ -45,20 +45,14 @@ class FlightLog extends StatelessWidget {
       }
 
       if (removalResult.isShiftRemoved) {
-        appState.resetSingleShiftMode();
         appState.updateShiftsResAfterShiftRemoved(removalResult.removedShiftId);
       }
 
-      if (removalResult.isLogRemoved || removalResult.isShiftRemoved) {
-        // if using with `await`, an err in terminal -
-        // at this moment widget's state is not stable...
-        appState.dbUpdateHome(shouldRefresh: true);
-      }
-
-      if (removalResult.isShiftRemoved) {
+      if (removalResult.isShiftRemoved && appState.isSingleShiftMode) {
+        appState.resetSingleShiftMode();
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => Home()),
+          MaterialPageRoute(builder: (context) => const ShiftsLoading()),
         );
       }
     }
