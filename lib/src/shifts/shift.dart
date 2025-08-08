@@ -45,23 +45,25 @@ class Shift extends StatelessWidget {
       );
     }
 
-    remove() async {
-      bool isRemoved = await appState.dbRemoveShift(shift.id);
-
-      if (isRemoved) {
-        shiftsState.updateEditAndDeleteButtonsView(index, false);
-        /// TODO (maybe old, not needed now): isExpanded is not enough because if next row is also expanded, then
-        /// it closes it and expands next one; I need to add id to shiftsState
-        // if (shiftsState.isExpanded(shift.id)) {
-        //   shiftsState.updateExpandingView(shift.id, false);
-        // }
-        shiftsState.removeExpandingRecord(shift.id);
-
-        int shiftsTotalCount = await getShiftsTotalCountFromDb();
-        appState.shiftsRes.totalCount = shiftsTotalCount;
-        appState.update();
-      }
-    }
+    /// Removing shift by button is not allowed. A shift is deleted automatically
+    /// when there's no logs left in it.
+    // remove() async {
+    //   bool isRemoved = await appState.dbRemoveShift(shift.id);
+    //
+    //   if (isRemoved) {
+    //     shiftsState.updateEditAndDeleteButtonsView(index, false);
+    //     /// TODO (maybe old, not needed now): isExpanded is not enough because if next row is also expanded, then
+    //     /// it closes it and expands next one; I need to add id to shiftsState
+    //     // if (shiftsState.isExpanded(shift.id)) {
+    //     //   shiftsState.updateExpandingView(shift.id, false);
+    //     // }
+    //     shiftsState.removeExpandingRecord(shift.id);
+    //
+    //     int shiftsTotalCount = await getShiftsTotalCountFromDb();
+    //     appState.shiftsRes.totalCount = shiftsTotalCount;
+    //     appState.update();
+    //   }
+    // }
 
     return Column(
       children: [
@@ -128,7 +130,7 @@ class Shift extends StatelessWidget {
                                 height: 36,
                                 child: Flex(
                                   direction: Axis.horizontal,
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     IconButton(
                                       icon: const Icon(Icons.edit),
@@ -136,12 +138,13 @@ class Shift extends StatelessWidget {
                                       iconSize: 18,
                                       visualDensity: VisualDensity.compact,
                                     ),
-                                    IconButton(
-                                      icon: const Icon(Icons.delete),
-                                      onPressed: remove,
-                                      iconSize: 18,
-                                      visualDensity: VisualDensity.compact,
-                                    ),
+                                    // IconButton(
+                                    //   icon: const Icon(Icons.delete),
+                                    //   // onPressed: remove,
+                                    //   onPressed: () {},
+                                    //   iconSize: 18,
+                                    //   visualDensity: VisualDensity.compact,
+                                    // ),
 
                                     // PointerInterceptor(
                                     //   child:
