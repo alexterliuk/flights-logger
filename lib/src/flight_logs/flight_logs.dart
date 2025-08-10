@@ -33,6 +33,9 @@ class FlightLogs extends StatelessWidget {
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
 
+    appState.updateCurrentPage(FlightLogs.routeName);
+    appState.addToHistory(FlightLogs.routeName);
+
     final List<FlightLogModel> logs = appState.isSingleShiftMode
       ? appState.singleShiftFlightLogs
       : appState.flightLogs;

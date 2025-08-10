@@ -27,11 +27,21 @@ class FlightLog extends StatelessWidget {
 
     edit () {
       flightLogsState.updateEditAndDeleteButtonsView(index, false);
-      appState.addToHistory(FlightLogForm.routeName);
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) =>
           FlightLogForm(log: log, shiftId: log.shiftId)),
+      );
+    }
+
+    navigateToShifts () {
+      while(Navigator.canPop(context)) {
+        Navigator.pop(context);
+      }
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const ShiftsLoading()),
       );
     }
 
@@ -50,10 +60,9 @@ class FlightLog extends StatelessWidget {
 
       if (removalResult.isShiftRemoved && appState.isSingleShiftMode) {
         appState.resetSingleShiftMode();
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const ShiftsLoading()),
-        );
+        appState.removeFromHistory(FlightLogs.routeName);
+
+        navigateToShifts();
       }
     }
 

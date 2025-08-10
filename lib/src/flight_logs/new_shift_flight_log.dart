@@ -21,7 +21,6 @@ class NewShiftFlightLog extends StatelessWidget {
     var appState = context.watch<MyAppState>();
 
     void edit() {
-      appState.addToHistory(FlightLogForm.routeName);
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => FlightLogForm(log: log, shiftId: log.shiftId)),

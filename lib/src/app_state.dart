@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 
 import 'flight_logs/flight_log.dart';
 import 'flight_logs/flight_log_model.dart';
+import 'flight_logs/flight_logs.dart';
 import 'shifts/shift.dart';
 import 'shifts/shift_model.dart';
+import 'shifts/shifts.dart';
 import 'shifts/utils.dart';
 import 'utils/date_time/parse_date_and_time.dart';
 import 'utils/date_time/to_date_time.dart';
@@ -31,6 +33,12 @@ class RemovalResult {
 }
 
 class MyAppState with ChangeNotifier {
+  String currentPage = '';
+
+  void updateCurrentPage(String routeName) {
+    currentPage = routeName;
+  }
+
   List<String> history = [];
 
   List<String> getHistory() {
@@ -53,6 +61,16 @@ class MyAppState with ChangeNotifier {
       print('           [history ADD BEF] - $history');
       history.add(routeName);
       print('           [history ADD AFT] - $history');
+    }
+
+    if (history.isNotEmpty) {
+      // workaround to avoid '/flight_logs' to be the last in history when
+      // the current page is Shifts; this happens when a shift is deleted
+      // automatically after its last log deleted, and redirection from FlightLogs
+      // to Shifts is performed
+      if (currentPage == Shifts.routeName && history.last == FlightLogs.routeName) {
+        removeFromHistory(FlightLogs.routeName);
+      }
     }
   }
 

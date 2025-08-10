@@ -21,14 +21,18 @@ class LastFlight extends StatelessWidget {
     final FlightLogModel log = appState.lastFlightLog;
     bool isEditButtonHidden = log.shiftId == -1;
 
-    String logDate = getStartEndDates(log.takeoffDateAndTime, log.landingDateAndTime, withYear: true);
+    String logDate = getStartEndDates(
+      log.takeoffDateAndTime,
+      log.landingDateAndTime,
+      withYear: true,
+    );
 
     void edit() {
-      appState.addToHistory(FlightLogForm.routeName);
-
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => FlightLogForm(log: log, shiftId: log.shiftId)),
+        MaterialPageRoute(builder: (context) =>
+          FlightLogForm(log: log, shiftId: log.shiftId),
+        ),
       );
     }
 

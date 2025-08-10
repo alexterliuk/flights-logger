@@ -53,7 +53,6 @@ class NewShiftState extends State<NewShift> {
     var appState = context.watch<MyAppState>();
 
     void addLog() {
-      appState.addToHistory(FlightLogForm.routeName);
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) =>

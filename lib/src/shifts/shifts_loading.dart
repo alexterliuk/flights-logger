@@ -31,7 +31,7 @@ class ShiftsLoadingState extends State<ShiftsLoading> {
     loadShifts();
   }
 
-  void loadShifts() {
+  void loadShifts() async {
     Future<ShiftsResult> loadedShiftsResult = getShiftsFromDb(
       fromDate: widget.fromDate,
       toDate: widget.toDate,
@@ -53,7 +53,6 @@ class ShiftsLoadingState extends State<ShiftsLoading> {
           // apply logic only for initial load
           if (appState.shiftsRes.shifts.isEmpty) { /// TODO: do I really need this if check?
             appState.updateShiftsRes(snapshot.data ?? ShiftsResult(shifts: []));
-            appState.addToHistory(Shifts.routeName);
           }
 
           return Shifts(fromDate: widget.fromDate, toDate: widget.toDate);

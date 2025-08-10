@@ -214,6 +214,9 @@ class FlightLogFormState extends State<FlightLogForm> {
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
 
+    appState.updateCurrentPage(FlightLogForm.routeName);
+    appState.addToHistory(FlightLogForm.routeName);
+
     void proceedToNewShift(BaseFlightLogModel editedLog) {
       appState.removeFromHistory(FlightLogForm.routeName);
       Navigator.pop(context);

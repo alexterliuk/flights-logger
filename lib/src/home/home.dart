@@ -38,6 +38,9 @@ class HomeState extends State<Home> {
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
 
+    appState.updateCurrentPage(Home.routeName);
+    appState.addToHistory(Home.routeName);
+
     bool isInit = widget.isInitLoading && !hasLoaded;
 
 /// NB ABOUT HOME
@@ -89,7 +92,6 @@ class HomeState extends State<Home> {
           }
 
           setState(() {
-            appState.addToHistory(Home.routeName);
             hasLoaded = true;
           });
         })();

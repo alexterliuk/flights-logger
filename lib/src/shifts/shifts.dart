@@ -45,6 +45,9 @@ class Shifts extends StatelessWidget {
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
 
+    appState.updateCurrentPage(Shifts.routeName);
+    appState.addToHistory(Shifts.routeName);
+
     final List<ShiftModel> shifts = appState.shiftsRes.shifts;
     final int shiftsTotalCount = appState.shiftsRes.totalCount;
 

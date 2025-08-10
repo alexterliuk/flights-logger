@@ -61,8 +61,6 @@ class FlightLogsLoadingState extends State<FlightLogsLoading> {
       future: logs,
       builder:(context, AsyncSnapshot<List<FlightLogModel>> snapshot) {
         if (snapshot.hasData) {
-          appState.addToHistory(FlightLogs.routeName);
-
           widget.isLoadByIds
             ? appState.updateSingleShiftFlightLogs(
                 givenLogs: snapshot.data ?? [],
