@@ -354,12 +354,25 @@ Future<int> addShiftToDb(BaseShiftModel shift) async {
 class ShiftsResult {
   List<ShiftModel> shifts;
   int totalCount;
+  String fromDate;
+  String toDate;
 
   ShiftsResult({
     // 'required' to avoid 'Cannot remove from an unmodifiable list' error in removeShift
     required this.shifts,
     this.totalCount = 0,
+    this.fromDate = '',
+    this.toDate = '',
   });
+
+  Map<String, Object?> toMap() {
+    return {
+      'shifts': shifts.map((shift) => shift.toMap()),
+      'totalCount': totalCount,
+      'fromDate': fromDate,
+      'toDate': toDate,
+    };
+  }
 }
 
 ///
@@ -424,7 +437,12 @@ Future<ShiftsResult> getShiftsFromDb({
     ));
   }
 
-  return ShiftsResult(shifts: shifts, totalCount: totalCount);
+  return ShiftsResult(
+    shifts: shifts,
+    totalCount: totalCount,
+    fromDate: fromStr,
+    toDate: toStr,
+  );
 }
 
 ///

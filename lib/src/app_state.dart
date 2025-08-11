@@ -237,14 +237,14 @@ class MyAppState with ChangeNotifier {
         throw Error();
       }
 
+      shiftsRes.totalCount = givenShiftsRes.totalCount;
+      shiftsRes.fromDate = givenShiftsRes.fromDate;
+      shiftsRes.toDate = givenShiftsRes.toDate;
+
       if (shiftsIds.isEmpty) {
         shiftsRes.shifts = givenShiftsRes.shifts;
-        shiftsRes.totalCount = givenShiftsRes.totalCount;
         shiftsIds = givenShiftsRes.shifts.map((shift) => shift.id).toList();
       } else {
-        shiftsRes.totalCount = givenShiftsRes.totalCount;
-
-        // print('shiftsIds.length - ${shiftsIds.length}');
         /// check to avoid inserting a duplicate shift
         for (final shift in givenShiftsRes.shifts) {
           bool isDuplicate = shiftsIds.contains(shift.id);
