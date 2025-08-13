@@ -114,15 +114,28 @@ class FlightLogsResult {
 ///
 /// Get many flight logs from db
 ///
-Future<List<FlightLogModel>> getFlightLogsFromDb({ int? offset, int? limit }) async {
+Future<List<FlightLogModel>> getFlightLogsFromDb({
+  int? offset,
+  int? limit,
+  DateTime? fromDate,
+  DateTime? toDate,
+}) async {
   try {
     final db = await database;
 
     final limitInt = limit ?? 20;
     final offsetInt = offset ?? 0;
+    final fromStr = getDateStringWithoutTimeFromDateTime(
+      fromDate ?? DateTime(1970),
+    );
+    final toStr = getDateStringWithoutTimeFromDateTime(
+      toDate ?? DateTime.now(),
+    );
 
     final List<Map<String, Object?>> logsMapList = await db.rawQuery(
-      '''SELECT * FROM FLIGHTLOG
+      '''SELECT * FROM FLIGHTLOG WHERE
+           strftime("%s", takeoffDateAndTime)
+           BETWEEN strftime("%s", "$fromStr") AND strftime("%s", "$toStr")
            ORDER BY takeoffDateAndTime DESC
            LIMIT $limitInt
            OFFSET $offsetInt
