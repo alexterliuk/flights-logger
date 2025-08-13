@@ -651,6 +651,30 @@ Future<int> getShiftsTotalCountFromDb() async {
 ///
 ///
 ///
+Future<int> getShiftsCountForPeriodFromDb({
+  required DateTime fromDate,
+  required DateTime toDate,
+}) async {
+  final db = await database;
+
+  final fromStr = getDateStringWithoutTimeFromDateTime(fromDate);
+  final toStr = getDateStringWithoutTimeFromDateTime(toDate);
+
+  final List<Map<String, Object?>> countMap = await db.rawQuery(
+    '''SELECT COUNT(*) FROM SHIFT WHERE
+         strftime("%s", startedAtDateAndTime)
+         BETWEEN strftime("%s", "$fromStr") AND strftime("%s", "$toStr")
+    '''
+  ); // e.g. [{COUNT(*): 117}]
+
+  int shiftsCountForPeriod = countMap.first['COUNT(*)'] as int;
+
+  return shiftsCountForPeriod;
+}
+
+///
+///
+///
 Future<int> getLastShiftIdFromDb() async {
   try {
     final db = await database;
