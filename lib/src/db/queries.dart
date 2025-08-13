@@ -392,8 +392,7 @@ Future<ShiftsResult> getShiftsFromDb({
     fromDate ?? DateTime(1970),
   );
   final toStr = getDateStringWithoutTimeFromDateTime(
-    // adding one day to include shifts ended till 23:59 of toDate
-    (toDate ?? DateTime.now()).add(const Duration(days: 1))
+    toDate ?? DateTime.now(),
   );
 
   final List<Map<String, Object?>> shiftsMapList = await db.rawQuery(

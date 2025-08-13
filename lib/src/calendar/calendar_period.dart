@@ -42,7 +42,8 @@ class CalendarState extends State<CalendarPeriod> {
     }
 
     DateTime from = fromDate ?? firstDate;
-    DateTime to = d;
+    // adding one day to include items ended till 23:59 of d
+    DateTime to = d.add(const Duration(days: 1));
 
     reset();
 
