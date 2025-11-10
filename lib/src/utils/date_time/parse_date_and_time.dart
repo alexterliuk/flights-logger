@@ -35,7 +35,7 @@ ParsedDateAndTime parseDateAndTime(String dateAndTime) { // '2024-07-20 23:48'
     year: yearInt == -1 ? defaultDateAndTime.year : yearInt,
     month: monthInt == -1 ? defaultDateAndTime.month : monthInt,
     day: dayInt == -1 ? defaultDateAndTime.day : dayInt,
-    hour: hourInt == -1 ? defaultDateAndTime.hour: hourInt,
+    hour: hourInt == -1 ? defaultDateAndTime.hour : hourInt,
     minute: minuteInt == -1 ? defaultDateAndTime.minute : minuteInt,
   );
 }
