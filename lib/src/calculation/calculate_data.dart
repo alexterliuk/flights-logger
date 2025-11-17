@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../app_state.dart';
-import '../shifts/shifts_loading.dart';
-import '../calendar/calendar_period.dart';
 import '../calculation/select_day_time.dart';
-import '../utils/date_time/from_date_time.dart';
 import 'calculation_result_model.dart';
 import 'make_calculation.dart';
+
+const int defaultFromYear = 2000;
+const int defaultToYear = 2100;
 
 class CalculateData extends StatefulWidget {
   const CalculateData({
@@ -21,33 +19,42 @@ class CalculateData extends StatefulWidget {
 class CalculateDataState extends State<CalculateData> {
   String dayStartsAt = dayStartOptions.first;
   String dayEndsAt = dayEndOptions.last;
-  DateTime fromTheDate = DateTime(2000);
-  DateTime toTheDate = DateTime(2100);
+  DateTime fromDate = DateTime(defaultFromYear);
+  DateTime toDate = DateTime(defaultToYear);
 
   bool isCalculationInProcess = false;
   CalculationResultModel calc = CalculationResultModel();
 
-  void calculate({ required DateTime fromDate, required DateTime toDate }) async {
-    setState(() {
-      fromTheDate = fromDate;
-      toTheDate = toDate;
-      isCalculationInProcess = true;
-    });
-    // print('calculate: fromTheDate - ${fromTheDate.toString()}, toTheDate - ${toTheDate.toString()}');
-    // print('calculate: dayStartsAt - $dayStartsAt, dayEndsAt - $dayEndsAt');
-    Navigator.pop(context);
-
-    var calcRes = await makeCalculation(
-      fromDate: fromDate,
-      toDate: toDate,
-      dayStartsAt: dayStartsAt,
-      dayEndsAt: dayEndsAt,
+  void calculate() async {
+    DateTimeRange<DateTime>? range = await showDateRangePicker(
+      context: context,
+      firstDate: fromDate,
+      lastDate: toDate,
     );
 
-    print('calcRes is ${calcRes.toMap()}');
+    setState(() {
+      if (range is DateTimeRange) {
+        fromDate = range.start;
+        toDate = range.end;
+        isCalculationInProcess = true;
+      }
+    });
+
+    CalculationResultModel calcRes = calc;
+    if (fromDate.year != defaultFromYear) {
+      calcRes = await makeCalculation(
+        fromDate: fromDate,
+        toDate: toDate,
+        dayStartsAt: dayStartsAt,
+        dayEndsAt: dayEndsAt,
+      );
+    }
+
     setState(() {
       calc = calcRes;
       isCalculationInProcess = false;
+      fromDate = DateTime(defaultFromYear);
+      toDate = DateTime(defaultToYear);
     });
   }
 
@@ -56,8 +63,6 @@ class CalculateDataState extends State<CalculateData> {
       dayStartsAt = dayStart;
       dayEndsAt = dayEnd;
     });
-    // print('defineDayTime: fromTheDate - ${fromTheDate.toString()}, toTheDate - ${toTheDate.toString()}');
-    // print('defineDayTime: dayStartsAt - $dayStartsAt, dayEndsAt - $dayEndsAt');
   }
 
   @override
@@ -71,14 +76,7 @@ class CalculateDataState extends State<CalculateData> {
         Column(
           children: [
             TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) =>
-                    CalendarPeriod(callback: calculate),
-                  ),
-                );
-              },
+              onPressed: calculate,
               child: const Text('Calculate'),
             ),
             SelectDayTime(callback: defineDayTime),
