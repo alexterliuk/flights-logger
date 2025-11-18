@@ -17,8 +17,10 @@ class CalculateData extends StatefulWidget {
 }
 
 class CalculateDataState extends State<CalculateData> {
+  // initial value for dayStartsAt, dayEndsAt should be same as
+  // dayStartValue, dayEndValue in SelectDayTime
   String dayStartsAt = dayStartOptions.first;
-  String dayEndsAt = dayEndOptions.last;
+  String dayEndsAt = dayEndOptions.first;
   DateTime fromDate = DateTime(defaultFromYear);
   DateTime toDate = DateTime(defaultToYear);
 

@@ -2,27 +2,18 @@ import 'package:flutter/material.dart';
 
 const List<String> dayStartOptions = <String>[
   '04:00',
-  // '04:30',
   '05:00',
-  // '05:30',
   '06:00',
-  // '06:30',
   '07:00',
-  // '07:30',
   '08:00',
 ];
 
 const List<String> dayEndOptions = <String>[
   '16:00',
-  // '16:30',
   '17:00',
-  // '17:30',
   '18:00',
-  // '18:30',
   '19:00',
-  // '19:30',
   '20:00',
-  // '20:30',
   '21:00',
 ];
 
@@ -42,7 +33,10 @@ class SelectDayTime extends StatefulWidget {
 
 class SelectDayTimeState extends State<SelectDayTime> {
   String dayStartValue = dayStartMenuEntries.first.value;
+  String initialDayStartSelection = dayStartMenuEntries.first.label;
+
   String dayEndValue = dayEndMenuEntries.first.value;
+  String initialDayEndSelection = dayEndMenuEntries.first.label;
 
   static final List<MenuEntry> dayStartMenuEntries = (() =>
     dayStartOptions.map((String name) =>
@@ -68,7 +62,7 @@ class SelectDayTimeState extends State<SelectDayTime> {
                   inputDecorationTheme: InputDecorationTheme(border: null),
                   focusNode: FocusNode(canRequestFocus: false),
                   // menuHeight: 100,
-                  initialSelection: dayStartMenuEntries.first.label,
+                  initialSelection: initialDayStartSelection,
                   onSelected: (String? value) {
                     setState(() {
                       dayStartValue = value!;
@@ -87,7 +81,7 @@ class SelectDayTimeState extends State<SelectDayTime> {
                   width: 124,
                   inputDecorationTheme: InputDecorationTheme(border: null),
                   focusNode: FocusNode(canRequestFocus: false),
-                  initialSelection: dayEndMenuEntries.first.label,
+                  initialSelection: initialDayEndSelection,
                   onSelected: (String? value) {
                     setState(() {
                       dayEndValue = value!;
