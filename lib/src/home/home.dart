@@ -13,7 +13,7 @@ import '../flight_logs/show_all_flights.dart';
 import '../shifts/select_shift.dart';
 import '../shifts/show_all_shifts.dart';
 import '../calculation/calculate_data.dart';
-import '../upload_data/upload_data.dart';
+import '../upload_data/upload_data_button.dart';
 import 'top_numbers.dart';
 import 'home_model.dart';
 
