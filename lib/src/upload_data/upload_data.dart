@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import '../utils/get_total_time.dart';
 import '../flight_logs/flight_log_model.dart';
-import '../upload_data/utils.dart';
+import 'utils.dart';
 import 'upload_data_model.dart';
+import 'uploaded_data_summary.dart';
 
 ///
 ///
@@ -78,53 +80,14 @@ class UploadDataState extends State<UploadData> {
       ),
       body: Column(
         children: [
-          Column(
-            children: [
-              // TextButton(
-              //   onPressed: calculate,
-              //   child: const Text('Calculate'),
-              // ),
-              // const SizedBox(height: 16),
-              Column(children: [
-                // const SizedBox(
-                //   width: 296,
-                //   child: Text(
-                //     'Upload data',
-                //     style: TextStyle(fontWeight: FontWeight.bold),
-                //   ),
-                // ),
-                // const SizedBox(width: 296, child: Text('Some explanation')),
-                // Row(
-                  // children: [
-                    IconButton(
-                      onPressed: getAndParseFile,
-                      icon: const Icon(Icons.add_chart),
-                    ),
-                  // ],
-                // ),
-                // Row(
-                //   children: [
-                //     const SizedBox(width: 120, child: Text('Total flights:')),
-                //     SizedBox(width: 56, child: Text('${calc.flightsCount}')),
-                //     SizedBox(width: 120, child: Text(calc.flightsTotalTime)),
-                //   ],
-                // ),
-                // Row(
-                //   children: [
-                //     const SizedBox(width: 120, child: Text('At night:')),
-                //     SizedBox(width: 56, child: Text('${calc.flightsAtNightCount}')),
-                //     SizedBox(width: 120, child: Text(calc.flightsAtNightTotalTime)),
-                //   ],
-                // ),
-                // Row(
-                //   children: [
-                //     const SizedBox(width: 120, child: Text('At day:')),
-                //     SizedBox(width: 56, child: Text('${calc.flightsAtDayCount}')),
-                //     SizedBox(width: 120, child: Text(calc.flightsAtDayTotalTime)),
-                //   ],
-                // ),
-              ]),
-            ],
+          IconButton(
+            onPressed: getAndParseFile,
+            icon: const Icon(Icons.add_chart),
+          ),
+          UploadedDataSummary(
+            flightsCount: 144,
+            shiftsCount: 17,
+            totalFlightTime: getTotalTime(2345),
           ),
         ],
       ),

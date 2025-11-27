@@ -5,7 +5,7 @@ import 'package:pointer_interceptor/pointer_interceptor.dart';
 
 import '../app_state.dart';
 import '../db/queries.dart';
-import '../utils/get_shift_total_time.dart';
+import '../utils/get_total_time.dart';
 import './shift_model.dart';
 import './shifts.dart';
 
@@ -172,7 +172,7 @@ class Shift extends StatelessWidget {
                                 width: 70,
                                 height: 36,
                                 child: Text(
-                                  getShiftTotalTime(shift.timeTotalMinutes),
+                                  getTotalTime(shift.timeTotalMinutes),
                                   textAlign: TextAlign.end,
                                   style: const TextStyle(height: 2.4),
                                 ),

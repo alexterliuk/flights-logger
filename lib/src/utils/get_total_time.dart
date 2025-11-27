@@ -1,4 +1,4 @@
-String getShiftTotalTime(int totalMinutes) {
+String getTotalTime(int totalMinutes) {
   if (totalMinutes < 60) {
     return '${totalMinutes}m';
   }
