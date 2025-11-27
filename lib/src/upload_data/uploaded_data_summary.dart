@@ -34,7 +34,7 @@ class UploadedDataSummary extends StatelessWidget {
             ),
             Row(
               children: [
-                const SizedBox(width: 120, child: Text('Top altitude:')),
+                const SizedBox(width: 120, child: Text('Total flight time:')),
                 SizedBox(width: 176, child: Text(totalFlightTime)),
               ],
             ),
