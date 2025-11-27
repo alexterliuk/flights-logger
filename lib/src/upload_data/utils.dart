@@ -121,7 +121,11 @@ List<FlightLogModel> convertToLogs(List<dynamic> decodedLogs) {
 
     return logs;
   } catch (err) {
-    print('[convertToLogs] error occurred, last log\'s id - ${logs.lastOrNull?.id}');
+    print('''[convertToLogs] ERR
+    last processed log's id - ${logs.lastOrNull?.id}
+    logs count - ${logs.length}
+    ''');
+
     return [];
   }
 }
