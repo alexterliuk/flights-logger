@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import '../calculation/select_day_time.dart';
 import 'calculation_result_model.dart';
 import 'make_calculation.dart';
-
-const int defaultFromYear = 2000;
-const int defaultToYear = 2100;
+import 'default_vars.dart';
 
 class CalculateData extends StatefulWidget {
   const CalculateData({
@@ -21,8 +19,8 @@ class CalculateDataState extends State<CalculateData> {
   // dayStartValue, dayEndValue in SelectDayTime
   String dayStartsAt = dayStartOptions.first;
   String dayEndsAt = dayEndOptions.first;
-  DateTime fromDate = DateTime(defaultFromYear);
-  DateTime toDate = DateTime(defaultToYear);
+  DateTime fromDate = defaultFromYearDateTime;
+  DateTime toDate = defaultToYearDateTime;
 
   bool isCalculationInProcess = false;
   CalculationResultModel calc = CalculationResultModel();
