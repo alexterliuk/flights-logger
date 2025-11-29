@@ -42,7 +42,7 @@ class CalculateDataState extends State<CalculateData> {
 
     CalculationResultModel calcRes = calc;
     if (fromDate.year != defaultFromYear) {
-      calcRes = await makeCalculation(
+      calcRes = await getDataFromDbAndMakeCalculation(
         fromDate: fromDate,
         toDate: toDate,
         dayStartsAt: dayStartsAt,

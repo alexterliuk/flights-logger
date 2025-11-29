@@ -1,29 +1,61 @@
-import 'package:flights_logger/src/calculation/flight_minutes_model.dart';
-import 'package:flights_logger/src/calculation/get_flight_minutes.dart';
-import 'package:flutter/widgets.dart';
-
 import '../db/queries.dart';
 import '../flight_logs/flight_log_model.dart';
 import '../utils/date_time/get_date_string_without_time.dart';
 import '../utils/date_time/get_time.dart';
 import '../utils/date_time/to_date_time.dart';
 import '../utils/date_time/time_to_double.dart';
-import 'calculate_data.dart';
+import 'flight_minutes_model.dart';
+import 'get_flight_minutes.dart';
 import 'calculation_result_model.dart';
 import 'utils.dart';
+import 'default_vars.dart';
 
-Future<CalculationResultModel> makeCalculation({
+///
+///
+///
+Future<CalculationResultModel> getDataFromDbAndMakeCalculation({
   required DateTime fromDate,
   required DateTime toDate,
   required String dayStartsAt,
   required String dayEndsAt,
 }) async {
-  // int shiftsTotalCount = await getShiftsTotalCountFromDb();
-  // int flightsTotalCount = await getAxisDirectionFromAxisReverseAndDirectionality(context, axis, reverse)
   int shiftsCount = await getShiftsCountForPeriodFromDb(
     fromDate: fromDate,
     toDate: toDate,
   );
+
+  List<FlightLogModel> logs = await getFlightLogsFromDb(
+    fromDate: fromDate,
+    toDate: toDate,
+    limit: 9999,
+  );
+
+  String startingDate = getDateStringWithoutTimeFromDateTime(fromDate);
+  String endingDate = getDateStringWithoutTimeFromDateTime(toDate);
+
+  return makeCalculation(
+    shiftsCount: shiftsCount,
+    logs: logs,
+    dayStart: dayStartsAt,
+    dayEnd: dayEndsAt,
+    startingDate: startingDate,
+    endingDate: endingDate,
+  );
+}
+
+///
+///
+///
+CalculationResultModel makeCalculation({
+  int shiftsCount = -1,
+  List<FlightLogModel> logs = const [],
+  String dayStart = '',
+  String dayEnd = '',
+  String startingDate = '',
+  String endingDate = '',
+}) {
+  String dayStartsAt = dayStart.isEmpty ? dayStartOptions.first : dayStart;
+  String dayEndsAt = dayEnd.isEmpty ? dayEndOptions.first : dayEnd;
 
   int flightsAtDayCount = 0;
   int flightsAtDayTotalMinutes = 0;
@@ -31,25 +63,27 @@ Future<CalculationResultModel> makeCalculation({
   int flightsAtNightTotalMinutes = 0;
   int flightsTotalMinutes = 0;
 
-  List<FlightLogModel> flights = await getFlightLogsFromDb(
-    fromDate: fromDate,
-    toDate: toDate,
-    limit: 9999,
-  );
+  List<FlightLogModel> flights = logs;
 
   List<FlightLogModel> unprocessedLogs = [];
   List<FlightLogModel> unresolvedLogsToSetAsDayOrNight = [];
 
-  double dayStart = timeToDouble(dayStartsAt);
-  double dayEnd = timeToDouble(dayEndsAt);
+  double dayStartDouble = timeToDouble(dayStartsAt);
+  double dayEndDouble = timeToDouble(dayEndsAt);
 
-  if (dayStart == -1 || dayEnd == -1) {
+  if (dayStartDouble == -1 || dayEndDouble == -1) {
     // RETURN UNPROCESSED RESULT
   }
+
+  List<String> takeoffDateAndTimes = [];
+  List<String> landingDateAndTimes = [];
 
   for (final flight in flights) {
     double flightStart = timeToDouble(getTime(flight.takeoffDateAndTime));
     double flightEnd = timeToDouble(getTime(flight.landingDateAndTime));
+
+    takeoffDateAndTimes.add(flight.takeoffDateAndTime);
+    landingDateAndTimes.add(flight.landingDateAndTime);
 
     if (flightStart == -1 || flightEnd == -1) {
       unprocessedLogs.add(flight);
@@ -65,8 +99,8 @@ Future<CalculationResultModel> makeCalculation({
     }
 
     FlightMinutesModel minutes = getFlightMinutes(
-      dayStart: dayStart,
-      dayEnd: dayEnd,
+      dayStart: dayStartDouble,
+      dayEnd: dayEndDouble,
       flightStart: flightStart,
       flightEnd: flightEnd,
     );
@@ -84,28 +118,7 @@ Future<CalculationResultModel> makeCalculation({
     } else { // 'unresolved'
       unresolvedLogsToSetAsDayOrNight.add(flight);
     }
-
-    // String dateString =
-    //   getDateStringWithoutTimeFromDateString(flight.takeoffDateAndTime);
-    //
-    // if (currentDateString != dateString) {
-    //   currentDateString = dateString;
-    // }
-
-    // DateTime date = toDateTime(flight.takeoffDateAndTime);
-
-    // 1. convert dayStartsAt to int dayStartsAtHour & int dayStartsAtMinute
-    // 2. convert dayEndsAt to int dayEndsAtHour & int dayEndsAtMinute
-    // 3. if ...
-    // FlightLogModel(
-    //   takeoffDateAndTime: takeoffDateAndTime,
-    //   landingDateAndTime: landingDateAndTime,
-    //   flightTimeMinutes: flightTimeMinutes,
-    // );
   }
-
-  String startingDate = getDateStringWithoutTimeFromDateTime(fromDate);
-  String endingDate = getDateStringWithoutTimeFromDateTime(toDate);
 
   String flightsAtDayTotalTime = minutesToTimeString(
     flightsAtDayTotalMinutes,
@@ -115,22 +128,36 @@ Future<CalculationResultModel> makeCalculation({
   );
   String flightsTotalTime = minutesToTimeString(flightsTotalMinutes);
 
-  return Future.delayed(const Duration(milliseconds: 2300), () {
-    return CalculationResultModel(
-      shiftsCount: shiftsCount,
-      flightsCount: flights.length,
-      flightsAtDayCount: flightsAtDayCount,
-      flightsAtDayTotalMinutes: flightsAtDayTotalMinutes,
-      flightsAtDayTotalTime: flightsAtDayTotalTime,
-      flightsAtNightCount: flightsAtNightCount,
-      flightsAtNightTotalMinutes: flightsAtNightTotalMinutes,
-      flightsAtNightTotalTime: flightsAtNightTotalTime,
-      flightsTotalMinutes: flightsTotalMinutes,
-      flightsTotalTime: flightsTotalTime,
-      startingDate: startingDate,
-      endingDate: endingDate,
-      dayStartsAt: dayStartsAt,
-      dayEndsAt: dayEndsAt,
-    );
-  });
+  String startDate = startingDate;
+  if (startDate.isEmpty) {
+    DateTime? foundStartDate = findEarliestDate(takeoffDateAndTimes);
+    startDate = foundStartDate != null
+      ? getDateStringWithoutTimeFromDateTime(foundStartDate)
+      : '';
+  }
+
+  String endDate = endingDate;
+  if (endDate.isEmpty) {
+    DateTime? foundEndDate = findLatestDate(landingDateAndTimes);
+    endDate = foundEndDate != null
+      ? getDateStringWithoutTimeFromDateTime(foundEndDate)
+      : '';
+  }
+
+  return CalculationResultModel(
+    shiftsCount: shiftsCount,
+    flightsCount: flights.length,
+    flightsAtDayCount: flightsAtDayCount,
+    flightsAtDayTotalMinutes: flightsAtDayTotalMinutes,
+    flightsAtDayTotalTime: flightsAtDayTotalTime,
+    flightsAtNightCount: flightsAtNightCount,
+    flightsAtNightTotalMinutes: flightsAtNightTotalMinutes,
+    flightsAtNightTotalTime: flightsAtNightTotalTime,
+    flightsTotalMinutes: flightsTotalMinutes,
+    flightsTotalTime: flightsTotalTime,
+    startingDate: startDate,
+    endingDate: endDate,
+    dayStartsAt: dayStartsAt,
+    dayEndsAt: dayEndsAt,
+  );
 }

@@ -1,3 +1,6 @@
+import '../utils/date_time/is_first_date_and_time_earlier.dart';
+import '../utils/date_time/is_first_date_and_time_later.dart';
+import '../utils/date_time/to_date_time.dart';
 import 'flight_minutes_model.dart';
 
 String minutesToTimeString(int minutes) {
@@ -19,4 +22,44 @@ String resolveDayOrNightFlight(FlightMinutesModel minutes) {
   }
 
   return 'unresolved';
+}
+
+DateTime? findEarliestDate(List<String> dateAndTimes) {
+  if (dateAndTimes.isEmpty) {
+    return null;
+  }
+
+  String earliestDate = dateAndTimes.first;
+
+  for (final date in dateAndTimes) {
+    if (date == earliestDate) {
+      continue;
+    }
+
+    if (isFirstDateAndTimeEarlier(date, earliestDate)) {
+      earliestDate = date;
+    }
+  }
+
+  return toDateTime(earliestDate);
+}
+
+DateTime? findLatestDate(List<String> dateAndTimes) {
+  if (dateAndTimes.isEmpty) {
+    return null;
+  }
+
+  String latestDate = dateAndTimes.first;
+
+  for (final date in dateAndTimes) {
+    if (date == latestDate) {
+      continue;
+    }
+
+    if (isFirstDateAndTimeLater(date, latestDate)) {
+      latestDate = date;
+    }
+  }
+
+  return toDateTime(latestDate);
 }

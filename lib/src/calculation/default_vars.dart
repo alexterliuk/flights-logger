@@ -1,4 +1,4 @@
-const List<String> dayStartOptions = <String>[
+final List<String> dayStartOptions = <String>[
   '04:00',
   '05:00',
   '06:00',
