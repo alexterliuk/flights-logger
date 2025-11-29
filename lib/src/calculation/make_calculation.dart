@@ -77,6 +77,7 @@ CalculationResultModel makeCalculation({
 
   List<String> takeoffDateAndTimes = [];
   List<String> landingDateAndTimes = [];
+  List<int> shiftsIds = [];
 
   for (final flight in flights) {
     double flightStart = timeToDouble(getTime(flight.takeoffDateAndTime));
@@ -84,6 +85,10 @@ CalculationResultModel makeCalculation({
 
     takeoffDateAndTimes.add(flight.takeoffDateAndTime);
     landingDateAndTimes.add(flight.landingDateAndTime);
+
+    if (!shiftsIds.contains(flight.shiftId)) {
+      shiftsIds.add(flight.shiftId);
+    }
 
     if (flightStart == -1 || flightEnd == -1) {
       unprocessedLogs.add(flight);
@@ -144,8 +149,10 @@ CalculationResultModel makeCalculation({
       : '';
   }
 
+  int countOfShifts = shiftsCount == -1 ? shiftsIds.length : shiftsCount;
+
   return CalculationResultModel(
-    shiftsCount: shiftsCount,
+    shiftsCount: countOfShifts,
     flightsCount: flights.length,
     flightsAtDayCount: flightsAtDayCount,
     flightsAtDayTotalMinutes: flightsAtDayTotalMinutes,
