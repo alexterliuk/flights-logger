@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import '../utils/get_total_time.dart';
+import '../calculation/calculation_result_model.dart';
+import '../calculation/make_calculation.dart';
 import '../flight_logs/flight_log_model.dart';
 import 'utils.dart';
 import 'upload_data_model.dart';
@@ -45,13 +46,20 @@ class UploadData extends StatefulWidget {
 ///
 ///
 class UploadDataState extends State<UploadData> {
-  Map<String, Object?> data = {};
+  CalculationResultModel stats = CalculationResultModel();
 
   Future<void> getAndParseFile() async {
     try {
       final result = await widget.pickFile();
       final parsedFile = await widget.readJson(result);
       final List<FlightLogModel> logs = convertToLogs(parsedFile['logs']);
+      final CalculationResultModel calcRes = makeCalculation(logs: logs);
+
+      setState(() {
+        stats.flightsCount = calcRes.flightsCount;
+        stats.shiftsCount = calcRes.shiftsCount;
+        stats.flightsTotalTime = calcRes.flightsTotalTime;
+      });
       // TODO: upload logs to db (with notification that all current data will be deleted)
     } catch (err) {
       print('[UploadData.getAndParseFile] $err');
@@ -85,9 +93,9 @@ class UploadDataState extends State<UploadData> {
             icon: const Icon(Icons.add_chart),
           ),
           UploadedDataSummary(
-            flightsCount: 144,
-            shiftsCount: 17,
-            totalFlightTime: getTotalTime(2345),
+            flightsCount: stats.flightsCount,
+            shiftsCount: stats.shiftsCount,
+            flightsTotalTime: stats.flightsTotalTime,
           ),
         ],
       ),

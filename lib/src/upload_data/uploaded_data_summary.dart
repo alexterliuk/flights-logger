@@ -5,12 +5,12 @@ class UploadedDataSummary extends StatelessWidget {
     super.key,
     this.flightsCount = 0,
     this.shiftsCount = 0,
-    this.totalFlightTime = '',
+    this.flightsTotalTime = '',
   });
 
   final int flightsCount;
   final int shiftsCount;
-  final String totalFlightTime;
+  final String flightsTotalTime;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class UploadedDataSummary extends StatelessWidget {
             Row(
               children: [
                 const SizedBox(width: 120, child: Text('Total flight time:')),
-                SizedBox(width: 176, child: Text(totalFlightTime)),
+                SizedBox(width: 176, child: Text(flightsTotalTime)),
               ],
             ),
           ],
