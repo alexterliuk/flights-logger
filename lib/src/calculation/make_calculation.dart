@@ -4,6 +4,7 @@ import '../utils/date_time/get_date_string_without_time.dart';
 import '../utils/date_time/get_time.dart';
 import '../utils/date_time/to_date_time.dart';
 import '../utils/date_time/time_to_double.dart';
+import '../utils/get_total_time.dart';
 import 'flight_minutes_model.dart';
 import 'get_flight_minutes.dart';
 import 'calculation_result_model.dart';
@@ -125,17 +126,20 @@ CalculationResultModel makeCalculation({
     }
   }
 
-  String flightsAtDayTotalTime = minutesToTimeString(
+  String flightsAtDayTotalTime = getTotalTime(
     flightsAtDayTotalMinutes,
   );
-  String flightsAtNightTotalTime = minutesToTimeString(
+  String flightsAtNightTotalTime = getTotalTime(
     flightsAtNightTotalMinutes,
   );
-  String flightsTotalTime = minutesToTimeString(flightsTotalMinutes);
+  String flightsTotalTime = getTotalTime(flightsTotalMinutes);
 
   String startDate = startingDate;
   if (startDate.isEmpty) {
-    DateTime? foundStartDate = findEarliestDate(takeoffDateAndTimes);
+    DateTime? foundStartDate = findDate(
+      takeoffDateAndTimes,
+      mode: FindDateMode.earliest,
+    );
     startDate = foundStartDate != null
       ? getDateStringWithoutTimeFromDateTime(foundStartDate)
       : '';
@@ -143,7 +147,10 @@ CalculationResultModel makeCalculation({
 
   String endDate = endingDate;
   if (endDate.isEmpty) {
-    DateTime? foundEndDate = findLatestDate(landingDateAndTimes);
+    DateTime? foundEndDate = findDate(
+      landingDateAndTimes,
+      mode: FindDateMode.latest
+    );
     endDate = foundEndDate != null
       ? getDateStringWithoutTimeFromDateTime(foundEndDate)
       : '';
