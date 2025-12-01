@@ -333,7 +333,7 @@ Future<int> getLastFlightLogIdFromDb() async {
 
     return lastShiftId;
   } catch (err) {
-    print('[getLastShiftIdFromDb] ERR: $err');
+    print('[getLastFlightLogIdFromDb] ERR: $err');
 
     return -1;
   }
