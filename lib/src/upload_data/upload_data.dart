@@ -47,6 +47,8 @@ class UploadData extends StatefulWidget {
 ///
 class UploadDataState extends State<UploadData> {
   CalculationResultModel stats = CalculationResultModel();
+  List<FlightLogModel> uploadedLogs = [];
+  bool isSaving = false;
 
   Future<void> getAndParseFile() async {
     try {
@@ -59,10 +61,33 @@ class UploadDataState extends State<UploadData> {
         stats.flightsCount = calcRes.flightsCount;
         stats.shiftsCount = calcRes.shiftsCount;
         stats.flightsTotalTime = calcRes.flightsTotalTime;
+        uploadedLogs = logs;
       });
       // TODO: upload logs to db (with notification that all current data will be deleted)
     } catch (err) {
       print('[UploadData.getAndParseFile] $err');
+    }
+  }
+
+  Future<void> saveData(List<FlightLogModel> logs) async {
+    setState(() {
+      isSaving = true;
+    });
+
+    var isSuccess = await Future.delayed(const Duration(milliseconds: 2000), () {
+      // TODO: process before saving - make data for home, appState, create shifts,
+      var shH = createShiftsAndHome(logs);
+      // resetAppState
+      // then make redirection to Home
+      // In the process call getLastShiftIdFromDb and getLastShiftId?
+      return true;
+    });
+
+    // TODO: this block is not needed when redirecting to Home is made
+    if (isSuccess) {
+      setState(() {
+        isSaving = false;
+      });
     }
   }
 
@@ -97,6 +122,27 @@ class UploadDataState extends State<UploadData> {
             shiftsCount: stats.shiftsCount,
             flightsTotalTime: stats.flightsTotalTime,
           ),
+          Row(
+            children: [const SizedBox(width: 10, height: 30)],
+          ),
+          Column(
+            children: [
+              const SizedBox(
+                width: 360,
+                child: Text(
+                  'Save data? This will erase all your current data.'
+                ),
+              ),
+              FloatingActionButton(
+                onPressed: () { saveData(uploadedLogs); },
+                child: Text('Save'),
+              ),
+            ],
+          ),
+          Row(
+            children: [const SizedBox(width: 10, height: 30)],
+          ),
+          isSaving ? const CircularProgressIndicator() : const SizedBox(),
         ],
       ),
     );

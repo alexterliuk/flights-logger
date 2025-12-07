@@ -1,4 +1,8 @@
+import '../home/home_model.dart';
 import '../flight_logs/flight_log_model.dart';
+import '../shifts/shift_model.dart';
+import '../utils/date_time/is_first_date_and_time_earlier.dart';
+import '../utils/date_time/is_first_date_and_time_later.dart';
 import '../utils/extract_int.dart';
 
 bool validateString(dynamic mayBeString) {
@@ -127,5 +131,121 @@ List<FlightLogModel> convertToLogs(List<dynamic> decodedLogs) {
     ''');
 
     return [];
+  }
+}
+
+class ShiftsAndHome {
+  List<ShiftModel> shifts;
+  HomeModel home;
+
+  ShiftsAndHome({
+    required this.shifts,
+    required this.home,
+  });
+}
+
+ShiftsAndHome createShiftsAndHome(List<FlightLogModel> logs) {
+  List<ShiftModel> shifts = [];
+  HomeModel home = HomeModel();
+  Map<int, ShiftModel> shiftsMap = {};
+
+  try {
+    for (final log in logs) {
+      if (!shiftsMap.containsKey(log.shiftId)) {
+        var sh = shiftsMap.putIfAbsent(log.shiftId, () => ShiftModel(id: log.shiftId));
+        shifts.add(sh);
+        sh.logIds = [...sh.logIds, log.id];
+        sh.startedAtDateAndTime = log.takeoffDateAndTime;
+        sh.endedAtDateAndTime = log.landingDateAndTime;
+        sh.flightsQty += 1;
+        sh.timeTotalMinutes = log.flightTimeMinutes;
+        sh.longestFlightTimeMinutes = log.flightTimeMinutes;
+        sh.longestDistanceMeters = log.distanceMeters;
+        sh.highestAltitudeMeters = log.altitudeMeters;
+      } else {
+        var sh = shiftsMap[log.shiftId] as ShiftModel;
+        updateShiftIfNeeded(sh, log);
+        shiftsMap.update(log.shiftId, (bSh) => bSh);
+      }
+      updateHomeIfNeeded(home, log);
+      updateLastLogAndShiftId(home, log, logs);
+    }
+  } catch (err) {
+    print('''[createShifts] ERR
+    $err
+    ''');
+  }
+
+  return ShiftsAndHome(shifts: shifts, home: home);
+}
+
+void updateShiftIfNeeded(ShiftModel sh, FlightLogModel log) {
+  if (!sh.logIds.contains(log.id)) {
+    sh.logIds.add(log.id);
+  }
+
+  var hasLogStartedEarlier = isFirstDateAndTimeEarlier(
+    log.takeoffDateAndTime,
+    sh.startedAtDateAndTime,
+  );
+  if (hasLogStartedEarlier) {
+    sh.startedAtDateAndTime = log.takeoffDateAndTime;
+  }
+
+  var hasLogEndedLater = isFirstDateAndTimeLater(
+    log.landingDateAndTime,
+    sh.endedAtDateAndTime,
+  );
+  if (hasLogEndedLater) {
+    sh.endedAtDateAndTime = log.landingDateAndTime;
+  }
+
+  sh.flightsQty += 1;
+  sh.timeTotalMinutes += log.flightTimeMinutes;
+
+  if (log.flightTimeMinutes > sh.longestFlightTimeMinutes) {
+    sh.longestFlightTimeMinutes = log.flightTimeMinutes;
+  }
+
+  if (log.distanceMeters > sh.longestDistanceMeters) {
+    sh.longestDistanceMeters = log.distanceMeters;
+  }
+
+  if (log.altitudeMeters > sh.highestAltitudeMeters) {
+    sh.highestAltitudeMeters = log.altitudeMeters;
+  }
+}
+
+void updateHomeIfNeeded(HomeModel home, FlightLogModel log) {
+  if (log.flightTimeMinutes > home.topFlightTimeMinutes) {
+    home.topFlightTimeMinutes = log.flightTimeMinutes;
+  }
+
+  if (log.distanceMeters > home.topDistanceMeters) {
+    home.topDistanceMeters = log.distanceMeters;
+  }
+
+  if (log.altitudeMeters > home.topAltitudeMeters) {
+    home.topAltitudeMeters = log.altitudeMeters;
+  }
+}
+
+void updateLastLogAndShiftId(
+  HomeModel home,
+  FlightLogModel log,
+  List<FlightLogModel> logs,
+) {
+  if (home.lastFlightLogId == -1) {
+    home.lastFlightLogId = log.id;
+    home.lastShiftId = log.shiftId;
+  } else {
+    var lastLogLanding = logs.firstWhere(
+      (l) => l.id == home.lastFlightLogId
+    ).landingDateAndTime;
+
+    if (isFirstDateAndTimeLater(log.landingDateAndTime, lastLogLanding)) {
+      home.lastFlightLogId = log.id;
+      home.lastShiftId = log.shiftId;
+    }
   }
 }

@@ -13,6 +13,11 @@ class CalculationResultModel {
   String endingDate;
   String dayStartsAt;
   String dayEndsAt;
+  int topFlightTimeMinutes;
+  int topDistanceMeters;
+  int topAltitudeMeters;
+  int lastShiftId;
+  int lastFlightLogId;
 
   CalculationResultModel({
     this.shiftsCount = 0,
@@ -29,6 +34,11 @@ class CalculationResultModel {
     this.endingDate = '-',
     this.dayStartsAt = '',
     this.dayEndsAt = '',
+    this.topFlightTimeMinutes = 0,
+    this.topDistanceMeters = 0,
+    this.topAltitudeMeters = 0,
+    this.lastShiftId = 0,
+    this.lastFlightLogId = 0,
   });
 
   Map<String, Object> toMap() {
@@ -47,6 +57,11 @@ class CalculationResultModel {
       'endingDate': endingDate,
       'dayStartsAt': dayStartsAt,
       'dayEndsAt': dayEndsAt,
+      'topFlightTimeMinutes': topFlightTimeMinutes,
+      'topDistanceMeters': topDistanceMeters,
+      'topAltitudeMeters': topAltitudeMeters,
+      'lastShiftId': lastShiftId,
+      'lastFlightLogId': lastFlightLogId,
     };
   }
 }
