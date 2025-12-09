@@ -77,6 +77,7 @@ class UploadDataState extends State<UploadData> {
     var isSuccess = await Future.delayed(const Duration(milliseconds: 2000), () {
       // TODO: process before saving - make data for home, appState, create shifts,
       var shH = createShiftsAndHome(logs);
+      // TODO: erase data (via a single responsible function), then save data
       // resetAppState
       // then make redirection to Home
       // In the process call getLastShiftIdFromDb and getLastShiftId?
