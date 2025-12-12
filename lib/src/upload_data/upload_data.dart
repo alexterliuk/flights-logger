@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import '../calculation/calculation_result_model.dart';
 import '../calculation/make_calculation.dart';
+import '../download_data/download_data.dart';
 import '../flight_logs/flight_log_model.dart';
 import 'utils.dart';
 import 'upload_data_model.dart';
@@ -134,9 +135,26 @@ class UploadDataState extends State<UploadData> {
                   'Save data? This will erase all your current data.'
                 ),
               ),
-              FloatingActionButton(
-                onPressed: () { saveData(uploadedLogs); },
-                child: Text('Save'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    width: 128,
+                    child: FloatingActionButton(
+                      heroTag: null,
+                      onPressed: () { downloadData(); },
+                      child: const Text('Download data'),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  SizedBox(
+                    child: FloatingActionButton(
+                      heroTag: null,
+                      onPressed: () { saveData(uploadedLogs); },
+                      child: const Text('Save'),
+                    ),
+                  )
+                ],
               ),
             ],
           ),
