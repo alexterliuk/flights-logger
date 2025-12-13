@@ -7,7 +7,7 @@ import '../settings/settings_view.dart';
 import '../app_state.dart';
 import './shift_model.dart';
 import './shift.dart';
-import '../table_methods/table_methods.dart';
+import '../utils/table_methods.dart';
 import 'shifts_header.dart';
 
 class ShiftsTitle extends StatelessWidget {

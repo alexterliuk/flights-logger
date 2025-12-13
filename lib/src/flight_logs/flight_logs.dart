@@ -9,7 +9,7 @@ import '../shifts/shifts_loading.dart';
 import '../utils/date_time/get_start_end_dates.dart';
 import './flight_log_model.dart';
 import './flight_log.dart';
-import '../table_methods/table_methods.dart';
+import '../utils/table_methods.dart';
 import '../home/home.dart';
 import '../shifts/shifts.dart';
 import 'flight_logs_header.dart';
