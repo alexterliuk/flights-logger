@@ -8,7 +8,7 @@ import '../db/queries.dart';
 import '../flight_logs/flight_log_model.dart';
 
 Future<bool> downloadData() async {
-  var isSuccess = await Future.delayed(const Duration(milliseconds: 2000), () async {
+  var hasDownloaded = await Future.delayed(const Duration(milliseconds: 2000), () async {
     final List<FlightLogModel> logs = await getFlightLogsFromDb(limit: 9999);
     // TODO: erase data (via a single responsible function), then save data
     // resetAppState
@@ -16,12 +16,15 @@ Future<bool> downloadData() async {
     // In the process call getLastShiftIdFromDb and getLastShiftId?
     print('downloaded logs count - ${logs.length}');
 
-    await writeLogsToFile(logs);
-
-    return logs.isNotEmpty;
+    if (logs.isNotEmpty) {
+      await writeLogsToFile(logs);
+      return true;
+    } else {
+      return false;
+    }
   });
 
-  return isSuccess;
+  return hasDownloaded;
 }
 
 Future<File> getLocalFile(String? name) async {
@@ -56,5 +59,5 @@ Future<void> writeLogsToFile(List<FlightLogModel> logs) async {
 
   final dataJson = json.encode({ 'logs': logMaps, 'createdAt': createdAt });
 
-  file.writeAsString(dataJson);
+  await file.writeAsString(dataJson);
 }

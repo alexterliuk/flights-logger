@@ -137,10 +137,12 @@ List<FlightLogModel> convertToLogs(List<dynamic> decodedLogs) {
 class ShiftsAndHome {
   List<ShiftModel> shifts;
   HomeModel home;
+  String lastLogLanding;
 
   ShiftsAndHome({
     required this.shifts,
     required this.home,
+    required this.lastLogLanding,
   });
 }
 
@@ -148,6 +150,12 @@ ShiftsAndHome createShiftsAndHome(List<FlightLogModel> logs) {
   List<ShiftModel> shifts = [];
   HomeModel home = HomeModel();
   Map<int, ShiftModel> shiftsMap = {};
+
+  ShiftsAndHome shiftsAndHome = ShiftsAndHome(
+    shifts: shifts,
+    home: home,
+    lastLogLanding: '',
+  );
 
   try {
     for (final log in logs) {
@@ -167,8 +175,8 @@ ShiftsAndHome createShiftsAndHome(List<FlightLogModel> logs) {
         updateShiftIfNeeded(sh, log);
         shiftsMap.update(log.shiftId, (bSh) => bSh);
       }
-      updateHomeIfNeeded(home, log);
-      updateLastLogAndShiftId(home, log, logs);
+      updateTopFiguresIfNeeded(shiftsAndHome, log);
+      updateLastLogAndShiftId(shiftsAndHome, log, logs);
     }
   } catch (err) {
     print('''[createShifts] ERR
@@ -176,7 +184,7 @@ ShiftsAndHome createShiftsAndHome(List<FlightLogModel> logs) {
     ''');
   }
 
-  return ShiftsAndHome(shifts: shifts, home: home);
+  return shiftsAndHome;
 }
 
 void updateShiftIfNeeded(ShiftModel sh, FlightLogModel log) {
@@ -216,36 +224,37 @@ void updateShiftIfNeeded(ShiftModel sh, FlightLogModel log) {
   }
 }
 
-void updateHomeIfNeeded(HomeModel home, FlightLogModel log) {
-  if (log.flightTimeMinutes > home.topFlightTimeMinutes) {
-    home.topFlightTimeMinutes = log.flightTimeMinutes;
+void updateTopFiguresIfNeeded(ShiftsAndHome sah, FlightLogModel log) {
+  if (log.flightTimeMinutes > sah.home.topFlightTimeMinutes) {
+    sah.home.topFlightTimeMinutes = log.flightTimeMinutes;
   }
 
-  if (log.distanceMeters > home.topDistanceMeters) {
-    home.topDistanceMeters = log.distanceMeters;
+  if (log.distanceMeters > sah.home.topDistanceMeters) {
+    sah.home.topDistanceMeters = log.distanceMeters;
   }
 
-  if (log.altitudeMeters > home.topAltitudeMeters) {
-    home.topAltitudeMeters = log.altitudeMeters;
+  if (log.altitudeMeters > sah.home.topAltitudeMeters) {
+    sah.home.topAltitudeMeters = log.altitudeMeters;
   }
 }
 
 void updateLastLogAndShiftId(
-  HomeModel home,
+  ShiftsAndHome sah,
   FlightLogModel log,
   List<FlightLogModel> logs,
 ) {
-  if (home.lastFlightLogId == -1) {
-    home.lastFlightLogId = log.id;
-    home.lastShiftId = log.shiftId;
+  if (sah.home.lastFlightLogId == -1) {
+    sah.home.lastFlightLogId = log.id;
+    sah.home.lastShiftId = log.shiftId;
   } else {
     var lastLogLanding = logs.firstWhere(
-      (l) => l.id == home.lastFlightLogId
+      (l) => l.id == sah.home.lastFlightLogId
     ).landingDateAndTime;
 
     if (isFirstDateAndTimeLater(log.landingDateAndTime, lastLogLanding)) {
-      home.lastFlightLogId = log.id;
-      home.lastShiftId = log.shiftId;
+      sah.home.lastFlightLogId = log.id;
+      sah.home.lastShiftId = log.shiftId;
+      sah.lastLogLanding = log.landingDateAndTime;
     }
   }
 }

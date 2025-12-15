@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:provider/provider.dart';
+import '../app_state.dart';
 import '../calculation/calculation_result_model.dart';
 import '../calculation/make_calculation.dart';
 import '../download_data/download_data.dart';
 import '../flight_logs/flight_log_model.dart';
+import '../app_state_utils.dart';
 import 'utils.dart';
 import 'upload_data_model.dart';
 import 'uploaded_data_summary.dart';
@@ -70,31 +73,46 @@ class UploadDataState extends State<UploadData> {
     }
   }
 
-  Future<void> saveData(List<FlightLogModel> logs) async {
-    setState(() {
-      isSaving = true;
-    });
-
-    var isSuccess = await Future.delayed(const Duration(milliseconds: 2000), () {
-      // TODO: process before saving - make data for home, appState, create shifts,
-      var shH = createShiftsAndHome(logs);
-      // TODO: erase data (via a single responsible function), then save data
-      // resetAppState
-      // then make redirection to Home
-      // In the process call getLastShiftIdFromDb and getLastShiftId?
-      return true;
-    });
-
-    // TODO: this block is not needed when redirecting to Home is made
-    if (isSuccess) {
-      setState(() {
-        isSaving = false;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+
+    Future<void> saveData(List<FlightLogModel> logs) async {
+      setState(() {
+        isSaving = true;
+      });
+
+      var isSuccess = await Future.delayed(const Duration(milliseconds: 2000), () {
+        // TODO: process before saving - make data for home, appState, create shifts,
+        var shiftsAndHome = createShiftsAndHome(logs);
+        resetAppState(appState);
+        // TODO: call saveDataToDb(shiftsAndHome);
+        // it should make a loop and create logs and shifts one by one,
+        // and lastFlightLogId and lastShiftId should be made with respect to
+        // shiftsAndHome.lastLogLanding
+
+        // then make redirection to Home
+        // In the process call getLastShiftIdFromDb and getLastShiftId???
+        return true;
+      });
+
+      // TODO: this block is not needed when redirecting to Home is made
+      if (isSuccess) {
+        setState(() {
+          isSaving = false;
+        });
+        // make redirection here
+      }
+    }
+
+    Future<void> saveUploadedLogs() async {
+      saveData(uploadedLogs);
+    }
+
+    Future<void> downloadExistingLogs() async {
+      downloadData();
+    }
+
     return Scaffold(
       appBar: AppBar(
         // automaticallyImplyLeading: false,
@@ -142,7 +160,7 @@ class UploadDataState extends State<UploadData> {
                     width: 128,
                     child: FloatingActionButton(
                       heroTag: null,
-                      onPressed: () { downloadData(); },
+                      onPressed: downloadExistingLogs,
                       child: const Text('Download data'),
                     ),
                   ),
@@ -150,7 +168,7 @@ class UploadDataState extends State<UploadData> {
                   SizedBox(
                     child: FloatingActionButton(
                       heroTag: null,
-                      onPressed: () { saveData(uploadedLogs); },
+                      onPressed: saveUploadedLogs,
                       child: const Text('Save'),
                     ),
                   )
