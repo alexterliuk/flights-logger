@@ -53,6 +53,7 @@ class UploadDataState extends State<UploadData> {
   CalculationResultModel stats = CalculationResultModel();
   List<FlightLogModel> uploadedLogs = [];
   bool isSaving = false;
+  bool isDownloading = false;
 
   Future<void> getAndParseFile() async {
     try {
@@ -85,7 +86,9 @@ class UploadDataState extends State<UploadData> {
       var isSuccess = await Future.delayed(const Duration(milliseconds: 2000), () {
         // TODO: process before saving - make data for home, appState, create shifts,
         var shiftsAndHome = createShiftsAndHome(logs);
-        resetAppState(appState);
+        print('logs - ${logs.first.id}');
+        print('shiftsAndHome - $shiftsAndHome');
+        // resetAppState(appState);
         // TODO: call saveDataToDb(shiftsAndHome);
         // it should make a loop and create logs and shifts one by one,
         // and lastFlightLogId and lastShiftId should be made with respect to
@@ -110,7 +113,13 @@ class UploadDataState extends State<UploadData> {
     }
 
     Future<void> downloadExistingLogs() async {
-      downloadData();
+      setState(() {
+        isDownloading = true;
+      });
+      await downloadData();
+      setState(() {
+        isDownloading = false;
+      });
     }
 
     return Scaffold(
@@ -161,7 +170,9 @@ class UploadDataState extends State<UploadData> {
                     child: FloatingActionButton(
                       heroTag: null,
                       onPressed: downloadExistingLogs,
-                      child: const Text('Download data'),
+                      child: isDownloading
+                        ? const CircularProgressIndicator()
+                        : const Text('Download data'),
                     ),
                   ),
                   const SizedBox(width: 16),
