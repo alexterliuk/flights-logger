@@ -116,11 +116,19 @@ FlightLogModel convertToLog(dynamic decodedLog) {
 
 List<FlightLogModel> convertToLogs(List<dynamic> decodedLogs) {
   List<FlightLogModel> logs = [];
+  List<int> logIds = [];
 
   try {
     for (final dLog in decodedLogs) {
       FlightLogModel log = convertToLog(dLog);
       logs.add(log);
+
+      if (logIds.contains(log.id)) {
+        print('[convertToLogs] ERR - there\'s a log with duplicate id ${log.id}');
+        return [];
+      }
+
+      logIds.add(log.id);
     }
 
     return logs;
@@ -258,3 +266,4 @@ void updateLastLogAndShiftId(
     }
   }
 }
+
