@@ -54,7 +54,7 @@ Future<void> writeLogsToFile(List<FlightLogModel> logs) async {
   final logMaps = [];
 
   for (final log in logs) {
-    logMaps.add(log.toMap());
+    logMaps.add(log.toMapWithId());
   }
 
   final dataJson = json.encode({ 'logs': logMaps, 'createdAt': createdAt });
