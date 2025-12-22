@@ -10,10 +10,7 @@ import '../flight_logs/flight_log_model.dart';
 Future<bool> downloadData() async {
   var hasDownloaded = await Future.delayed(const Duration(milliseconds: 2000), () async {
     final List<FlightLogModel> logs = await getFlightLogsFromDb(limit: 9999);
-    // TODO: erase data (via a single responsible function), then save data
-    // resetAppState
-    // then make redirection to Home
-    // In the process call getLastShiftIdFromDb and getLastShiftId?
+
     print('downloaded logs count - ${logs.length}');
 
     if (logs.isNotEmpty) {
@@ -34,21 +31,11 @@ Future<File> getLocalFile(String? name) async {
   return File(fileName);
 }
 
-class DownloadData {
-  List<Map<String, Object?>> logs;
-  String createdAt;
-
-  DownloadData({
-    required this.logs,
-    required this.createdAt,
-  });
-}
-
 Future<void> writeLogsToFile(List<FlightLogModel> logs) async {
   final createdAt = DateTime.now().toIso8601String();
   final date = getDateStringWithoutTimeFromDateString(createdAt);
   final time = getTime(createdAt).replaceFirst(RegExp(r':'), '-');
-  final name = 'flight-logs_$date-$time';
+  final name = 'flight-logs_${date}_$time';
 
   final file = await getLocalFile(name);
   final logMaps = [];
