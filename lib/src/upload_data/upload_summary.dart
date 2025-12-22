@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class UploadedDataSummary extends StatelessWidget {
-  const UploadedDataSummary({
+class UploadSummary extends StatelessWidget {
+  const UploadSummary({
     super.key,
     this.flightsCount = 0,
     this.shiftsCount = 0,

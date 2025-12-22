@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'upload_data.dart';
+import 'upload.dart';
 
-class UploadDataButton extends StatelessWidget {
-  const UploadDataButton({
+class UploadButton extends StatelessWidget {
+  const UploadButton({
     super.key,
   });
 
-  static const routeName = '/upload_data';
+  static const routeName = '/upload';
 
   @override
   Widget build(BuildContext context) {
     void showUploadData() {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const UploadData()),
+        MaterialPageRoute(builder: (context) => const Upload()),
       );
     }
 

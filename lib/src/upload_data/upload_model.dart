@@ -1,9 +1,9 @@
 import '../flight_logs/flight_log_model.dart';
 
-class UploadDataModel {
+class UploadModel {
   List<FlightLogModel> logs;
 
-  UploadDataModel({
+  UploadModel({
     required this.logs,
   });
 }
