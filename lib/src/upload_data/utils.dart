@@ -170,7 +170,7 @@ ShiftsAndHome createShiftsAndHome(List<FlightLogModel> logs) {
       if (!shiftsMap.containsKey(log.shiftId)) {
         var sh = shiftsMap.putIfAbsent(log.shiftId, () => ShiftModel(id: log.shiftId));
         shifts.add(sh);
-        sh.logIds = [...sh.logIds, log.id];
+        sh.logIds = [log.id];
         sh.startedAtDateAndTime = log.takeoffDateAndTime;
         sh.endedAtDateAndTime = log.landingDateAndTime;
         sh.flightsQty += 1;
@@ -187,7 +187,7 @@ ShiftsAndHome createShiftsAndHome(List<FlightLogModel> logs) {
       updateLastLogAndShiftId(shiftsAndHome, log, logs);
     }
   } catch (err) {
-    print('''[createShifts] ERR
+    print('''[createShiftsAndHome] ERR
     $err
     ''');
   }
