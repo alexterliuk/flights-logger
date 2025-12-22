@@ -1,9 +1,8 @@
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import '../utils/date_time/get_date_string_without_time.dart';
 import '../utils/date_time/is_first_date_and_time_earlier.dart';
 import '../utils/date_time/is_first_date_and_time_later.dart';
-import '../utils/date_time/parse_date_and_time.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-
+import '../upload_data/utils.dart';
 import '../utils/extract_ids.dart';
 import '../utils/extract_int.dart';
 import '../flight_logs/flight_log_model.dart';
@@ -310,6 +309,19 @@ Future<bool> removeFlightLogFromDb(int id) async {
     print('[removeFlightLogFromDb] ERR: $err');
 
     return false;
+  }
+}
+
+///
+/// Remove all flight logs from db
+///
+Future<void> removeAllFlightLogsFromDb() async {
+  try {
+    final db = await database;
+    await db.delete('FlightLog');
+    print('all logs deleted');
+  } catch (err) {
+    print('[removeAllFlightLogsFromDb] ERR: $err');
   }
 }
 
@@ -643,6 +655,19 @@ Future<bool> removeShiftFromDb(int id) async {
 }
 
 ///
+/// Remove all shifts from db
+///
+Future<void> removeAllShiftsFromDb() async {
+  try {
+    final db = await database;
+    await db.delete('Shift');
+    print('all shifts deleted');
+  } catch (err) {
+    print('[removeAllShiftsFromDb] ERR: $err');
+  }
+}
+
+///
 ///
 ///
 Future<int> getShiftsTotalCountFromDb() async {
@@ -710,3 +735,108 @@ Future<int> getLastShiftIdFromDb() async {
     return -1;
   }
 }
+
+// ====================== UPLOADED FLIGHT LOGS ======================
+
+Future<void> save(List<FlightLogModel> logs) async {
+  await Future.delayed(const Duration(milliseconds: 1000), () async {
+    var shiftsAndHome = createShiftsAndHome(logs);
+
+    final logIdsMap = await saveUploadedLogsInDb(logs);
+    final shiftIdsMap = await saveShiftsFromUploadedLogsInDb(
+        shiftsAndHome.shifts,
+        logIdsMap
+    );
+    await saveHomeFromUploadedLogsInDb(
+      shiftsAndHome.home,
+      logIdsMap,
+      shiftIdsMap,
+    );
+  });
+}
+
+Future<Map<int, int>> saveUploadedLogsInDb(List<FlightLogModel> logs) async {
+  await removeAllFlightLogsFromDb();
+
+  //    Map<oldId, newId>
+  final Map<int, int> logIdsMap = {};
+
+  for (final log in logs) {
+    int newId = await addFlightLogToDb(log);
+    logIdsMap.addAll({ log.id: newId });
+  }
+
+  return logIdsMap;
+}
+
+Future<Map<int, int>> saveShiftsFromUploadedLogsInDb(
+  List<ShiftModel> shifts,
+  Map<int, int> logIdsMap,
+) async {
+  await removeAllShiftsFromDb();
+
+  //    Map<oldId, newId>
+  final Map<int, int> shiftIdsMap = {};
+
+  for (final shift in shifts) {
+    List<int> logNewIds = [];
+
+    for (final logOldId in shift.logIds) {
+      int? logNewId = logIdsMap[logOldId];
+      if (logNewId is int) {
+        logNewIds.add(logNewId);
+      }
+    }
+
+    shift.logIds = logNewIds;
+
+    int shiftNewId = await addShiftToDb(shift);
+    shiftIdsMap.addAll({ shift.id: shiftNewId });
+
+    await updateShiftIdInUploadedLogs(shiftNewId, shift.logIds);
+  }
+
+  return shiftIdsMap;
+}
+
+Future<void> updateShiftIdInUploadedLogs(int shiftId, List<int> logIds) async {
+  for (final logId in logIds) {
+    var log = await getFlightLogFromDb(logId);
+
+    if (log != null) {
+      if (log.shiftId != shiftId) {
+        log.shiftId = shiftId;
+        await updateFlightLogInDb(logId, log);
+      }
+    }
+  }
+}
+
+Future<void> saveHomeFromUploadedLogsInDb(
+  HomeModel home,
+  Map<int, int> logIdsMap,
+  Map<int, int> shiftIdsMap,
+) async {
+  var HomeModel(:lastFlightLogId, :lastShiftId) = home;
+
+  var newLastFlightLogId = logIdsMap[lastFlightLogId];
+  if (newLastFlightLogId is int) {
+    home.lastFlightLogId = newLastFlightLogId;
+  }
+
+  var newLastShiftId = shiftIdsMap[lastShiftId];
+  if (newLastShiftId is int) {
+    home.lastShiftId = newLastShiftId;
+  }
+
+  await updateHomeInDb(
+    topFlightTimeMinutes: home.topFlightTimeMinutes,
+    topDistanceMeters: home.topDistanceMeters,
+    topAltitudeMeters: home.topAltitudeMeters,
+    lastFlightLogId: home.lastFlightLogId,
+    lastShiftId: home.lastShiftId,
+  );
+}
+
+// int compareIds(FlightLogModel log1, FlightLogModel log2) =>
+//   log1.id.compareTo(log2.id);
