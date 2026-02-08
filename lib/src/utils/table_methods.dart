@@ -29,15 +29,15 @@ class ExpandingState extends Object with ChangeNotifier {
 
 /// Represents shown or hidden buttons (edit, delete) block on row
 class ButtonsState extends ExpandingState {
-  final editAndDeleteButtonsView = <int, bool>{};
+  final buttonsView = <int, bool>{};
 
-  void updateEditAndDeleteButtonsView(int index, bool value) {
-    editAndDeleteButtonsView.update(index, (value) => !value, ifAbsent: () => value);
+  void updateButtonsView(int index, bool value) {
+    buttonsView.update(index, (value) => !value, ifAbsent: () => value);
     notifyListeners();
   }
 
-  bool areEditAndDeleteButtonsShown(int index) {
-    return editAndDeleteButtonsView.putIfAbsent(index, () => false);
+  bool isButtonsBlockShown(int index) {
+    return buttonsView.putIfAbsent(index, () => false);
   }
 }
 

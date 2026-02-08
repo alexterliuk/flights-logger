@@ -26,7 +26,7 @@ class FlightLog extends StatelessWidget {
     var appState = context.watch<MyAppState>();
 
     edit () {
-      flightLogsState.updateEditAndDeleteButtonsView(index, false);
+      flightLogsState.updateButtonsView(index, false);
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) =>
@@ -50,7 +50,7 @@ class FlightLog extends StatelessWidget {
         await appState.dbRemoveFlightLog(log.id, log.shiftId);
 
       if (removalResult.isLogRemoved) {
-        flightLogsState.updateEditAndDeleteButtonsView(index, false);
+        flightLogsState.updateButtonsView(index, false);
         appState.update();
       }
 
@@ -133,7 +133,7 @@ class FlightLog extends StatelessWidget {
                           gap8,
                           isSingleShiftMode ? distanceCell : Container(),
                           isSingleShiftMode ? gap12 : Container(),
-                          flightLogsState.areEditAndDeleteButtonsShown(index)
+                          flightLogsState.isButtonsBlockShown(index)
                             ? buttonsCell
                             : isSingleShiftMode ? locationCell : distanceCell,
                         ],
@@ -164,7 +164,7 @@ class FlightLog extends StatelessWidget {
                 flightLogsState.updateExpandingView(log.id, !flightLogsState.isExpanded(log.id));
               },
               onLongPress: () {
-                flightLogsState.updateEditAndDeleteButtonsView(index, true);
+                flightLogsState.updateButtonsView(index, true);
               },
             ),
           ],

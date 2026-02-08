@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../db/queries.dart';
 import '../home/home.dart';
 import '../settings/settings_view.dart';
 import '../app_state.dart';
-import './shift_model.dart';
-import './shift.dart';
 import '../utils/table_methods.dart';
+import 'shift_model.dart';
+import 'shift.dart';
 import 'shifts_header.dart';
 
 class ShiftsTitle extends StatelessWidget {
@@ -118,19 +117,22 @@ class Shifts extends StatelessWidget {
             const ShiftsHeader(),
             Flexible(
               child:
-                ListView.builder(
-                  restorationId: 'shifts',
-                  itemCount: shifts.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final shift = shifts[index];
-                    if (index == shifts.length - 1) {
-                      print('...loading more shifts index $index, id: ${shift.id}, shifts.length: ${shifts.length}');
-                      getMoreShifts(shifts.length);
-                    }
+                ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: 800),
+                  child: ListView.builder(
+                    restorationId: 'shifts',
+                    itemCount: shifts.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final shift = shifts[index];
+                      if (index == shifts.length - 1) {
+                        print('...loading more shifts index $index, id: ${shift.id}, shifts.length: ${shifts.length}');
+                        getMoreShifts(shifts.length);
+                      }
 
-                    return Shift(shift: shift, index: index);
-                  },
-                ),
+                      return Shift(shift: shift, index: index);
+                    },
+                  ),
+                )
             ),
           ],
         ),
