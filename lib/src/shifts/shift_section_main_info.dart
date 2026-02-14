@@ -57,35 +57,37 @@ class ShiftsSectionMainInfo extends StatelessWidget {
             style: const TextStyle(height: 2.4),
           ),
         ),
-
-        isEditButtonShown
-          ?
-            SizedBox(
-              width: 70,
-              height: 36,
-              child: Flex(
-                direction: Axis.horizontal,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: edit,
-                    iconSize: 18,
-                    visualDensity: VisualDensity.compact,
-                  ),
-                ],
+        Expanded(
+          flex: 2,
+          child: isEditButtonShown
+            ?
+              SizedBox(
+                width: 70,
+                height: 38,
+                child: Flex(
+                  direction: Axis.horizontal,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: edit,
+                      iconSize: 18,
+                      visualDensity: VisualDensity.compact,
+                    ),
+                  ],
+                ),
+              )
+            :
+              SizedBox(
+                width: 70,
+                height: 38,
+                child: Text(
+                  getTotalTime(shift.timeTotalMinutes + 600),
+                  textAlign: TextAlign.end,
+                  style: const TextStyle(height: 2.4),
+                ),
               ),
-            )
-          :
-            SizedBox(
-              width: 70,
-              height: 36,
-              child: Text(
-                getTotalTime(shift.timeTotalMinutes),
-                textAlign: TextAlign.end,
-                style: const TextStyle(height: 2.4),
-              ),
-            ),
+        ),
       ],
     );
   }

@@ -112,29 +112,37 @@ class Shifts extends StatelessWidget {
               ],
             )
           : null,
-        body: Column(
-          children: [
-            const ShiftsHeader(),
-            Flexible(
-              child:
-                ConstrainedBox(
+        body: Center(
+          child: Column(
+            children: [
+              Flexible(
+                flex: 0,
+                child: ConstrainedBox(
                   constraints: BoxConstraints(maxWidth: 800),
-                  child: ListView.builder(
-                    restorationId: 'shifts',
-                    itemCount: shifts.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final shift = shifts[index];
-                      if (index == shifts.length - 1) {
-                        print('...loading more shifts index $index, id: ${shift.id}, shifts.length: ${shifts.length}');
-                        getMoreShifts(shifts.length);
-                      }
+                  child: ShiftsHeader(),
+                ),
+              ),
+              Flexible(
+                child:
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 800),
+                    child: ListView.builder(
+                      restorationId: 'shifts',
+                      itemCount: shifts.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final shift = shifts[index];
+                        if (index == shifts.length - 1) {
+                          print('...loading more shifts index $index, id: ${shift.id}, shifts.length: ${shifts.length}');
+                          getMoreShifts(shifts.length);
+                        }
 
-                      return Shift(shift: shift, index: index);
-                    },
-                  ),
-                )
-            ),
-          ],
+                        return Shift(shift: shift, index: index);
+                      },
+                    ),
+                  )
+              ),
+            ],
+          ),
         ),
       ),
     );
