@@ -177,35 +177,50 @@ class FlightLogs extends StatelessWidget {
         // extendBodyBehindAppBar: true,
         // extendBody: true,
 
-        body: Column(
-          children: [
-            FlightLogsHeader(isSingleShiftMode: appState.isSingleShiftMode),
-            Flexible(
-              child: ListView.builder(
-                // Providing a restorationId allows the ListView to restore the
-                // scroll position when a user leaves and returns to the app after it
-                // has been killed while running in the background.
-                restorationId: 'flight_logs',
-                itemCount: logs.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final log = logs[index];
-
-                  if (!appState.isSingleShiftMode) {
-                    if (index == logs.length - 2) {
-                      print('...loading more logs, index $index');
-                      getMoreFlightLogs(logs.length);
-                    }
-                  }
-
-                  return FlightLog(
-                    log: log,
-                    index: index,
+        body: Center(
+          child: Column(
+            children: [
+              Flexible(
+                flex: 0,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: 800),
+                  child: FlightLogsHeader(
                     isSingleShiftMode: appState.isSingleShiftMode,
-                  );
-                },
+                  ),
+                ),
               ),
-            ),
-          ],
+              // FlightLogsHeader(isSingleShiftMode: appState.isSingleShiftMode),
+              Flexible(
+                child:
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 800),
+                    child: ListView.builder(
+                      // Providing a restorationId allows the ListView to restore the
+                      // scroll position when a user leaves and returns to the app after it
+                      // has been killed while running in the background.
+                      restorationId: 'flight_logs',
+                      itemCount: logs.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final log = logs[index];
+
+                        if (!appState.isSingleShiftMode) {
+                          if (index == logs.length - 2) {
+                            print('...loading more logs, index $index');
+                            getMoreFlightLogs(logs.length);
+                          }
+                        }
+
+                        return FlightLog(
+                          log: log,
+                          index: index,
+                          isSingleShiftMode: appState.isSingleShiftMode,
+                        );
+                      },
+                    ),
+                  ),
+              ),
+            ],
+          ),
         ),
       ),
     );

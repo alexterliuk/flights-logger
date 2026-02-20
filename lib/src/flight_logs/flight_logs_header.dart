@@ -14,19 +14,6 @@ class FlightLogsHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final singleShiftHeader = [ // 368px
-      const SizedBox(width: 40, child: Text('#', textAlign: TextAlign.start)),
-      const SizedBox(width: 4),
-      const SizedBox(width: 64, child: Text('Takeoff', textAlign: TextAlign.end)),
-      const SizedBox(width: 8),
-      const SizedBox(width: 64, child: Text('Landing', textAlign: TextAlign.end)),
-      const SizedBox(width: 8),
-      const SizedBox(width: 80, child: Text('Distance', textAlign: TextAlign.end)),
-      const SizedBox(width: 12),
-      const SizedBox(width: 82, child: Text('Location', textAlign: TextAlign.end)),
-      const SizedBox(width: 6),
-    ];
-
     final lastLogHeader = [ // 324px
       const SizedBox(width: 64, child: Text('Takeoff', textAlign: TextAlign.end)),
       const SizedBox(width: 8),
@@ -38,36 +25,98 @@ class FlightLogsHeader extends StatelessWidget {
       const SizedBox(width: 6),
     ];
 
-    final allLogsHeader = [ // 328px
-      const SizedBox(width: 88, child: Text('Start Date', textAlign: TextAlign.start)),
-      const SizedBox(width: 8),
-      const SizedBox(width: 64, child: Text('Takeoff', textAlign: TextAlign.end)),
-      const SizedBox(width: 8),
-      const SizedBox(width: 64, child: Text('Landing', textAlign: TextAlign.end)),
-      const SizedBox(width: 8),
-      const SizedBox(width: 80, child: Text('Distance', textAlign: TextAlign.end)),
-      const SizedBox(width: 8),
+    final singleShiftHeader = [
+      Expanded(
+        flex: 3,
+        child: Text(
+          '#',
+          textAlign: TextAlign.start,
+          style: const TextStyle(height: 2.4),
+        ),
+      ),
+      Expanded(
+        flex: 2,
+        child: Text(
+          'Takeoff',
+          textAlign: TextAlign.end,
+          style: const TextStyle(height: 2.4),
+        ),
+      ),
+      Expanded(
+        flex: 2,
+        child: Text(
+          'Landing',
+          textAlign: TextAlign.end,
+          style: const TextStyle(height: 2.4),
+        ),
+      ),
+      Expanded(
+        flex: 2,
+        child: Text(
+          'Distance',
+          textAlign: TextAlign.end,
+          style: const TextStyle(height: 2.4),
+        ),
+      ),
+      Expanded(
+        flex: 2,
+        child: Text(
+          'Location',
+          textAlign: TextAlign.end,
+          style: const TextStyle(height: 2.4),
+        ),
+      ),
     ];
 
-    var header = allLogsHeader;
+    final allLogsHeader = [
+      Expanded(
+        flex: 2,
+        child: Text(
+          'Start Date',
+          textAlign: TextAlign.start,
+          style: const TextStyle(height: 2.4),
+        ),
+      ),
+      Expanded(
+        flex: 2,
+        child: Text(
+          'Takeoff',
+          textAlign: TextAlign.end,
+          style: const TextStyle(height: 2.4),
+        ),
+      ),
+      Expanded(
+        flex: 2,
+        child: Text(
+          'Landing',
+          textAlign: TextAlign.end,
+          style: const TextStyle(height: 2.4),
+        ),
+      ),
+      Expanded(
+        flex: 2,
+        child: Text(
+          'Distance',
+          textAlign: TextAlign.end,
+          style: const TextStyle(height: 2.4),
+        ),
+      ),
+    ];
+
+    List<Widget> header = allLogsHeader;
     if (isSingleShiftMode) {
       header = singleShiftHeader;
     } else if (isLastFlightMode) {
       header = lastLogHeader;
     }
 
-    return Column(
-      children: [
-        Flex(
-          direction: Axis.horizontal,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Row(
-              children: header,
-            ),
-          ],
-        ),
-      ],
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
+      child: Row(
+        // mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: isLastFlightMode ? MainAxisSize.min : MainAxisSize.max,
+        children: header,
+      ),
     );
   }
 }
