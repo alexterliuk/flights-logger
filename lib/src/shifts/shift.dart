@@ -44,11 +44,11 @@ class Shift extends StatelessWidget {
 
     /// --- PRIMARY INFO CELLS ---
     var countCell = Expanded(
-      flex: 3,
+      flex: 1,
       child: Text(
         '${index + 1}',
         textAlign: TextAlign.start,
-        style: const TextStyle(height: 2.4),
+        style: const TextStyle(height: 2.4, fontSize: 14),
       ),
     );
 
@@ -59,7 +59,7 @@ class Shift extends StatelessWidget {
           ? 'none'
           : shift.startedAtDateAndTime.substring(0, 10),
         textAlign: TextAlign.end,
-        style: const TextStyle(height: 2.4),
+        style: const TextStyle(height: 2.4, fontSize: 14),
       ),
     );
 
@@ -70,8 +70,13 @@ class Shift extends StatelessWidget {
           ? 'none'
           : shift.endedAtDateAndTime.substring(0, 10),
         textAlign: TextAlign.end,
-        style: const TextStyle(height: 2.4),
+        style: const TextStyle(height: 2.4, fontSize: 14),
       ),
+    );
+
+    var gap8 = Expanded(
+      flex: 0,
+      child: const SizedBox(width: 8),
     );
 
     var shiftFlightsQtyCell = Expanded(
@@ -79,7 +84,7 @@ class Shift extends StatelessWidget {
       child: Text(
         '${shift.flightsQty}',
         textAlign: TextAlign.end,
-        style: const TextStyle(height: 2.4),
+        style: const TextStyle(height: 2.4, fontSize: 14),
       ),
     );
 
@@ -88,10 +93,13 @@ class Shift extends StatelessWidget {
       child: SizedBox(
         width: 70,
         height: 38,
-        child: Text(
-          getTotalTime(shift.timeTotalMinutes + 600),
-          textAlign: TextAlign.end,
-          style: const TextStyle(height: 2.4),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 2),
+          child: Text(
+            getTotalTime(shift.timeTotalMinutes + 600),
+            textAlign: TextAlign.end,
+            style: const TextStyle(height: 2.4, fontSize: 14),
+          ),
         ),
       ),
     );
@@ -118,52 +126,76 @@ class Shift extends StatelessWidget {
 
     /// --- ADDITIONAL INFO CELLS ---
     var longestFlightTimeCell = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const SizedBox(width: 48),
-        const SizedBox(
-          width: 180,
-          child: Text(
-            'Longest flight time: ',
-            style: TextStyle(fontWeight: FontWeight.normal),
+        Expanded(flex: 1, child: const SizedBox()),
+        Expanded(
+          flex: 4,
+          child: Row(
+            children: [
+              SizedBox(
+                width: 160,
+                child: const Text(
+                  'Longest flight time:',
+                  style: TextStyle(fontSize: 14),
+                ),
+              ),
+              Text(
+                '${shift.longestFlightTimeMinutes} min',
+                style: TextStyle(fontSize: 14),
+              ),
+            ],
           ),
-        ),
-        SizedBox(
-          width: 140,
-          child: Text('${shift.longestFlightTimeMinutes} m'),
         ),
       ],
     );
 
     var longestDistanceCell = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const SizedBox(width: 48),
-        const SizedBox(
-          width: 180,
-          child: Text(
-            'Longest distance: ',
-            style: TextStyle(fontWeight: FontWeight.normal),
+        Expanded(flex: 1, child: const SizedBox()),
+        Expanded(
+          flex: 4,
+          child: Row(
+            children: [
+              SizedBox(
+                width: 160,
+                child: const Text(
+                  'Longest distance:',
+                  style: TextStyle(fontSize: 14),
+                ),
+              ),
+              Text(
+                '${shift.longestDistanceMeters} m',
+                style: TextStyle(fontSize: 14),
+              ),
+            ],
           ),
-        ),
-        SizedBox(
-          width: 140,
-          child: Text('${shift.longestDistanceMeters} m'),
         ),
       ],
     );
 
     var highestAltitudeCell = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const SizedBox(width: 48),
-        const SizedBox(
-          width: 180,
-          child: Text(
-            'Highest altitude: ',
-            style: TextStyle(fontWeight: FontWeight.normal),
+        Expanded(flex: 1, child: const SizedBox()),
+        Expanded(
+          flex: 4,
+          child: Row(
+            children: [
+              SizedBox(
+                width: 160,
+                child: const Text(
+                  'Highest altitude:',
+                  style: TextStyle(fontSize: 14),
+                ),
+              ),
+              Text(
+                '${shift.highestAltitudeMeters} m',
+                style: TextStyle(fontSize: 14),
+              ),
+            ],
           ),
-        ),
-        SizedBox(
-          width: 140,
-          child: Text('${shift.highestAltitudeMeters} m'),
         ),
       ],
     );
@@ -176,35 +208,34 @@ class Shift extends StatelessWidget {
       ],
     );
 
-    return Container(
-      // padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
-      child: ListTile(
-        // minVerticalPadding: 6,
-        title: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                countCell,
-                shiftStartedAtCell,
-                shiftEndedAtCell,
-                shiftFlightsQtyCell,
-                shiftsState.isButtonsBlockShown(index)
-                  ? editButtonCell
-                  : shiftTimeTotal,
-              ],
-            ),
-            shiftsState.isExpanded(shift.id) ? additionalInfo : Container(),
-          ],
-        ),
-        selectedTileColor: const Color.fromARGB(255, 75, 44, 126),
-        onTap: () {
-          shiftsState.updateExpandingView(shift.id, !shiftsState.isExpanded(shift.id));
-        },
-        onLongPress: () {
-          shiftsState.updateButtonsView(index, true);
-        },
+    return ListTile(
+      // minVerticalPadding: 6,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 0),
+      title: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              countCell,
+              shiftStartedAtCell,
+              gap8,
+              shiftEndedAtCell,
+              shiftFlightsQtyCell,
+              shiftsState.isButtonsBlockShown(index)
+                ? editButtonCell
+                : shiftTimeTotal,
+            ],
+          ),
+          shiftsState.isExpanded(shift.id) ? additionalInfo : Container(),
+        ],
       ),
+      selectedTileColor: const Color.fromARGB(255, 75, 44, 126),
+      onTap: () {
+        shiftsState.updateExpandingView(shift.id, !shiftsState.isExpanded(shift.id));
+      },
+      onLongPress: () {
+        shiftsState.updateButtonsView(index, true);
+      },
     );
   }
 }
