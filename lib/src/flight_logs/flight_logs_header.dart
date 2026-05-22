@@ -15,7 +15,7 @@ class FlightLogsHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final lastLogHeader = [ // 324px
-      const SizedBox(width: 64, child: Text('Takeoff', textAlign: TextAlign.end)),
+      const SizedBox(width: 64, child: Text('Takeoff', textAlign: TextAlign.start)),
       const SizedBox(width: 8),
       const SizedBox(width: 64, child: Text('Landing', textAlign: TextAlign.end)),
       const SizedBox(width: 8),
@@ -27,7 +27,7 @@ class FlightLogsHeader extends StatelessWidget {
 
     final singleShiftHeader = [
       Expanded(
-        flex: 3,
+        flex: 1,
         child: Text(
           '#',
           textAlign: TextAlign.start,
@@ -36,34 +36,50 @@ class FlightLogsHeader extends StatelessWidget {
       ),
       Expanded(
         flex: 2,
-        child: Text(
-          'Takeoff',
-          textAlign: TextAlign.end,
-          style: const TextStyle(height: 2.4),
+        child: Padding(
+          padding: const EdgeInsets.all(0),
+          child: Text(
+            'Takeoff',
+            textAlign: TextAlign.end,
+            style: const TextStyle(height: 2.4),
+          ),
+        ),
+      ),
+      // Expanded(
+      //   flex: 0,
+      //   child: const SizedBox(width: 8),
+      // ),
+      Expanded(
+        flex: 2,
+        child: Padding(
+          padding: const EdgeInsets.all(0),
+          child: Text(
+            'Landing',
+            textAlign: TextAlign.end,
+            style: const TextStyle(height: 2.4),
+          ),
         ),
       ),
       Expanded(
         flex: 2,
-        child: Text(
-          'Landing',
-          textAlign: TextAlign.end,
-          style: const TextStyle(height: 2.4),
+        child: Padding(
+          padding: const EdgeInsets.all(0),
+          child: Text(
+            'Distance',
+            textAlign: TextAlign.end,
+            style: const TextStyle(height: 2.4),
+          ),
         ),
       ),
       Expanded(
         flex: 2,
-        child: Text(
-          'Distance',
-          textAlign: TextAlign.end,
-          style: const TextStyle(height: 2.4),
-        ),
-      ),
-      Expanded(
-        flex: 2,
-        child: Text(
-          'Location',
-          textAlign: TextAlign.end,
-          style: const TextStyle(height: 2.4),
+        child: Padding(
+          padding: const EdgeInsets.all(0),
+          child: Text(
+            'Location',
+            textAlign: TextAlign.end,
+            style: const TextStyle(height: 2.4),
+          ),
         ),
       ),
     ];
@@ -71,34 +87,50 @@ class FlightLogsHeader extends StatelessWidget {
     final allLogsHeader = [
       Expanded(
         flex: 2,
-        child: Text(
-          'Start Date',
-          textAlign: TextAlign.start,
-          style: const TextStyle(height: 2.4),
+        child: Padding(
+          padding: const EdgeInsets.all(0),
+          child: Text(
+            'Start Date',
+            textAlign: TextAlign.start,
+            style: const TextStyle(height: 2.4),
+          ),
         ),
       ),
       Expanded(
         flex: 2,
-        child: Text(
-          'Takeoff',
-          textAlign: TextAlign.end,
-          style: const TextStyle(height: 2.4),
+        child: Padding(
+          padding: const EdgeInsets.all(0),
+          child: Text(
+            'Takeoff',
+            textAlign: TextAlign.end,
+            style: const TextStyle(height: 2.4),
+          ),
+        ),
+      ),
+      // Expanded(
+      //   flex: 0,
+      //   child: const SizedBox(width: 8),
+      // ),
+      Expanded(
+        flex: 2,
+        child: Padding(
+          padding: const EdgeInsets.all(0),
+          child: Text(
+            'Landing',
+            textAlign: TextAlign.end,
+            style: const TextStyle(height: 2.4),
+          ),
         ),
       ),
       Expanded(
         flex: 2,
-        child: Text(
-          'Landing',
-          textAlign: TextAlign.end,
-          style: const TextStyle(height: 2.4),
-        ),
-      ),
-      Expanded(
-        flex: 2,
-        child: Text(
-          'Distance',
-          textAlign: TextAlign.end,
-          style: const TextStyle(height: 2.4),
+        child: Padding(
+          padding: const EdgeInsets.all(0),
+          child: Text(
+            'Distance',
+            textAlign: TextAlign.end,
+            style: const TextStyle(height: 2.4),
+          ),
         ),
       ),
     ];
@@ -111,9 +143,14 @@ class FlightLogsHeader extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
+      padding: EdgeInsets.symmetric(
+        horizontal: isLastFlightMode ? 0 : 4.0,
+        vertical: 0
+      ),
       child: Row(
-        // mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.baseline,
+        textBaseline: TextBaseline.alphabetic,
         mainAxisSize: isLastFlightMode ? MainAxisSize.min : MainAxisSize.max,
         children: header,
       ),

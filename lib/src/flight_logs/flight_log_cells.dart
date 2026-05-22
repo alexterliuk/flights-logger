@@ -6,20 +6,20 @@ import '../utils/get_flight_log_distance_kilometers.dart';
 
 List<Widget> getFlightLogMainInfoCells(FlightLogModel log, int index) {
   var countCell = Expanded(
-    flex: 3,
+    flex: 1,
     child: Text(
       '${index + 1}',
       textAlign: TextAlign.start,
-      style: const TextStyle(height: 2.4),
+      style: const TextStyle(height: 2.4, fontSize: 14),
     ),
   );
 
   var takeoffDateAndTimeCell = Expanded(
-    flex: 3,
+    flex: 2,
     child: Text(
       log.takeoffDateAndTime,
       textAlign: TextAlign.start,
-      style: const TextStyle(height: 2.4),
+      style: const TextStyle(height: 1.4, fontSize: 14),
     ),
   );
 
@@ -28,7 +28,7 @@ List<Widget> getFlightLogMainInfoCells(FlightLogModel log, int index) {
     child: Text(
       getTime(log.takeoffDateAndTime),
       textAlign: TextAlign.end,
-      style: const TextStyle(height: 2.4),
+      style: const TextStyle(height: 2.4, fontSize: 14),
     ),
   );
 
@@ -37,7 +37,7 @@ List<Widget> getFlightLogMainInfoCells(FlightLogModel log, int index) {
     child: Text(
       getTime(log.landingDateAndTime),
       textAlign: TextAlign.end,
-      style: const TextStyle(height: 2.4),
+      style: const TextStyle(height: 2.4, fontSize: 14),
     ),
   );
 
@@ -46,7 +46,7 @@ List<Widget> getFlightLogMainInfoCells(FlightLogModel log, int index) {
     child: Text(
       getFlightLogDistanceKilometers(log.distanceMeters),
       textAlign: TextAlign.end,
-      style: const TextStyle(height: 2.4),
+      style: const TextStyle(height: 2.4, fontSize: 14),
     ),
   );
 
@@ -55,7 +55,9 @@ List<Widget> getFlightLogMainInfoCells(FlightLogModel log, int index) {
     child: Text(
       log.location,
       textAlign: TextAlign.end,
-      style: const TextStyle(height: 2.4),
+      maxLines: 10,
+      overflow: TextOverflow.ellipsis,
+      style: const TextStyle(height: 1.4, fontSize: 14),
     ),
   );
 
@@ -90,7 +92,7 @@ List<Widget> getFlightLogExtraInfoFirstRowCells(FlightLogModel log) {
       SizedBox(
         width: 96,
         child: Text(
-          '${log.flightTimeMinutes}m',
+          '${log.flightTimeMinutes} min',
           textScaler: expandedRowScaler,
           textAlign: TextAlign.start,
         ),
@@ -155,8 +157,11 @@ List<Widget> getFlightLogExtraInfoFirstRowCells(FlightLogModel log) {
     ]),
   ]);
 
+  // Important to keep one space string when no data, so that it occupies area,
+  // and 'RC Battery' is vertically aligned to 'Flight Time', 'Battery', 'Altitude'
+  // (other titles of the first row of expanded block)
   var rcAccumRecord =
-    log.rcAccumChargeLeft == -1 ? '' : '${log.rcAccumChargeLeft}%';
+    log.rcAccumChargeLeft == -1 ? ' ' : '${log.rcAccumChargeLeft}%';
 
   var rcBatteryCell = Column(children: [
     Row(children: [
@@ -211,6 +216,8 @@ List<Widget> getFlightLogExtraInfoDroneNameCell(FlightLogModel log) {
         log.droneName,
         textScaler: expandedRowScaler,
         textAlign: TextAlign.start,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       ),
     ),
   ];
@@ -235,6 +242,8 @@ List<Widget> getFlightLogExtraInfoDroneIdCell(FlightLogModel log) {
         log.droneId,
         textScaler: expandedRowScaler,
         textAlign: TextAlign.start,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       ),
     ),
   ];
@@ -283,6 +292,8 @@ List<Widget> getFlightLogExtraInfoNoteCell(FlightLogModel log) {
         log.note,
         textScaler: expandedRowScaler,
         textAlign: TextAlign.start,
+        maxLines: 10,
+        overflow: TextOverflow.ellipsis,
       ),
     ),
   ];

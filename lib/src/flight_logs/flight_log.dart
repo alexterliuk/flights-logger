@@ -146,33 +146,33 @@ class FlightLog extends StatelessWidget {
       ],
     );
 
-    return Container(
-      // padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
-      child: ListTile(
-        title: Column(
-          children: [
-            Row(
-              children: [
-                isSingleShiftMode ? countCell : takeoffDateAndTimeCell,
-                takeoffTimeCell,
-                landingTimeCell,
-                isSingleShiftMode ? distanceCell : Container(),
-                flightLogsState.isButtonsBlockShown(index)
-                  ? buttonsCell
-                  : isSingleShiftMode ? locationCell : distanceCell,
-              ],
-            ),
-            flightLogsState.isExpanded(log.id) ? extraInfo : Container(),
-          ],
-        ),
-        selectedTileColor: const Color.fromARGB(255, 75, 44, 126),
-        onTap: () {
-          flightLogsState.updateExpandingView(log.id, !flightLogsState.isExpanded(log.id));
-        },
-        onLongPress: () {
-          flightLogsState.updateButtonsView(index, true);
-        },
+    return ListTile(
+      // minVerticalPadding: 6,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 0),
+      title: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              isSingleShiftMode ? countCell : takeoffDateAndTimeCell,
+              takeoffTimeCell,
+              landingTimeCell,
+              isSingleShiftMode ? distanceCell : Container(),
+              flightLogsState.isButtonsBlockShown(index)
+                ? buttonsCell
+                : isSingleShiftMode ? locationCell : distanceCell,
+            ],
+          ),
+          flightLogsState.isExpanded(log.id) ? extraInfo : Container(),
+        ],
       ),
+      selectedTileColor: const Color.fromARGB(255, 75, 44, 126),
+      onTap: () {
+        flightLogsState.updateExpandingView(log.id, !flightLogsState.isExpanded(log.id));
+      },
+      onLongPress: () {
+        flightLogsState.updateButtonsView(index, true);
+      },
     );
   }
 }
