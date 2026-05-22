@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/gaps.dart';
 import 'default_vars.dart';
 
 typedef MenuEntry = DropdownMenuEntry<String>;
@@ -35,12 +36,26 @@ class SelectDayTimeState extends State<SelectDayTime> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text('Day time'),
+        const Text(
+          'Day time',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const Gap12(),
         Row(
           children: [
             Column(
               children: [
-                const SizedBox(width: 124, child: Text('Day start')),
+                const SizedBox(
+                  width: 124,
+                  child: Text(
+                    'Day start',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
                 DropdownMenu<String>(
                   width: 124,
                   inputDecorationTheme: InputDecorationTheme(border: null),
@@ -60,7 +75,13 @@ class SelectDayTimeState extends State<SelectDayTime> {
             const SizedBox(width: 48),
             Column(
               children: [
-                const SizedBox(width: 124, child: Text('Day end')),
+                const SizedBox(
+                  width: 124,
+                  child: Text(
+                    'Day end',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
                 DropdownMenu<String>(
                   width: 124,
                   inputDecorationTheme: InputDecorationTheme(border: null),

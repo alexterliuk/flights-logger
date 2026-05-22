@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
-import 'shifts_loading.dart';
+import 'calculate_data.dart';
 
-class ShowAllShifts extends StatelessWidget {
-  const ShowAllShifts({
+class GetStats extends StatelessWidget {
+  const GetStats({
     super.key,
   });
 
+  static const routeName = '/get_stats';
+
   @override
   Widget build(BuildContext context) {
-    void showShifts() {
+    void getStats() {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const ShiftsLoading()),
+        MaterialPageRoute(builder: (context) => const CalculateData()),
       );
     }
 
     return ElevatedButton(
-      onPressed: showShifts,
+      onPressed: getStats,
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.white,
         backgroundColor: Colors.indigo,
@@ -26,7 +28,7 @@ class ShowAllShifts extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
       child: const Text(
-        'All shifts',
+        'Get stats',
         style: TextStyle(
           // color: Colors.black87
           fontSize: 16,

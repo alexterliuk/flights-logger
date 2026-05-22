@@ -85,47 +85,91 @@ class UploadState extends State<Upload> {
       return Column(
         children: [
           SizedBox(
-            width: 360,
+            width: 320,
             child: Text(
               'Save uploaded data? This will erase all your current data. If you want to keep your data, first click "Download data"',
+              style: TextStyle(fontSize: 16),
             ),
           ),
           const SizedBox(height: 8),
-          SizedBox(
-            width: 56,
-            child: FloatingActionButton(
-              heroTag: null,
-              mini: true,
-              onPressed: saveUploadedLogs,
-              // backgroundColor: isSavingEnabled ? null : Colors.transparent,
-              // elevation: isSavingEnabled ? null : 0,
-              child: Text(
-                'Save',
-                // style: TextStyle(
-                //   color: isSavingEnabled ? null : Colors.transparent,
-                // ),
+          ElevatedButton(
+            onPressed: saveUploadedLogs,
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.indigo,
+              elevation: 8,
+              shadowColor: Colors.indigo.withValues(alpha: 0.5),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            child: const Text(
+              'Save',
+              style: TextStyle(
+                // color: Colors.black87
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.2,
               ),
             ),
           ),
+          // SizedBox(
+          //   width: 56,
+          //   child: FloatingActionButton(
+          //     heroTag: null,
+          //     mini: true,
+          //     onPressed: saveUploadedLogs,
+          //     // backgroundColor: isSavingEnabled ? null : Colors.transparent,
+          //     // elevation: isSavingEnabled ? null : 0,
+          //     child: Text(
+          //       'Save',
+          //       // style: TextStyle(
+          //       //   color: isSavingEnabled ? null : Colors.transparent,
+          //       // ),
+          //     ),
+          //   ),
+          // ),
           const SizedBox(height: 16),
           SizedBox(
-            width: 360,
+            width: 320,
             child: Text(
-              'You can download your data, and upload it to the app again later if you need.'
+              'You can download your data, and upload it to the app again later if you need.',
+              style: TextStyle(fontSize: 16),
             ),
           ),
           const SizedBox(height: 16),
-          SizedBox(
-            width: 128,
-            child: FloatingActionButton(
-              heroTag: null,
-              mini: true,
-              onPressed: downloadExistingLogs,
-              child: isDownloading
-                ? const CircularProgressIndicator()
-                : const Text('Download data'),
-            ),
-          ),
+          isDownloading
+            ? const CircularProgressIndicator()
+            : ElevatedButton(
+                onPressed: downloadExistingLogs,
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.indigo,
+                  elevation: 8,
+                  shadowColor: Colors.indigo.withValues(alpha: 0.5),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+                child: const Text(
+                  'Download data',
+                  style: TextStyle(
+                    // color: Colors.black87
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.2,
+                  ),
+                ),
+              ),
+          // SizedBox(
+          //   width: 128,
+          //   child: FloatingActionButton(
+          //     heroTag: null,
+          //     mini: true,
+          //     onPressed: downloadExistingLogs,
+          //     child: isDownloading
+          //       ? const CircularProgressIndicator()
+          //       : const Text('Download data'),
+          //   ),
+          // ),
           const SizedBox(height: 16),
         ],
       );
@@ -161,7 +205,7 @@ class UploadState extends State<Upload> {
             flightsTotalTime: stats.flightsTotalTime,
           ),
           const SizedBox(height: 24),
-          isSavingEnabled ? showSaveAndDownloadButtons() : const SizedBox(),
+          !isSavingEnabled ? showSaveAndDownloadButtons() : const SizedBox(),
           const SizedBox(height: 16),
           isSaving ? const CircularProgressIndicator() : const SizedBox(),
         ],

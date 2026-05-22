@@ -17,6 +17,8 @@ import 'settings/settings_view.dart';
 import 'flight_log_form/flight_log_form.dart';
 import 'shifts/shifts_loading.dart';
 import 'shifts/shifts.dart';
+import 'calculation/calculate_data.dart';
+import 'calculation/get_stats.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({
@@ -72,7 +74,11 @@ class MyApp extends StatelessWidget {
             // Define a light and dark color theme. Then, read the user's
             // preferred ThemeMode (light, dark, or system default) from the
             // SettingsController to display the correct theme.
-            theme: ThemeData(),
+            theme: ThemeData(
+              brightness: Brightness.light,
+              primaryColor: const Color(0xFF2D3E50),
+              scaffoldBackgroundColor: const Color(0xFFF5F7F9),
+            ),
             darkTheme: ThemeData.dark(),
             themeMode: settingsController.themeMode,
 
@@ -150,7 +156,14 @@ class MyApp extends StatelessWidget {
                         ? true
                         : (routeSettings.arguments as Map<String, Object>)['isInitLoading'] as bool;
 
-                      return Home(isInitLoading: isInitLoading);
+                      return Home(
+                        isInitLoading: isInitLoading,
+                        settingsController: settingsController,
+                      );
+                    }
+
+                    case GetStats.routeName: {
+                      return const CalculateData();
                     }
 
                     default:
@@ -165,8 +178,7 @@ class MyApp extends StatelessWidget {
                       // return const SelectShift();
                       // return Home(appStateInitData: appStateInitData);
                       // return const Home();
-
-                      return const Home();
+                      return Home(settingsController: settingsController);
                       // return routeSettings.arguments == null
                       //   ? const Home()
                       //   : Home(

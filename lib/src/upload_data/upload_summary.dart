@@ -22,20 +22,56 @@ class UploadSummary extends StatelessWidget {
           children: [
             Row(
               children: [
-                const SizedBox(width: 120, child: Text('Flights count:')),
-                SizedBox(width: 176, child: Text('$flightsCount')),
+                const SizedBox(
+                  width: 140,
+                  child: Text(
+                    'Flights count:',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+                SizedBox(
+                  width: 156,
+                  child: Text(
+                    '$flightsCount',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
               ],
             ),
             Row(
               children: [
-                const SizedBox(width: 120, child: Text('Shifts count:')),
-                SizedBox(width: 176, child: Text('$shiftsCount')),
+                const SizedBox(
+                  width: 140,
+                  child: Text(
+                    'Shifts count:',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+                SizedBox(
+                  width: 156,
+                  child: Text(
+                    '$shiftsCount',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
               ],
             ),
             Row(
               children: [
-                const SizedBox(width: 120, child: Text('Total flight time:')),
-                SizedBox(width: 176, child: Text(flightsTotalTime)),
+                const SizedBox(
+                  width: 140,
+                  child: Text(
+                    'Total flight time:',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+                SizedBox(
+                  width: 156,
+                  child: Text(
+                    flightsTotalTime,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
               ],
             ),
           ],
