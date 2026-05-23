@@ -1,9 +1,5 @@
 import 'flight_minutes_model.dart';
-import 'utils.dart';
 
-///
-///
-///
 int extractMinutes(double num) {
   if (num.toString().contains('.')) {
     if (num.floor() >= 10) {
@@ -18,9 +14,7 @@ int extractMinutes(double num) {
   return 0;
 }
 
-///
 /// returns int day or night
-///
 int getMinutesOnePeriod(
   int hours,
   int flightStartMinutes,
@@ -33,9 +27,6 @@ int getMinutesOnePeriod(
     : minutes - (flightStartMinutes - flightEndMinutes);
 }
 
-///
-///
-///
 FlightMinutesModel getMinutesTwoPeriods(
   double flightStart,
   double dayStart,
@@ -182,9 +173,6 @@ FlightMinutesModel getMinutesTwoPeriods(
   return FlightMinutesModel(atDay: minutesDay, atNight: minutesNight);
 }
 
-///
-///
-///
 FlightMinutesModel getFlightMinutes({
   required double dayStart,
   required double dayEnd,
@@ -213,17 +201,14 @@ FlightMinutesModel getFlightMinutes({
         flightEnd >= dayEnd;
 
     if (isFlightEndBeforeMidnight) {
-      // print('a');
       hoursNight = flightEnd.floor() - flightStart.floor();
       minutesNight = getMinutesOnePeriod(hoursNight, flightStartMinutes, flightEndMinutes);
     } else if (isFlightEndBeforeMorning) {
-      // print('b');
       hoursNight = 24 - flightStart.floor() + flightEnd.floor();
       minutesNight = getMinutesOnePeriod(hoursNight, flightStartMinutes, flightEndMinutes);
     } else if (isFlightEndBeforeEvening) {
       /// starts from dayEnd to 23:59
       /// ends from dayStart to dayEnd
-      // print('c');
       hoursDay = flightEnd.floor() - dayStart.floor();
       hoursNight = 24 - flightStart.floor() + dayStart.floor();
 
@@ -241,7 +226,6 @@ FlightMinutesModel getFlightMinutes({
       minutesDay = minutes.atDay;
       minutesNight = minutes.atNight;
     } else if (isFlightAboutTheWholeDay) {
-      // print('d');
       hoursDay = dayEnd.floor() - dayStart.floor();
       hoursNight = 24 - flightStart.floor() + dayStart.floor() + (flightEnd.floor() - dayEnd.floor());
 
@@ -269,11 +253,9 @@ FlightMinutesModel getFlightMinutes({
     bool isFlightEndBeforeMidnight = flightEnd > dayEnd && flightEnd <= 23.59;
 
     if (isFlightEndBeforeMorningAFewHours) {
-      // print('e');
       hoursNight = flightEnd.floor() - flightStart.floor();
       minutesNight = getMinutesOnePeriod(hoursNight, flightStartMinutes, flightEndMinutes);
     } else if (isFlightAboutTheWholeDay) {
-      // print('f');
       hoursDay = dayEnd.floor() - dayStart.floor();
       hoursNight = dayStart.floor() - flightStart.floor() + (24 - dayEnd.floor()) + flightEnd.floor();
 
@@ -291,7 +273,6 @@ FlightMinutesModel getFlightMinutes({
       minutesDay = minutes.atDay;
       minutesNight = minutes.atNight;
     } else if (isFlightEndBeforeEvening) {
-      // print('g');
       hoursDay = flightEnd.floor() - dayStart.floor();
       hoursNight = dayStart.floor() - flightStart.floor();
 
@@ -309,7 +290,6 @@ FlightMinutesModel getFlightMinutes({
       minutesDay = minutes.atDay;
       minutesNight = minutes.atNight;
     } else if (isFlightEndBeforeMidnight) {
-      // print('h');
       hoursDay = dayEnd.floor() - dayStart.floor();
       hoursNight = dayStart.floor() - flightStart.floor() + (flightEnd.floor() - dayEnd.floor());
 
@@ -338,11 +318,9 @@ FlightMinutesModel getFlightMinutes({
     bool isFlightEndInTheDay = flightEnd >= dayStart && flightEnd < flightStart;
 
     if (isFlightEndBeforeEvening) {
-      // print('i');
       hoursDay = flightEnd.floor() - flightStart.floor();
       minutesDay = getMinutesOnePeriod(hoursDay, flightStartMinutes, flightEndMinutes);
     } else if (isFlightEndBeforeMidnight) {
-      // print('j');
       hoursDay = dayEnd.floor() - flightStart.floor();
       hoursNight = flightEnd.floor() - dayEnd.floor();
 
@@ -360,7 +338,6 @@ FlightMinutesModel getFlightMinutes({
       minutesDay = minutes.atDay;
       minutesNight = minutes.atNight;
     } else if (isFlightEndBeforeMorning) {
-      // print('k');
       hoursDay = dayEnd.floor() - flightStart.floor();
       hoursNight = 24 - dayEnd.floor() + flightEnd.floor();
 
@@ -378,7 +355,6 @@ FlightMinutesModel getFlightMinutes({
       minutesDay = minutes.atDay;
       minutesNight = minutes.atNight;
     } else if (isFlightEndInTheDay) {
-      // print('l');
       hoursDay = dayEnd.floor() - flightStart.floor() + (flightEnd.floor() - dayStart.floor());
       hoursNight = 24 - dayEnd.floor() + dayStart.floor();
 

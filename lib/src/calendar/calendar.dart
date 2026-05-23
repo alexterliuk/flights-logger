@@ -27,7 +27,6 @@ class Calendar extends StatelessWidget {
   static const routeName = '/calendar';
 
   void onDateChanged (DateTime d) {
-    // print('date picked');
     // print(d); // DateTime 2024-07-10 00:00:00.000
     // print('iso 8601: ${d.toIso8601String()}'); // 2024-07-10T00:00:00.000
     print('date picked toString: ${d.toString()}'); // 2024-07-10 00:00:00.000
@@ -37,15 +36,6 @@ class Calendar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // onDateChanged (DateTime d) {
-    //   // print('date picked');
-    //   // print(d); // DateTime 2024-07-10 00:00:00.000
-    //   // print('iso 8601: ${d.toIso8601String()}'); // 2024-07-10T00:00:00.000
-    //   print('date picked toString: ${d.toString()}'); // 2024-07-10 00:00:00.000
-
-    //   callback(d);      
-    // }
-
     DateTime firstDate = (int year) { return DateTime(year - 3); }(DateTime.now().year);
     // restrict selection by today
     DateTime lastDate = DateTime.now();

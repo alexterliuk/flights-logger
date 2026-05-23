@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 import '../flight_log_form/flight_log_form.dart';
-import '../app_state.dart';
 import '../utils/date_time/get_time.dart';
 import 'flight_log_model.dart';
 
@@ -18,8 +15,6 @@ class NewShiftFlightLog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-
     void edit() {
       Navigator.push(
         context,
@@ -43,7 +38,6 @@ class NewShiftFlightLog extends StatelessWidget {
         width: 296,
         child: Column(
           children: [
-            // Container(height: 6),
             Row(
               children: [
                 SizedBox(

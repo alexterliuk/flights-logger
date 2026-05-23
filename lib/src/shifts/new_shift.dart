@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../app_state.dart';
 import '../flight_log_form/flight_log_form.dart';
-import '../flight_logs/flight_logs_header.dart';
 import '../flight_logs/new_shift_flight_log.dart';
 import '../flight_logs/flight_log_model.dart';
-import '../db/queries.dart';
-import 'shift_model.dart';
 
 class NewShift extends StatefulWidget {
   const NewShift({
@@ -66,8 +62,6 @@ class NewShiftState extends State<NewShift> {
 
     final List<FlightLogModel> logs = appState.newShiftFlightLogs;
 
-    print('[NewShift] logs.first - ${logs.isEmpty ? null : logs.first.toMapWithId()}');
-
     void proceedToHome() {
       appState.resetNewShiftFlightLogs();
       /// reset logs to be sure appState.flightLogs will contain a new log(s)
@@ -118,7 +112,6 @@ class NewShiftState extends State<NewShift> {
                 style: TextStyle(
                   fontSize: 18,
                 ),
-                // style
               ),
             ),
           ),

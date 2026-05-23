@@ -1,19 +1,13 @@
-import 'dart:io';
-import 'dart:async';
-// import 'package:flights_logger/src/db/queries.dart';
-import 'package:flights_logger/src/flight_logs/flight_log_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import '../../l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-
+import '../../l10n/app_localizations.dart';
 import 'app_state.dart';
-// import 'flight_logs/flight_logs.dart';
-import 'flight_logs/flight_logs_loading.dart';
 import 'home/home.dart';
-import 'home/home_model.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
+import 'flight_logs/flight_logs_loading.dart';
+import 'flight_logs/flight_log_model.dart';
 import 'flight_log_form/flight_log_form.dart';
 import 'shifts/shifts_loading.dart';
 import 'shifts/shifts.dart';
@@ -24,12 +18,9 @@ class MyApp extends StatelessWidget {
   const MyApp({
     super.key,
     required this.settingsController,
-    // required this.appStateInitData,
-    // required this.initData,
   });
 
   final SettingsController settingsController;
-  // final AppStateInitDataModel initData;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +32,6 @@ class MyApp extends StatelessWidget {
       listenable: settingsController,
       builder: (BuildContext context, Widget? child) {
         return ChangeNotifierProvider(
-          // create: (context) => MyAppState(initData),
           create: (context) => MyAppState(),
           child: MaterialApp(
             // Providing a restorationScopeId allows the Navigator built by the
@@ -90,43 +80,17 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute<void>(
                 settings: routeSettings,
                 builder: (BuildContext context) {
-                  // print('routeSettings: $routeSettings');
                   switch (routeSettings.name) {
-                    case SettingsView.routeName:
-                      // print('SETTINGS');
+                    case SettingsView.routeName: {
                       return SettingsView(controller: settingsController);
-                    case FlightLogForm.routeName:
-                      // print('FLIGHT LOG FORM');
-                      // return const FlightLogFormDemoX();
-                      // CTRL
-                      // return FlightLogForm(controller: settingsController);
+                    }
+
+                    case FlightLogForm.routeName: {
                       final log = routeSettings.arguments == null ? null : (routeSettings.arguments as Map<String, Object>)['log'] as FlightLogModel?;
                       final shiftId = routeSettings.arguments == null ? -1 : (routeSettings.arguments as Map<String, Object>)['shiftId'] as int;
-                      // final log = routeSettings.arguments == null ? null : routeSettings.arguments.log as FlightLogModel;
-                      // final log = (routeSettings.arguments as FlightLogFormArguments).log;
-                      // (routeSettings.arguments as FlightLogFormArguments).log;
-
-                      // return FlightLogForm(log: log, shiftId: log?.shiftId ?? -1);
 
                       return FlightLogForm(log: log, shiftId: shiftId);
-                    // case SampleItemDetailsView.routeName:
-                    //   print('SAMPLE ITEM DETAILS');
-                    //   return SampleItemDetailsView();
-                    // case SampleItemListView.routeName:
-                    //   // return const SampleItemListView();
-                    // case Shifts.routeName:
-                    //   final fromDate = routeSettings.arguments == null
-                    //     ? DateTime.now().subtract(const Duration(days: 30))
-                    //     : (routeSettings.arguments as ShiftsArguments).fromDate;
-                    //
-                    //   final toDate = routeSettings.arguments == null
-                    //     ? DateTime.now()
-                    //     : (routeSettings.arguments as ShiftsArguments).toDate;
-                    //
-                    //   return Shifts(fromDate: fromDate, toDate: toDate);
-                    // case SampleItemListView.routeName:
-                    //   // print('Sample itemsss');
-                    //   return const SampleItemListView();
+                    }
 
                     case FlightLogsLoading.routeName: {
                       return routeSettings.arguments == null
@@ -166,26 +130,9 @@ class MyApp extends StatelessWidget {
                       return const CalculateData();
                     }
 
-                    default:
-                      // return const SampleItemListView();
-                      // print('FLIGHT LOGS');
-                      print('routeSettings.name: ${routeSettings.name}');
-                      // CTRL
-                      // return FlightLogs(controller: settingsController);
-                      // return const FlightLogs(title: 'Shift Apr 17 - Apr 18 2024');
-                      // return const Shifts();
-                      // return const Calendar();
-                      // return const SelectShift();
-                      // return Home(appStateInitData: appStateInitData);
-                      // return const Home();
+                    default: {
                       return Home(settingsController: settingsController);
-                      // return routeSettings.arguments == null
-                      //   ? const Home()
-                      //   : Home(
-                      //       // shouldUpdateTopNumbers: (routeSettings.arguments as Map<String, Object>)['shouldUpdateTopNumbers'] as bool,
-                      //       // shouldUpdateLastFlightLog: (routeSettings.arguments as Map<String, Object>)['shouldUpdateLastFlightLog'] as bool,
-                      //       // shouldUpdateLastShiftId: (routeSettings.arguments as Map<String, Object>)['shouldUpdateLastShiftId'] as bool,
-                      //   );
+                    }
                   }
                 },
               );

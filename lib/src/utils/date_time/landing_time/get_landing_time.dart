@@ -1,7 +1,7 @@
 import '../../extract_int.dart';
 import '../../prepend_zero_if_needed.dart';
 import '../to_date_time.dart';
-import './calc_landing_time.dart';
+import 'calc_landing_time.dart';
 
 class GetLandingTimeArgument {
   GetLandingTimeArgument(this.text, this.validate);
@@ -37,7 +37,6 @@ LandingTime getLandingTime (
 
       final LandingTime landingTime = calcLandingTime(takeoffDateTime, flightTimeMinutesInt);
 
-      print('landingTime: ${landingTime.dateTime.toIso8601String()}');
       return landingTime;
     }
 

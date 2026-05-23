@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../calculation/select_day_time.dart';
 import '../settings/settings_view.dart';
 import '../utils/gaps.dart';
@@ -72,26 +71,12 @@ class CalculateDataState extends State<CalculateData> {
 
   @override
   Widget build(BuildContext context) {
-    // var appState = context.watch<MyAppState>();
-
     return Scaffold(
       appBar: widget.isAppBarShown
         ? AppBar(
             // automaticallyImplyLeading: false,
             titleSpacing: 0,
             title: const Text('Calculate data'),
-            // title: Row(
-            //   children: [
-            //     BackButton(
-            //       onPressed: onPressBackButton,
-            //       style: const ButtonStyle(
-            //         padding: WidgetStatePropertyAll(EdgeInsets.all(16)),
-            //       ),
-            //     ),
-            //     const Padding(padding: EdgeInsets.all(8)),
-            //     const Text('Calculate data'),
-            //   ],
-            // ),
             actions: [
               IconButton(
                 icon: const Icon(Icons.settings),
@@ -128,10 +113,6 @@ class CalculateDataState extends State<CalculateData> {
                   ),
                 ),
               ),
-              // TextButton(
-              //   onPressed: calculate,
-              //   child: const Text('Calculate'),
-              // ),
               const Gap12(),
               SelectDayTime(callback: defineDayTime),
               const Gap24(),

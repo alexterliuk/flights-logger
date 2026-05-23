@@ -4,6 +4,5 @@ int extractInt(String maybeInt) {
     return integer;
   } catch (e) {
     return -1;
-    // return 0;
   }
 }

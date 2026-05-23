@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../utils/date_time/get_time.dart';
 import '../utils/get_flight_log_distance_kilometers.dart';
-import '../utils/get_total_time.dart';
 import 'flight_log_model.dart';
 import 'flight_logs.dart';
 

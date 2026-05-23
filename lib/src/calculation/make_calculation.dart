@@ -11,9 +11,6 @@ import 'calculation_result_model.dart';
 import 'utils.dart';
 import 'default_vars.dart';
 
-///
-///
-///
 Future<CalculationResultModel> getDataFromDbAndMakeCalculation({
   required DateTime fromDate,
   required DateTime toDate,
@@ -44,9 +41,6 @@ Future<CalculationResultModel> getDataFromDbAndMakeCalculation({
   );
 }
 
-///
-///
-///
 CalculationResultModel makeCalculation({
   int shiftsCount = -1,
   List<FlightLogModel> logs = const [],
@@ -112,7 +106,6 @@ CalculationResultModel makeCalculation({
     );
 
     flightsTotalMinutes += flight.flightTimeMinutes;
-
     String flightCategory = resolveDayOrNightFlight(minutes);
 
     if (flightCategory == 'day') {

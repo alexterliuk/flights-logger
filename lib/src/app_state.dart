@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 // import 'package:path/path.dart';
 // import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-
 import 'flight_logs/flight_log.dart';
 import 'flight_logs/flight_log_model.dart';
 import 'flight_logs/flight_logs.dart';
@@ -56,7 +55,6 @@ class MyAppState with ChangeNotifier {
   }
 
   void addToHistory(String routeName) {
-    // if (history.isEmpty || history.last != routeName) {
     if (history.isEmpty || !history.contains(routeName)) {
       print('           [history ADD BEF] - $history');
       history.add(routeName);
@@ -102,9 +100,6 @@ class MyAppState with ChangeNotifier {
   ShiftsResult shiftsRes = ShiftsResult(shifts: []);
   List<int> shiftsIds = [];
 
-  ///
-  /// UPDATE FLIGHT LOGS
-  ///
   void updateFlightLogs({
     List<FlightLogModel> givenLogs = const [],
     List<int> idsForReload = const [],
@@ -142,9 +137,6 @@ class MyAppState with ChangeNotifier {
     }
   }
 
-  ///
-  /// UPDATE SINGLE SHIFT FLIGHT LOGS
-  ///
   void updateSingleShiftFlightLogs({
     List<FlightLogModel> givenLogs = const [],
     List<int> idsForReload = const [],
@@ -180,9 +172,6 @@ class MyAppState with ChangeNotifier {
     }
   }
 
-  ///
-  /// UPDATE NEW SHIFT FLIGHT LOGS
-  ///
   void updateNewShiftFlightLogs({
     List<FlightLogModel> givenLogs = const [],
     List<int> idsForReload = const [],
@@ -225,9 +214,6 @@ class MyAppState with ChangeNotifier {
     }
   }
 
-  ///
-  /// UPDATE SHIFTS_RES
-  ///
   void updateShiftsRes(ShiftsResult givenShiftsRes) {
     try {
       if (
@@ -248,10 +234,6 @@ class MyAppState with ChangeNotifier {
         /// check to avoid inserting a duplicate shift
         for (final shift in givenShiftsRes.shifts) {
           bool isDuplicate = shiftsIds.contains(shift.id);
-          // print('isDuplicate - $isDuplicate');
-          // if (isDuplicate) {
-          //   print('duplicate id - ${shift.id}');
-          // }
           if (!isDuplicate) {
             shiftsRes.shifts.add(shift);
             shiftsIds.add(shift.id);
@@ -263,27 +245,17 @@ class MyAppState with ChangeNotifier {
     }
   }
 
-  ///
-  ///
-  ///
   void updateShiftsResAfterShiftRemoved(int removedShiftId) {
     shiftsRes.shifts.retainWhere((shift) => shift.id != removedShiftId);
     shiftsIds.retainWhere((id) => id != removedShiftId);
     shiftsRes.totalCount = shiftsRes.shifts.length;
   }
 
-  ///
-  ///
-  ///
   void resetShifts() {
     shiftsRes.shifts = [];
-    // shiftsRes.totalCount = 0;
     shiftsIds = [];
   }
 
-  ///
-  ///
-  ///
   void replaceShift(ShiftModel givenShift) {
     int index = shiftsRes.shifts.indexWhere((shift) => shift.id == givenShift.id);
     if (index != -1) {
@@ -291,9 +263,6 @@ class MyAppState with ChangeNotifier {
     }
   }
 
-  ///
-  ///
-  ///
   bool removeShift(int id) {
     int beforeCount = shiftsRes.shifts.length;
     shiftsRes.shifts.removeWhere((shift) => shift.id == id);
@@ -308,17 +277,11 @@ class MyAppState with ChangeNotifier {
     return isRemoved;
   }
 
-  ///
-  ///
-  ///
   void setSingleShiftMode(ShiftModel shift) {
     isSingleShiftMode = true;
     singleShift = shift;
   }
 
-  ///
-  ///
-  ///
   void resetSingleShiftMode() {
     isSingleShiftMode = false;
     singleShift = null;
@@ -329,35 +292,23 @@ class MyAppState with ChangeNotifier {
     // update();
   }
 
-  ///
-  ///
-  ///
   void resetSingleShiftFlightLogs() {
     singleShiftFlightLogs = [];
     singleShiftFlightLogsIds = [];
   }
 
-  ///
-  ///
-  ///
   void setSelectedShiftsMode(DateTime? fromDate, DateTime? toDate) {
     isSelectedShiftsMode = true;
     selectShiftsFromDate = fromDate;
     selectShiftsToDate = toDate;
   }
 
-  ///
-  ///
-  ///
   void resetSelectedShiftsMode() {
     isSelectedShiftsMode = false;
     selectShiftsFromDate = null;
     selectShiftsToDate = null;
   }
 
-  ///
-  ///
-  ///
   void replaceSingleShiftFlightLog(FlightLogModel givenLog) {
     int index = singleShiftFlightLogs.indexWhere((log) => log.id == givenLog.id);
 
@@ -366,17 +317,11 @@ class MyAppState with ChangeNotifier {
     }
   }
 
-  ///
-  ///
-  ///
   void resetFlightLogs() {
     flightLogs = [];
     flightLogsIds = [];
   }
 
-  ///
-  ///
-  ///
   void replaceFlightLog(FlightLogModel givenLog) {
     int index = flightLogs.indexWhere((log) => log.id == givenLog.id);
     print('[replaceFlightLog] index - $index, flightLogs.length - ${flightLogs.length}');
@@ -385,9 +330,6 @@ class MyAppState with ChangeNotifier {
     }
   }
 
-  ///
-  ///
-  ///
   bool removeFlightLog(int id) {
     int beforeCount = flightLogs.length;
     flightLogs.removeWhere((log) => log.id == id);
@@ -401,9 +343,6 @@ class MyAppState with ChangeNotifier {
     return isRemoved;
   }
 
-  ///
-  ///
-  ///
   bool removeSingleShiftFlightLog(int id) {
     int beforeCount = singleShiftFlightLogs.length;
     singleShiftFlightLogs.removeWhere((log) => log.id == id);
@@ -417,17 +356,11 @@ class MyAppState with ChangeNotifier {
     return isRemoved;
   }
 
-  ///
-  ///
-  ///
   void resetNewShiftFlightLogs() {
     newShiftFlightLogs = [];
     newShiftFlightLogsIds = [];
   }
 
-  ///
-  ///
-  ///
   void replaceNewShiftFlightLog(FlightLogModel givenLog) {
     int index = newShiftFlightLogs.indexWhere((log) => log.id == givenLog.id);
 
@@ -435,23 +368,6 @@ class MyAppState with ChangeNotifier {
       newShiftFlightLogs.fillRange(index, index + 1, givenLog);
     }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   ///
   /// Home block
@@ -481,9 +397,6 @@ class MyAppState with ChangeNotifier {
     lastFlightLog = FlightLogModel(shiftId: -1, id: -1);
   }
 
-  ///
-  ///
-  ///
   FlightLogModel? getFlightLogById(int id) {
     try {
       FlightLogModel log = flightLogs.firstWhere((log) => log.id == id);
@@ -493,14 +406,8 @@ class MyAppState with ChangeNotifier {
     }
   }
 
-  ///
-  ///
-  ///
   FlightLogModel getLastFlightLog() => lastFlightLog;
 
-  ///
-  ///
-  ///
   FlightLogModel? setLastFlightLog() {
     if (flightLogs.isNotEmpty) {
       lastFlightLog = flightLogs[flightLogs.length - 1];
@@ -509,8 +416,6 @@ class MyAppState with ChangeNotifier {
     return lastFlightLog;
   }
 
-  ///
-  ///
   /// COMMENTED BECAUSE THERE'S NO CALLER OF THE FUNC IN THE APP
   // /// TODO: make similar func findLastShift (probably without logs parameter)
   // FlightLogModel? findLastFlightLog(List<FlightLogModel>? logs) {
@@ -527,9 +432,6 @@ class MyAppState with ChangeNotifier {
   //   return lastFlightLog;
   // }
 
-  ///
-  ///
-  ///
   BaseFlightLogModel getUpdatedFlightLog(BaseFlightLogModel oldLog, BaseFlightLogModel newLog) {
     oldLog.takeoffDateAndTime = newLog.takeoffDateAndTime;
     oldLog.landingDateAndTime = newLog.landingDateAndTime;
@@ -544,9 +446,6 @@ class MyAppState with ChangeNotifier {
     return oldLog;
   }
 
-  ///
-  ///
-  ///
   // void updateFlightLog(BaseFlightLogModel log, int id) {
   //   final existingLog = getFlightLogById(id);
   //
@@ -557,47 +456,9 @@ class MyAppState with ChangeNotifier {
   // }
 
   ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
   /// ============================== DB RELATED ================================
   ///
 
-  ///
-  ///
-  ///
   Future<void> dbUpdateHome({ bool shouldRefresh = false }) async {
     HomeModel home = await getHomeFromDb();
     /// TODO: get all shifts and logs might be expensive,
@@ -680,8 +541,6 @@ class MyAppState with ChangeNotifier {
     }
   }
 
-  ///
-  ///
   /// COMMENTED BECAUSE THERE'S NO CALLER OF THE FUNC IN THE APP
   // Future<List<FlightLogModel>> dbGetFlightLogs() async {
   //   List<FlightLogModel> logs = await getFlightLogsFromDb();
@@ -693,9 +552,6 @@ class MyAppState with ChangeNotifier {
   //   return logs;
   // }
 
-  ///
-  ///
-  ///
   Future<void> dbAddFlightLog(BaseFlightLogModel flightLog) async {
     int id = await addFlightLogToDb(flightLog);
     print('[dbAddFlightLog] id of created log: $id');
@@ -706,8 +562,6 @@ class MyAppState with ChangeNotifier {
 
       print('[dbAddFlightLog] log.shiftId - ${log.shiftId}, lastShiftId - $lastShiftId');
       if (log.shiftId == lastShiftId) {
-        // newShiftFlightLogs.add(log);
-        // newShiftFlightLogsIds.add(log.id);
         updateNewShiftFlightLogs(givenLogs: [log]);
       }
 
@@ -715,9 +569,6 @@ class MyAppState with ChangeNotifier {
     }
   }
 
-  ///
-  ///
-  ///
   Future<void> dbUpdateFlightLog(BaseFlightLogModel flightLog, int logId) async {
     FlightLogModel? logBeforeUpdate = await getFlightLogFromDb(logId);
 
@@ -747,34 +598,10 @@ class MyAppState with ChangeNotifier {
       replaceSingleShiftFlightLog(log);
       replaceNewShiftFlightLog(log);
 
-      // if (flightLog.shiftId == lastShiftId) {
-        // int index = newShiftFlightLogs.indexWhere((log) => log.id == logId);
-
-        // if (index != -1) {
-        //   newShiftFlightLogs.fillRange(index, index + 1, log);
-        // }
-      // }
-
-                              // if (flightLogsIds.contains(logId)) {
-                              //   replaceFlightLog(log);
-                              // }
-
-                              // if (singleShiftFlightLogsIds.contains(logId)) {
-                              //   replaceSingleShiftFlightLog(log);
-                              // }
-
-                              // if (newShiftFlightLogsIds.contains(logId)) {
-                              //   replaceNewShiftFlightLog(log);
-                              // }
-
-      /// NB: this also notifies subscribers about changes in lastFlightLogs - NOT ACTUAL COMMENTARY
       await _updateHomeInDb(log);
     }
   }
 
-  ///
-  ///
-  ///
   Future<void> _updateHomeInDb(FlightLogModel log) async {
     bool shouldUpdateTopFlightTime = log.flightTimeMinutes > topFlightTimeMinutes;
     bool shouldUpdateTopDistance = log.distanceMeters > topDistanceMeters;
@@ -828,9 +655,6 @@ class MyAppState with ChangeNotifier {
     }
   }
 
-  ///
-  ///
-  ///
   Future<RemovalResult> dbRemoveFlightLog(int id, int shiftId) async {
     bool isLogRemoved = await removeFlightLogFromDb(id);
 
@@ -851,9 +675,6 @@ class MyAppState with ChangeNotifier {
     return removalResult;
   }
 
-  ///
-  ///
-  ///
   Future<RemovalResult> dbUpdateShiftAfterFlightLogRemoved(int shiftId, int removedLogId) async {
     ShiftModel? shift = await getShiftFromDb(shiftId);
 
@@ -925,18 +746,12 @@ class MyAppState with ChangeNotifier {
     return RemovalResult();
   }
 
-  ///
-  ///
-  ///
   // Future<ShiftModel?> dbGetShift(int id) async {
   //   ShiftModel? shift = await getShiftFromDb(id);
   //
   //   return shift;
   // }
 
-  ///
-  ///
-  ///
   Future<bool> dbRemoveShift(int id) async {
     bool isRemoved = await removeShiftFromDb(id);
     /// TODO: get from db real count of shifts?
@@ -950,9 +765,6 @@ class MyAppState with ChangeNotifier {
     return isRemoved;
   }
 
-  ///
-  ///
-  ///
   void update() {
     notifyListeners();
   }

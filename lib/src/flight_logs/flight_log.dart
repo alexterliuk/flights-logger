@@ -65,13 +65,6 @@ class FlightLog extends StatelessWidget {
       }
     }
 
-    // final gap4 = const SizedBox(width: 4);
-    // final gap8 = const SizedBox(width: 8);
-    // final gap12 = const SizedBox(width: 12);
-    // final padding8 = const Padding(
-    //   padding: EdgeInsetsGeometry.directional(top: 8),
-    // );
-
     var mainInfoCells = getFlightLogMainInfoCells(log, index);
     var countCell = mainInfoCells.first;
     var takeoffDateAndTimeCell = mainInfoCells.elementAt(1);

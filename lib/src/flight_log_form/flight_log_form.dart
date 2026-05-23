@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
 import '../app_state.dart';
 import '../db/queries.dart';
 import '../calendar/calendar.dart';
 import '../flight_logs/flight_log_model.dart';
-import '../flight_logs/flight_logs.dart';
 import '../flight_logs/flight_logs_loading.dart';
 import '../home/home.dart';
 import '../shifts/new_shift.dart';
@@ -130,7 +128,6 @@ class FlightLogFormState extends State<FlightLogForm> {
         );
       }
 
-      print('log.takeoffDateAndTime - ${log.takeoffDateAndTime}');
       setDate(null, log.takeoffDateAndTime);
     } else {
       setDate(null, null);
@@ -307,7 +304,7 @@ class FlightLogFormState extends State<FlightLogForm> {
                     children: [
                       // const Padding(
                       //   padding: EdgeInsets.only(left: 16.0, right: 16.0),
-                      //   child: Text('Distance'),
+                      //   child: Text('Date'),
                       // ),
                       const Text('Date'),
                       Flex(

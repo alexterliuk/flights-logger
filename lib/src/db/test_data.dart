@@ -62,9 +62,6 @@ const logsData = <List>[
   ['DJI Matrice 30T', '704', '2025-06-19 23:51', '2025-06-20 00:29', 38, 18733, 1324, '', '', 0, 0, 14, ''],
 ];
 
-///
-///
-///
 Future<void> createDummyData() async {
   /// hardcoded not real ids used later for getting real shift ids
   final hardShiftIds = <int>[];
@@ -215,9 +212,6 @@ Future<void> createDummyData() async {
   );
 }
 
-///
-///
-///
 class LatestLogRecord {
   String lastLandingDateAndTime;
   int idOfLastFlightLog;
@@ -230,9 +224,6 @@ class LatestLogRecord {
   });
 }
 
-///
-///
-///
 LatestLogRecord addDataToShift(ShiftModel shift, List<FlightLogModel> logs) {
   shift.logIds = logs.map((log) => log.id).toList();
   shift.flightsQty = logs.length;
@@ -294,9 +285,6 @@ LatestLogRecord addDataToShift(ShiftModel shift, List<FlightLogModel> logs) {
   return latestLogRec;
 }
 
-///
-///
-///
 void addDataToHome(
   HomeModel homeData,
   List<ShiftModel> shifts,

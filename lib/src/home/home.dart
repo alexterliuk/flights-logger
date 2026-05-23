@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../l10n/app_localizations.dart';
-import '../db/test_data.dart';
 import '../flight_logs/flight_log_model.dart';
 import '../settings/settings_controller.dart';
 import '../settings/settings_view.dart';
@@ -25,7 +23,6 @@ class Home extends StatefulWidget {
   const Home({
     super.key,
     this.isInitLoading = true,
-    // required this.settingsController,
     this.settingsController,
   });
 
@@ -169,60 +166,6 @@ class HomeState extends State<Home> {
           ),
         ),
       ),
-
-      // body: Column(
-      //   children: [
-      //     Container(height: 12),
-      //     isInit ? const CircularProgressIndicator() : Container(),
-      //     TopNumbers(
-      //       topFlightTimeMinutes: appState.topFlightTimeMinutes,
-      //       topDistanceMeters: appState.topDistanceMeters,
-      //       topAltitudeMeters: appState.topAltitudeMeters,
-      //     ),
-      //     Container(height: 12),
-      //     // LastFlight(log: appState.lastFlightLog),
-      //     LastFlight(),
-      //     // // ?EditFlightBtn,
-      //     const SelectShift(),
-      //     const ShowAllShifts(),
-      //     const ShowAllFlights(),
-      //     const StartNewShift(),
-      //     const CalculateData(),
-      //     // const DefaultFilesUpload(),
-      //     const UploadButton(),
-      //     // const Flexible(
-      //     //   child: FlightLogs(isOrdinalShown: false),
-      //     // ),
-      //
-      //     // Center(
-      //     //   child: Column(
-      //     //     mainAxisAlignment: MainAxisAlignment.center,
-      //     //     children: <Widget>[
-      //     //       // Add the following code
-      //     //       Localizations.override(
-      //     //         context: context,
-      //     //         locale: const Locale('en'),
-      //     //         // Using a Builder to get the correct BuildContext.
-      //     //         // Alternatively, you can create a new widget and Localizations.override
-      //     //         // will pass the updated BuildContext to the new widget.
-      //     //         child: Builder(
-      //     //           builder: (context) {
-      //     //             // A toy example for an internationalized Material widget.
-      //     //             return CalendarDatePicker(
-      //     //               initialDate: DateTime.now(),
-      //     //               firstDate: DateTime(1900),
-      //     //               lastDate: DateTime(2100),
-      //     //               onDateChanged: (value) {},
-      //     //             );
-      //     //           },
-      //     //         ),
-      //     //       ),
-      //     //     ],
-      //     //   ),
-      //     // ),
-      //
-      //   ],
-      // ),
     );
   }
 }

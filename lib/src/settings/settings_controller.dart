@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'settings_service.dart';
 
 /// A class that many Widgets can interact with to read user settings, update
@@ -17,25 +16,8 @@ class SettingsController with ChangeNotifier {
   // also persisting the changes with the SettingsService.
   late ThemeMode _themeMode;
 
-        // CTRL
-        // late List<int> _altitudeLogs;
-
   // Allow Widgets to read the user's preferred ThemeMode.
   ThemeMode get themeMode => _themeMode;
-
-        // CTRL
-        // List<int> get altitudeLogs => _altitudeLogs;
-
-        // CTRL
-        // loadAltitudeLogs() {
-        //   _altitudeLogs = [103, 99, 154];
-        //   notifyListeners();
-        // }
-        // CTRL
-        // updateAltitudeLogs(List<int> altitudeLogs ) {
-        //   _altitudeLogs = altitudeLogs;
-        //   notifyListeners();
-        // }
 
   /// Load the user's settings from the SettingsService. It may load from a
   /// local database or the internet. The controller only knows it can load the

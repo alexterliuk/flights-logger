@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../app_state.dart';
 import '../db/queries.dart';
 import 'flight_log_model.dart';
@@ -32,15 +31,12 @@ class FlightLogsLoadingState extends State<FlightLogsLoading> {
 
   @override
   void initState() {
-    /// 0
-    print('     [FlightLogsLoading.initState]');
     super.initState();
     loadLogs();
   }
 
   void loadLogs() async {
     /// 1
-    print('     [FlightLogsLoading.loadLogs]');
     Future<List<FlightLogModel>> loadedLogs = widget.isLoadByIds
       ? getFlightLogsByIdsFromDb(ids: widget.ids)
       : getFlightLogsFromDb(offset: 0, limit: 20);

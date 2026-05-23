@@ -26,14 +26,10 @@ class CalendarState extends State<CalendarPeriod> {
   void reset() {
     fromDate = null;
     stepOne = true;
-    // forbiddenDates.clear();3
+    // forbiddenDates.clear();
   }
 
   void onDateChanged(DateTime d) {
-    // print(d); // DateTime 2024-07-10 00:00:00.000
-    // print('iso 8601: ${d.toIso8601String()}'); // 2024-07-10T00:00:00.000
-    // print('date picked toString: ${d.toString()}'); // 2024-07-10 00:00:00.000
-
     if (stepOne) {
       stepOne = false;
       fromDate = d;
@@ -62,7 +58,6 @@ class CalendarState extends State<CalendarPeriod> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(),
       body: Column(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../settings/settings_view.dart';
 import '../app_state.dart';
 import '../db/queries.dart';

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-
 import 'initial_table_queries.dart';
 
 Future<Database> openDb() async {

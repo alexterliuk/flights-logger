@@ -112,22 +112,6 @@ class UploadState extends State<Upload> {
               ),
             ),
           ),
-          // SizedBox(
-          //   width: 56,
-          //   child: FloatingActionButton(
-          //     heroTag: null,
-          //     mini: true,
-          //     onPressed: saveUploadedLogs,
-          //     // backgroundColor: isSavingEnabled ? null : Colors.transparent,
-          //     // elevation: isSavingEnabled ? null : 0,
-          //     child: Text(
-          //       'Save',
-          //       // style: TextStyle(
-          //       //   color: isSavingEnabled ? null : Colors.transparent,
-          //       // ),
-          //     ),
-          //   ),
-          // ),
           const SizedBox(height: 16),
           SizedBox(
             width: 320,
@@ -159,17 +143,6 @@ class UploadState extends State<Upload> {
                   ),
                 ),
               ),
-          // SizedBox(
-          //   width: 128,
-          //   child: FloatingActionButton(
-          //     heroTag: null,
-          //     mini: true,
-          //     onPressed: downloadExistingLogs,
-          //     child: isDownloading
-          //       ? const CircularProgressIndicator()
-          //       : const Text('Download data'),
-          //   ),
-          // ),
           const SizedBox(height: 16),
         ],
       );

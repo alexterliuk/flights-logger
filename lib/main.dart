@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import './src/app.dart';
 import './src/settings/settings_controller.dart';
 import './src/settings/settings_service.dart';
@@ -8,10 +7,6 @@ void main() async {
   // Avoid errors caused by flutter upgrade.
   // Importing 'package:flutter/widgets.dart' is required.
   WidgetsFlutterBinding.ensureInitialized();
-
-  // THESE 2 LINES MOVED TO openDb
-  // sqfliteFfiInit();
-  // databaseFactory = databaseFactoryFfi;
 
   // Set up the SettingsController, which will glue user settings to multiple
   // Flutter Widgets.
